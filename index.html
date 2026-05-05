@@ -1,222 +1,476 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HTML Szerkesztő - Átméretezhető panelek</title>
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f1f1f1;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            overflow: hidden;
-        }
-        /* Felső menüsor */
-        .header {
-            background-color: #ffffff;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #ddd;
-            z-index: 10;
-        }
-        .button-group {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-run {
-            background-color: #04AA6D;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-run:hover {
-            background-color: #059862;
-        }
-        .btn-clear {
-            background-color: #f44336;
-            color: white;
-            border: none;
-            padding: 10px 25px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        .btn-clear:hover {
-            background-color: #da190b;
-        }
-        /* Szerkesztő konténer */
-        .main-container {
-            display: flex;
-            flex: 1;
-            background-color: #e5e5e5;
-            position: relative;
-            overflow: hidden;
-        }
-        .pane {
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            min-width: 100px;
-        }
-        #leftPane {
-            width: 50%;
-        }
-        #rightPane {
-            flex: 1;
-        }
-        /* Az elválasztó sáv */
-        .resizer {
-            width: 10px;
-            cursor: col-resize;
-            background-color: #e5e5e5;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .resizer:hover {
-            background-color: #ccc;
-        }
-        textarea {
-            width: 100%;
-            height: 100%;
-            border: none;
-            padding: 15px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 15px;
-            resize: none;
-            outline: none;
-        }
-        iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            background-color: white;
-        }
-        .pane-label {
-            background-color: #f8f8f8;
-            padding: 5px 15px;
-            font-size: 12px;
-            color: #555;
-            border-bottom: 1px solid #eee;
-            text-transform: uppercase;
-            user-select: none;
-        }
-        .dragging iframe {
-            pointer-events: none;
-        }
-    </style>
-</head>
-<body id="body">
-
-    <div class="header">
-        <div class="button-group">
-            <button class="btn-run" onclick="runCode()">Fuss &gt;</button>
-            <button class="btn-clear" onclick="clearCode()">Törlés</button>
-        </div>
-        <div style="font-size: 14px; color: #666;">
-            Interaktív HTML Szerkesztő
-        </div>
-    </div>
-
-    <div class="main-container" id="container">
-        <div class="pane" id="leftPane">
-            <div class="pane-label">Forráskód</div>
-            <textarea id="htmlCode" spellcheck="false" oninput="saveCode()"><!DOCTYPE html>
-<html>
-<head>
+<meta charset="UTF-8"> <title>ULTRA-NOTE-PNG-Save_STABLE_V.01</title> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Pinyon+Script&family=Nabla&family=Bungee+Shade&family=Ewert&family=Vast+Shadow&family=Creepster&family=Lobster&family=Righteous&family=Faster+One&family=Special+Elite&family=Orbitron&family=Pacifico&family=Press+Start+2P&family=Permanent+Marker&family=Sacramento&family=Silkscreen&family=Codystar&family=Megrim&family=Fredericka+the+Great&family=UnifrakturMaguntia&family=Wallpoet&family=Syncopate&family=Fascinate+Inline&family=Nosifer&family=Rubik+Glitch&family=Bangers&family=Alumni+Sans+Inline+One&family=Iceberg&family=Glass+Antiqua&family=Kranky&family=Great+Vibes&family=Bruno+Ace+SC&family=VT323&family=Montserrat&family=Nunito&family=Oswald&family=Playfair+Display&family=Spectral&family=Ultra&family=Varela+Round&family=Alegreya&family=Roboto+Serif&family=Roboto+Mono&family=Bungee+Spice&family=Shadows+Into+Light&family=Indie+Flower&family=Dancing+Script&family=Caveat&family=Satisfy&family=Kaushan+Script&family=Yellowtail&family=Courgette&family=Amatic+SC&family=Bebas+Neue&family=Abril+Fatface&family=Patua+One&family=Fredoka+One&family=Limelight&family=Stalinist+One&family=Black+Ops+One&family=Shojumaru&family=Metal+Mania&family=Sancreek&family=Rye&family=Butcherman&family=Frijole&family=Eater&family=Aclonica&family=Michroma&family=Audiowide&family=Quantico&family=Russo+One&family=Squada+One&family=Allura&family=Alex+Brush&family=Cookie&family=Grand+Hotel&family=Parisienne&family=Rochester&family=Tangerine&family=Zeyada&family=Architects+Daughter&family=Covered+By+Your+Grace&family=Gloria+Hallelujah&family=Handlee&family=Patrick+Hand&family=Reenie+Beanie&family=Rock+Salt&family=Coming+Soon&family=Boogaloo&family=Carter+One&family=Chango&family=Cherry+Cream+Soda&family=Chewy&family=Fugaz+One&family=Luckiest+Guy&family=Titan+One&family=Yeseva+One&family=Marcellus&family=Cinzel&family=Forum&family=Cormorant+Garamond&display=swap" rel="stylesheet"> 
 <style>
-  body { font-family: sans-serif; text-align: center; }
-  h1 { color: #04AA6D; }
+  body{ margin:0; background:#0a0a0a; color:#fff; font-family:Arial, sans-serif; transition: background 0.3s; }
+  .container{ display:flex; height:100vh; }
+  .sidebar{ width:60px; background:#111; padding:10px; box-sizing:border-box; overflow-y:auto; }
+  .color-btn{ width:100%; height:24px; margin-bottom:6px; border:none; cursor:pointer; outline:none; border-radius:4px; box-shadow:0 0 5px rgba(255,255,255,0.3); }
+  .main{ flex:1; padding:10px; box-sizing:border-box; display:flex; flex-direction:column; }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:10px; margin-bottom:10px; align-items:center; }
+  .toolbar select, .toolbar input, .toolbar button{ padding:6px; border-radius:4px; border:1px solid #333; background:#111; color:#fff; outline:none; }
+  
+  body.light-mode { background: #e0e0e0; color: #000; }
+  .light-mode #captureArea { background: #ffffff !important; border-color: #ccc; }
+  .light-mode #editorHeader { border-bottom-color: #ccc; color: #000; }
+  .light-mode .toolbar select, .light-mode .toolbar input, .light-mode .toolbar button { background: #eee; color: #000; border-color: #bbb; }
+  .light-mode .sidebar { background: #d0d0d0; }
+
+  #captureArea { flex:1; background:#050505; border:1px solid #333; border-radius:6px; display:flex; flex-direction:column; overflow-y:auto; position: relative; }
+  #editorHeader { padding: 10px; font-size: 18px; min-height: 20px; margin-bottom: 5px; border-bottom: 1px dashed #333; text-align: left; }
+  
+  .editor{ flex:1; padding:10px; overflow-y:auto; font-size:20px; white-space: pre-wrap; word-wrap: break-word; word-break: break-word; min-height: 100%; outline: none; line-height: 1.0 !important; }
+  .editor div { margin: 0 !important; padding: 0 !important; min-height: 1.0em !important; line-height: 1.0 !important; }
+
+  /* Színek */
+  .neon-black{ color:#000000 !important; text-shadow:none !important; } 
+  .neon-orange{ color:#ff6600 !important; text-shadow:0 0 5px #ff6600,0 0 10px #ff6600,0 0 15px #ff6600,0 0 20px #ff6600 !important; }
+  .neon-yellow{ color:#ffff00 !important; text-shadow:0 0 5px #ffff00,0 0 10px #ffff00,0 0 15px #ffff00,0 0 20px #ffff00 !important; }
+  .neon-darkred{ color:#7a001f !important; text-shadow:0 0 5px #7a001f,0 0 10px #7a001f,0 0 15px #7a001f,0 0 20px #7a001f !important; }
+  .neon-cyan{ color:#00f6ff !important; text-shadow:0 0 5px #00f6ff,0 0 10px #00f6ff,0 0 15px #00f6ff,0 0 20px #00f6ff !important; }
+  .neon-blue{ color:#00aaff !important; text-shadow:0 0 5px #00aaff,0 0 10px #00aaff,0 0 15px #00aaff,0 0 20px #00aaff !important; }
+  .neon-deepblue{ color:#0080ff !important; text-shadow:0 0 5px #0080ff,0 0 10px #0080ff,0 0 15px #0080ff,0 0 20px #0080ff !important; }
+  .neon-magenta{ color:#ff00ff !important; text-shadow:0 0 5px #ff00ff,0 0 10px #ff00ff,0 0 15px #ff00ff,0 0 20px #ff00ff !important; }
+  .neon-pink{ color:#ff33ff !important; text-shadow:0 0 5px #ff33ff,0 0 10px #ff33ff,0 0 15px #ff33ff,0 0 20px #ff33ff !important; }
+  .neon-green{ color:#00ff00 !important; text-shadow:0 0 5px #00ff00,0 0 10px #00ff00,0 0 15px #00ff00,0 0 20px #00ff00 !important; }
+  .neon-lightgreen{ color:#00ff66 !important; text-shadow:0 0 5px #00ff66,0 0 10px #00ff66,0 0 15px #00ff66,0 0 20px #00ff66 !important; }
+  .neon-lime{ color:#33ff33 !important; text-shadow:0 0 5px #33ff33,0 0 10px #33ff33,0 0 15px #33ff33,0 0 20px #33ff33 !important; }
+  .neon-mint{ color:#00ff99 !important; text-shadow:0 0 5px #00ff99,0 0 10px #00ff99,0 0 15px #00ff99,0 0 20px #00ff99 !important; }
+  .neon-purple{ color:#8000ff !important; text-shadow:0 0 5px #8000ff,0 0 10px #8000ff,0 0 15px #8000ff,0 0 20px #8000ff !important; }
+  .neon-red{ color:#ff0000 !important; text-shadow:0 0 5px #ff0000,0 0 10px #ff0000,0 0 15px #ff0000,0 0 20px #ff0000 !important; }
+  .neon-white{ color:#ffffff !important; text-shadow:0 0 5px #ffffff,0 0 10px #ffffff,0 0 15px #ffffff,0 0 20px #ffffff !important; }
+
+  .glow-off [class^='neon-'] { text-shadow: none !important; } 
+  #glowBtn.on { background: #00ff00 !important; color: #000 !important; font-weight: bold; } 
+  #glowBtn.off { background: #ff0000 !important; color: #fff !important; font-weight: bold; } 
+
+  .editor a { cursor: pointer !important; text-decoration: underline !important; display: inline-block; }
+  .saved-panel{ width:300px; background:#222; padding:20px; box-sizing:border-box; display: flex; flex-direction: column; overflow-y:auto; } 
+  .saved-panel h3{ color:#00f6ff; margin-top:0; } 
+  #savedList { flex: 1; overflow-y: auto; } 
+  .saved-item{ border-bottom:1px solid #333; padding:6px; cursor:pointer; } 
+  
+  .label-red { color: #7a001f; font-weight: bold; } 
+  .label-yellow { color: #ffff00; }
+  .label-green { color: #00ff00; }
+  .label-cyan { color: #00f6ff; }
+
+  #storageInfo { font-size: 20px; margin-top: 10px; } 
+  .storage-bar-bg { width: 100%; height: 12px; background: #333; border-radius: 6px; margin: 10px 0; overflow: hidden; border: 1px solid #444; } 
+  #storageBarFill { height: 100%; width: 0%; transition: width 0.3s ease-in-out; } 
+  .hard-reset-btn { background: #ff0000 !important; color: white !important; font-weight: bold; cursor: pointer; padding: 10px; border: none; border-radius: 4px; } 
+
+  #pdf-helper-wrap { position: absolute; left: -9999px; top: 0; width: 210mm; }
+  .pdf-capture-node { padding: 40px; box-sizing: border-box; }
 </style>
 </head>
 <body>
 
-<h1>Sikeres futtatás!</h1>
-<p>Próbáld meg elhúzni a középső szürke sávot.</p>
+<div class="container">
+  <div class="sidebar">
+    <div style="text-align:center;font-size:12px;margin-bottom:8px;">Neon<br>Színek</div> 
+    <button class="color-btn" style="background:#000000; border:1px solid #555;" onmousedown="applyColorAndSet(event, 'neon-black')"></button>
+    <button class="color-btn" style="background:#ff6600" onmousedown="applyColorAndSet(event, 'neon-orange')"></button>
+    <button class="color-btn" style="background:#ffff00" onmousedown="applyColorAndSet(event, 'neon-yellow')"></button>
+    <button class="color-btn" style="background:#7a001f" onmousedown="applyColorAndSet(event, 'neon-darkred')"></button>
+    <button class="color-btn" style="background:#00f6ff" onmousedown="applyColorAndSet(event, 'neon-cyan')"></button>
+    <button class="color-btn" style="background:#00aaff" onmousedown="applyColorAndSet(event, 'neon-blue')"></button>
+    <button class="color-btn" style="background:#0080ff" onmousedown="applyColorAndSet(event, 'neon-deepblue')"></button>
+    <button class="color-btn" style="background:#ff00ff" onmousedown="applyColorAndSet(event, 'neon-magenta')"></button>
+    <button class="color-btn" style="background:#ff33ff" onmousedown="applyColorAndSet(event, 'neon-pink')"></button>
+    <button class="color-btn" style="background:#00ff00" onmousedown="applyColorAndSet(event, 'neon-green')"></button>
+    <button class="color-btn" style="background:#00ff66" onmousedown="applyColorAndSet(event, 'neon-lightgreen')"></button>
+    <button class="color-btn" style="background:#33ff33" onmousedown="applyColorAndSet(event, 'neon-lime')"></button>
+    <button class="color-btn" style="background:#00ff99" onmousedown="applyColorAndSet(event, 'neon-mint')"></button>
+    <button class="color-btn" style="background:#8000ff" onmousedown="applyColorAndSet(event, 'neon-purple')"></button>
+    <button class="color-btn" style="background:#ff0000" onmousedown="applyColorAndSet(event, 'neon-red')"></button>
+    <button class="color-btn" style="background:#ffffff" onmousedown="applyColorAndSet(event, 'neon-white')"></button>
+  </div>
 
-</body>
-</html></textarea>
-        </div>
-
-        <div class="resizer" id="dragBar"></div>
-
-        <div class="pane" id="rightPane">
-            <div class="pane-label">Eredmény</div>
-            <iframe id="resultFrame"></iframe>
-        </div>
+  <div class="main">
+    <div style="background: #1a1a1a; padding: 10px; border-radius: 8px; border: 1px solid #444; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+        <div class="neon-green" style="font-weight: bold; font-size: 20px; font-family: 'Orbitron', sans-serif;">ULTRA-NOTE-PNG-Save_STABLE_V.01</div>
+        <button class="hard-reset-btn" onclick="hardReset()">VÉSZHELYZETI RESET (MEMÓRIA ÜRÍTÉS)</button>
     </div>
 
-    <script>
-        const leftPane = document.getElementById('leftPane');
-        const dragBar = document.getElementById('dragBar');
-        const container = document.getElementById('container');
-        const body = document.getElementById('body');
-        const editor = document.getElementById('htmlCode');
+    <div class="toolbar">
+      <label>Betűtípus:</label> 
+      <select id="fontSelect" onchange="setFont()"> 
+        <option value="Arial" style="color:#ffffff; font-family:'Arial';">1. Arial (Alap)</option>
+        <option value="Montserrat" style="color:#00ffcc; font-family:'Montserrat';">2. Montserrat</option>
+        <option value="Nunito" style="color:#ffccff; font-family:'Nunito';">3. Nunito</option>
+        <option value="Oswald" style="color:#ff6600; font-family:'Oswald';">4. Oswald</option>
+        <option value="Playfair Display" style="color:#ffff99; font-family:'Playfair Display';">5. Playfair Display</option>
+        <option value="Spectral" style="color:#99ff99; font-family:'Spectral';">6. Spectral</option>
+        <option value="Ultra" style="color:#ff3333; font-family:'Ultra';">7. Ultra (Vastag)</option>
+        <option value="Varela Round" style="color:#66ccff; font-family:'Varela Round';">8. Varela Round</option>
+        <option value="Alegreya" style="color:#ff9900; font-family:'Alegreya';">9. Alegreya</option>
+        <option value="Roboto Serif" style="color:#cccccc; font-family:'Roboto Serif';">10. Roboto Serif</option>
+        <option value="Roboto Mono" style="color:#00ff00; font-family:'Roboto Mono';">11. Roboto Mono</option>
+        <option value="Orbitron" style="color:#00f6ff; font-family:'Orbitron';">12. Orbitron (Sci-fi Neon)</option>
+        <option value="Special Elite" style="color:#ffd700; font-family:'Special Elite';">13. Gépelés (Írógép)</option>
+        <option value="VT323" style="color:#00ff00; font-family:'VT323';">14. Terminal (Mátrix)</option>
+        <option value="Press Start 2P" style="color:#ffff00; font-family:'Press Start 2P';">15. 8-Bit (Retro)</option>
+        <option value="Monoton" style="color:#ff00ff; font-family:'Monoton';">16. MONOTON (Neon)</option>
+        <option value="Pinyon Script" style="color:#00ff99; font-family:'Pinyon Script';">17. Pinyon (Kézírás)</option>
+        <option value="Creepster" style="color:#ff0000; font-family:'Creepster';">18. Horror (Creep)</option>
+        <option value="Nabla" style="color:#ff6600; font-family:'Nabla';">19. Nabla (3D Színes)</option>
+        <option value="Lobster" style="color:#00f6ff; font-family:'Lobster';">20. Lobster</option>
+        <option value="Righteous" style="color:#ffff00; font-family:'Righteous';">21. Righteous</option>
+        <option value="Bungee Shade" style="color:#ff33ff; font-family:'Bungee Shade';">22. Bungee (Árnyas)</option>
+        <option value="Faster One" style="color:#00ff00; font-family:'Faster One';">23. Faster (Száguldó)</option>
+        <option value="Ewert" style="color:#8000ff; font-family:'Ewert';">24. Ewert (Különleges)</option>
+        <option value="Vast Shadow" style="color:#ffffff; font-family:'Vast Shadow';">25. Vast Shadow</option>
+        <option value="Permanent Marker" style="color:#ff6600; font-family:'Permanent Marker';">26. Filctoll (Vastag)</option>
+        <option value="Sacramento" style="color:#ff99cc; font-family:'Sacramento';">27. Sacramento (Folyó)</option>
+        <option value="Silkscreen" style="color:#33ff33; font-family:'Silkscreen';">28. Pixel (Tiszta)</option>
+        <option value="Codystar" style="color:#00ffff; font-family:'Codystar';">29. Codystar (Pontok)</option>
+        <option value="Megrim" style="color:#ffcc00; font-family:'Megrim';">30. Megrim (Elvont)</option>
+        <option value="UnifrakturMaguntia" style="color:#7a001f; font-family:'UnifrakturMaguntia';">31. Gótikus (Old)</option>
+        <option value="Wallpoet" style="color:#0080ff; font-family:'Wallpoet';">32. Graffiti</option>
+        <option value="Syncopate" style="color:#00ff99; font-family:'Syncopate';">33. Techno</option>
+        <option value="Nosifer" style="color:#ff0000; font-family:'Nosifer';">34. Vérző (Folyékony)</option>
+        <option value="Rubik Glitch" style="color:#ffff00; font-family:'Rubik Glitch';">35. Glitch (Hiba)</option>
+        <option value="Bangers" style="color:#00aaff; font-family:'Bangers';">36. Pop Art</option>
+        <option value="Pacifico" style="color:#ff33ff; font-family:'Pacifico';">37. Pacifico</option>
+        <option value="Great Vibes" style="color:#ff99cc; font-family:'Great Vibes';">38. Great Vibes</option>
+        <option value="Bruno Ace SC" style="color:#00f6ff; font-family:'Bruno Ace SC';">39. Bruno Ace</option>
+        <option value="Fascinate Inline" style="color:#ff00ff; font-family:'Fascinate Inline';">40. Fascinate</option>
+        <option value="Fredericka the Great" style="color:#ffffff; font-family:'Fredericka the Great';">41. Vázlatos</option>
+        <option value="Courier New" style="color:#ff00ff; font-family:'Courier New';">42. Courier</option>
+        <option value="Bungee Spice" style="color:#ff6600; font-family:'Bungee Spice';">43. Spice (3D)</option>
+        <option value="Shadows Into Light" style="color:#00ff00; font-family:'Shadows Into Light';">44. Shadows</option>
+        <option value="Indie Flower" style="color:#00f6ff; font-family:'Indie Flower';">45. Indie Flower</option>
+        <option value="Dancing Script" style="color:#ffcc00; font-family:'Dancing Script';">46. Dancing</option>
+        <option value="Caveat" style="color:#7a001f; font-family:'Caveat';">47. Caveat</option>
+        <option value="Satisfy" style="color:#00aaff; font-family:'Satisfy';">48. Satisfy</option>
+        <option value="Kaushan Script" style="color:#0080ff; font-family:'Kaushan Script';">49. Kaushan</option>
+        <option value="Yellowtail" style="color:#ff00ff; font-family:'Yellowtail';">50. Yellowtail</option>
+        <option value="Courgette" style="color:#ff33ff; font-family:'Courgette';">51. Courgette</option>
+        <option value="Amatic SC" style="color:#00ff66; font-family:'Amatic SC';">52. Amatic</option>
+        <option value="Bebas Neue" style="color:#33ff33; font-family:'Bebas Neue';">53. Bebas</option>
+        <option value="Abril Fatface" style="color:#00ff99; font-family:'Abril Fatface';">54. Abril</option>
+        <option value="Patua One" style="color:#8000ff; font-family:'Patua One';">55. Patua</option>
+        <option value="Fredoka One" style="color:#ff0000; font-family:'Fredoka One';">56. Fredoka</option>
+        <option value="Limelight" style="color:#ffffff; font-family:'Limelight';">57. Limelight</option>
+        <option value="Stalinist One" style="color:#ff6600; font-family:'Stalinist One';">58. Stalinist</option>
+        <option value="Black Ops One" style="color:#00ff00; font-family:'Black Ops One';">59. Black Ops</option>
+        <option value="Shojumaru" style="color:#00f6ff; font-family:'Shojumaru';">60. Shojumaru</option>
+        <option value="Metal Mania" style="color:#ffff00; font-family:'Metal Mania';">61. Metal Mania</option>
+        <option value="Sancreek" style="color:#7a001f; font-family:'Sancreek';">62. Sancreek</option>
+        <option value="Rye" style="color:#00aaff; font-family:'Rye';">63. Rye</option>
+        <option value="Butcherman" style="color:#0080ff; font-family:'Butcherman';">64. Butcher</option>
+        <option value="Frijole" style="color:#ff00ff; font-family:'Frijole';">65. Frijole</option>
+        <option value="Eater" style="color:#ff33ff; font-family:'Eater';">66. Eater</option>
+        <option value="Aclonica" style="color:#00ff66; font-family:'Aclonica';">67. Aclonica</option>
+        <option value="Michroma" style="color:#33ff33; font-family:'Michroma';">68. Michroma</option>
+        <option value="Audiowide" style="color:#00ff99; font-family:'Audiowide';">69. Audiowide</option>
+        <option value="Quantico" style="color:#8000ff; font-family:'Quantico';">70. Quantico</option>
+        <option value="Russo One" style="color:#ff0000; font-family:'Russo One';">71. Russo</option>
+        <option value="Squada One" style="color:#ffffff; font-family:'Squada One';">72. Squada</option>
+        <option value="Allura" style="color:#ff6600; font-family:'Allura';">73. Allura</option>
+        <option value="Alex Brush" style="color:#00ff00; font-family:'Alex Brush';">74. Alex Brush</option>
+        <option value="Cookie" style="color:#00f6ff; font-family:'Cookie';">75. Cookie</option>
+        <option value="Grand Hotel" style="color:#ffff00; font-family:'Grand Hotel';">76. Grand Hotel</option>
+        <option value="Parisienne" style="color:#7a001f; font-family:'Parisienne';">77. Parisienne</option>
+        <option value="Rochester" style="color:#00aaff; font-family:'Rochester';">78. Rochester</option>
+        <option value="Tangerine" style="color:#0080ff; font-family:'Tangerine';">79. Tangerine</option>
+        <option value="Zeyada" style="color:#ff00ff; font-family:'Zeyada';">80. Zeyada</option>
+        <option value="Architects Daughter" style="color:#ff33ff; font-family:'Architects Daughter';">81. Architects</option>
+        <option value="Covered By Your Grace" style="color:#00ff66; font-family:'Covered By Your Grace';">82. Grace</option>
+        <option value="Gloria Hallelujah" style="color:#33ff33; font-family:'Gloria Hallelujah';">83. Gloria</option>
+        <option value="Handlee" style="color:#00ff99; font-family:'Handlee';">84. Handlee</option>
+        <option value="Patrick Hand" style="color:#8000ff; font-family:'Patrick Hand';">85. Patrick</option>
+        <option value="Reenie Beanie" style="color:#ff0000; font-family:'Reenie Beanie';">86. Reenie</option>
+        <option value="Rock Salt" style="color:#ffffff; font-family:'Rock Salt';">87. Rock Salt</option>
+        <option value="Coming Soon" style="color:#ff6600; font-family:'Coming Soon';">88. Coming Soon</option>
+        <option value="Boogaloo" style="color:#00ff00; font-family:'Boogaloo';">89. Boogaloo</option>
+        <option value="Carter One" style="color:#00f6ff; font-family:'Carter One';">90. Carter</option>
+        <option value="Chango" style="color:#ffff00; font-family:'Chango';">91. Chango</option>
+        <option value="Cherry Cream Soda" style="color:#7a001f; font-family:'Cherry Cream Soda';">92. Cherry</option>
+        <option value="Chewy" style="color:#00aaff; font-family:'Chewy';">93. Chewy</option>
+        <option value="Fugaz One" style="color:#0080ff; font-family:'Fugaz One';">94. Fugaz</option>
+        <option value="Luckiest Guy" style="color:#ff00ff; font-family:'Luckiest Guy';">95. Luckiest</option>
+        <option value="Titan One" style="color:#ff33ff; font-family:'Titan One';">96. Titan</option>
+        <option value="Yeseva One" style="color:#00ff66; font-family:'Yeseva One';">97. Yeseva</option>
+        <option value="Marcellus" style="color:#33ff33; font-family:'Marcellus';">98. Marcellus</option>
+        <option value="Cinzel" style="color:#00ff99; font-family:'Cinzel';">99. Cinzel</option>
+        <option value="Forum" style="color:#8000ff; font-family:'Forum';">100. Forum</option>
+        <option value="Cormorant Garamond" style="color:#ff0000; font-family:'Cormorant Garamond';">101. Garamond</option>
+        <option value="Iceberg" style="color:#ffffff; font-family:'Iceberg';">102. Iceberg</option>
+        <option value="Glass Antiqua" style="color:#ff6600; font-family:'Glass Antiqua';">103. Glass</option>
+        <option value="Kranky" style="color:#00ff00; font-family:'Kranky';">104. Kranky</option>
+        <option value="Alumni Sans Inline One" style="color:#00f6ff; font-family:'Alumni Sans Inline One';">105. Alumni</option>
+        <option value="Rubik Glitch" style="color:#ffff00; font-family:'Rubik Glitch';">106. Glitch 2</option>
+        <option value="Times New Roman" style="color:#7a001f; font-family:'Times New Roman';">107. Times</option>
+        <option value="Georgia" style="color:#00aaff; font-family:'Georgia';">108. Georgia</option>
+        <option value="Impact" style="color:#0080ff; font-family:'Impact';">109. Impact</option>
+        <option value="Comic Sans MS" style="color:#ff00ff; font-family:'Comic Sans MS';">110. Comic Sans</option>
+        <option value="Verdana" style="color:#ff33ff; font-family:'Verdana';">111. Verdana</option>
+        <option value="Trebuchet MS" style="color:#00ff66; font-family:'Trebuchet MS';">112. Trebuchet</option>
+        <option value="Garamond" style="color:#33ff33; font-family:'Garamond';">113. Garamond Old</option>
+        <option value="Bookman" style="color:#00ff99; font-family:'Bookman';">114. Bookman</option>
+        <option value="Palatino" style="color:#8000ff; font-family:'Palatino';">115. Palatino</option>
+        <option value="Candara" style="color:#ff0000; font-family:'Candara';">116. Candara</option>
+        <option value="Geneva" style="color:#ffffff; font-family:'Geneva';">117. Geneva</option>
+        <option value="Optima" style="color:#ff6600; font-family:'Optima';">118. Optima</option>
+        <option value="Tahoma" style="color:#00ff00; font-family:'Tahoma';">119. Tahoma (Vége)</option>
+      </select>
 
-        let isDragging = false;
+      <label>Méret:</label> 
+      <input type="range" id="sizeRange" min="8" max="250" value="20" oninput="setSize(this.value)"> <span id="sizeValue">20</span>px 
+      <button onclick="resetColor()">Reset szín</button> 
+      <button id="glowBtn" class="on" onclick="toggleGlow()">Glow ON</button> 
+      <button onclick="toggleTheme()">🌓 Sötétítő</button>
+      <input type="text" id="linkInput" placeholder="Link..." /> 
+      <button onclick="insertLink()">Beszúrás</button> 
+      <button onclick="newNote()">+ Új lap</button> </div>
 
-        function saveCode() {
-            localStorage.setItem('savedHtmlCode', editor.value);
+    <div class="toolbar">
+        <button onclick="loadNote()">Betöltés</button> <button onclick="saveNote()">Mentés (.json)</button> <button onclick="deleteNote()">Törlés</button> <button onclick="exportNotes()">EXPORT (ÖSSZES)</button> <button onclick="importNotes()">Import (.json)</button> <button onclick="downloadPNG(false)">PNG fekete</button> <button onclick="downloadPNG(true)">PNG átlátszó</button> 
+        <button onclick="downloadPDF(false)">PDF FF</button> <button onclick="downloadPDF(true)" style="background:#7a001f">PDF Színes</button>
+        <button onclick="insertHTMLPrompt()" style="background:#0055ff; border-color:#00f6ff">HTML BEILLESZTÉS</button>
+    </div>
+
+    <div id="savePath" style="margin-top:6px; font-family: 'Courier New', monospace; line-height: 1.6;">
+        <div><span class="label-red">Mentés helye:</span> <span class="label-yellow">Letöltések mappa</span></div>
+        <div id="lastFileDisplay"><span class="label-red">Utolsó fájl:</span> <span class="label-green">Nincs mentés</span></div>
+        <div id="timeDisplay"><span class="label-red">Időpont:</span> <span class="label-cyan">--:--:--</span></div>
+        <div id="freeMemoryDisplay"><span class="label-red">Szabad memória:</span> <span class="label-cyan"></span></div>
+    </div> 
+    
+    <div id="storageInfo"></div> 
+    <div class="storage-bar-bg"><div id="storageBarFill"></div></div> 
+    
+    <div id="captureArea">
+        <div id="editorHeader"></div> 
+        <div id="editor" class="editor" contenteditable="true"></div> 
+    </div>
+  </div>
+
+  <div class="saved-panel">
+    <h3>Mentett jegyzetek</h3> <div id="savedList"></div> <button class="clear-btn" onclick="clearList()" style="background:#7a001f; color:white; border:1px solid red; padding:10px; cursor:pointer;">Lista ürítése</button> </div>
+</div>
+
+<div id="pdf-helper-wrap"></div>
+
+<script>
+  const editor = document.getElementById("editor"); const editorHeader = document.getElementById("editorHeader"); const captureArea = document.getElementById("captureArea"); const savedList = document.getElementById("savedList"); const storageInfo = document.getElementById("storageInfo"); const storageBarFill = document.getElementById("storageBarFill"); const linkInput = document.getElementById("linkInput"); const glowBtn = document.getElementById("glowBtn"); const lastFileDisplay = document.getElementById("lastFileDisplay"); const timeDisplay = document.getElementById("timeDisplay"); let activeColorClass = "neon-white"; let glowOn = true; let notes = []; 
+
+  let db;
+  const dbRequest = indexedDB.open("NeonNotesDB", 1);
+  dbRequest.onupgradeneeded = e => { db = e.target.result; db.createObjectStore("notes", { keyPath: "id", autoIncrement: true }); };
+  dbRequest.onsuccess = e => { db = e.target.result; loadFromDB(); };
+
+  function loadFromDB() {
+    const transaction = db.transaction("notes", "readonly");
+    const store = transaction.objectStore("notes");
+    const request = store.getAll();
+    request.onsuccess = () => { notes = request.result; refreshListUI(); updateStorageStatus(); };
+  }
+
+  function updateStorageStatus() {
+    const totalMax = 500 * 1024 * 1024;
+    let size = new Blob([JSON.stringify(notes)]).size;
+    const freePercentage = Math.max(0, 100 - ((size / totalMax) * 100)).toFixed(2);
+    const usedMB = (size / (1024 * 1024)).toFixed(2);
+    storageBarFill.style.width = (100 - freePercentage) + "%";
+    storageBarFill.style.background = freePercentage < 10 ? "#ff0000" : "#00ff00";
+    storageInfo.innerHTML = `<span class="label-red">Használt:</span> <span class="label-cyan">${usedMB} MB</span> / 500 MB`;
+    const freeMB = ((totalMax - size) / (1024 * 1024)).toFixed(2);
+    document.getElementById("freeMemoryDisplay").innerHTML = `<span class="label-red">Szabad memória:</span> <span class="label-cyan">${freeMB} MB</span>`;
+  }
+
+  editor.addEventListener("mousedown", function(e) { const link = e.target.closest("a"); if (link) { window.open(link.href, "_blank"); } });
+
+  function setRecordedTime(ts) { timeDisplay.innerHTML = `<span class="label-red">Időpont:</span> <span class="label-cyan">${ts || "--:--:--"}</span>`; }
+  function hardReset() { if(confirm("Törli a memóriát?")) { const t = db.transaction("notes", "readwrite"); t.objectStore("notes").clear(); t.oncomplete = () => { notes = []; refreshListUI(); updateStorageStatus(); setRecordedTime(""); alert("Resetelve!"); }; } } 
+  function refreshListUI() { savedList.innerHTML = ""; notes.forEach(n => addSavedItemToUI(n.name, n.timestamp, n.color)); } 
+  
+  function toggleGlow(){ glowOn = !glowOn; document.body.classList.toggle("glow-off", !glowOn); glowBtn.innerText = glowOn ? "Glow ON" : "Glow OFF"; glowBtn.className = glowOn ? "on" : "off"; } 
+  function toggleTheme() { document.body.classList.toggle("light-mode"); }
+
+  function applyColorAndSet(e, className) { 
+    e.preventDefault(); activeColorClass = className; 
+    const selection = window.getSelection(); 
+    if (selection.rangeCount > 0) { 
+        let container = selection.anchorNode; if (container.nodeType === 3) container = container.parentElement;
+        const closestLink = container.closest("a");
+        if (closestLink) { closestLink.className = className; } else if (selection.toString().length > 0) {
+            const range = selection.getRangeAt(0); const span = document.createElement("span"); span.className = className; span.textContent = selection.toString(); range.deleteContents(); range.insertNode(span);
         }
+    } editor.focus(); 
+  } 
 
-        function clearCode() {
-            if (confirm("Biztosan törölni akarod a projektet?")) {
-                editor.value = "";
-                localStorage.removeItem('savedHtmlCode');
-                runCode();
-            }
-        }
+  function resetColor(){ activeColorClass = "neon-white"; } 
+  function setFont(){ editor.style.fontFamily = document.getElementById("fontSelect").value; } 
+  function setSize(size){ editor.style.fontSize = size + "px"; document.getElementById("sizeValue").innerText = size; } 
+  
+  function insertHTMLAtCursor(html){ const sel=window.getSelection(); if(!sel.rangeCount) return; const range=sel.getRangeAt(0); range.deleteContents(); const el=document.createElement("div"); el.innerHTML=html; const frag=document.createDocumentFragment(); let node,lastNode; while((node=el.firstChild)) lastNode=frag.appendChild(node); range.insertNode(frag); if(lastNode){ range.setStartAfter(lastNode); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); } } 
 
-        dragBar.addEventListener('mousedown', function(e) {
-            isDragging = true;
-            body.classList.add('dragging');
-        });
+  function insertHTMLPrompt() {
+    const htmlCode = prompt("Másold be ide a beillesztendő HTML kódot:");
+    if(htmlCode) {
+        const span = document.createElement("span");
+        span.className = activeColorClass;
+        span.textContent = htmlCode;
+        editor.appendChild(span);
+        editor.appendChild(document.createElement("br"));
+        editor.scrollTop = editor.scrollHeight;
+    }
+  }
 
-        document.addEventListener('mousemove', function(e) {
-            if (!isDragging) return;
-            let containerOffsetLeft = container.offsetLeft;
-            let pointerRelativeXpos = e.clientX - containerOffsetLeft;
-            let newWidth = Math.max(100, Math.min(pointerRelativeXpos, container.clientWidth - 100));
-            leftPane.style.width = newWidth + 'px';
-        });
+  editor.addEventListener("keydown", e => {
+    if(e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){
+      const selection = window.getSelection();
+      let container = selection.anchorNode.parentElement;
+      if (container && (container.tagName === "A" || container.closest("a"))) return;
+      e.preventDefault(); 
+      if(container && container.classList.contains(activeColorClass) && container.tagName === "SPAN") {
+        const textNode = document.createTextNode(e.key === " " ? "\u00A0" : e.key); const range = selection.getRangeAt(0); range.insertNode(textNode); range.setStartAfter(textNode); range.collapse(true); 
+      } else {
+        let char = e.key === " " ? "&nbsp;" : e.key; insertHTMLAtCursor(`<span class="${activeColorClass}">${char}</span>`); 
+      }
+    } else if(e.key === "Enter"){ e.preventDefault(); insertHTMLAtCursor("<div><br></div>"); }
+  }); 
 
-        document.addEventListener('mouseup', function() {
-            if (isDragging) {
-                isDragging = false;
-                body.classList.remove('dragging');
-            }
-        });
+  editor.addEventListener("paste", e => { 
+    e.preventDefault(); 
+    const text = (e.clipboardData || window.clipboardData).getData("text/plain"); 
+    const fragment = document.createDocumentFragment();
+    const urlPattern = /(https?:\/\/[^\s]+)/gi;
+    const lines = text.split(/\r?\n/);
+    lines.forEach((line) => {
+      const lineDiv = document.createElement("div");
+      let currentLineHTML = ""; let lastIdx = 0; let match;
+      while ((match = urlPattern.exec(line)) !== null) {
+        const before = line.substring(lastIdx, match.index);
+        if (before) currentLineHTML += `<span class="${activeColorClass}">${before.replace(/ /g, "&nbsp;")}</span>`;
+        currentLineHTML += `<a href="${match[0]}" target="_blank" class="${activeColorClass}">${match[0]}</a>`;
+        lastIdx = urlPattern.lastIndex;
+      }
+      const after = line.substring(lastIdx);
+      if (after) currentLineHTML += `<span class="${activeColorClass}">${after.replace(/ /g, "&nbsp;")}</span>`;
+      lineDiv.innerHTML = currentLineHTML || "<br>"; fragment.appendChild(lineDiv);
+    });
+    const sel = window.getSelection(); if (!sel.rangeCount) return; const range = sel.getRangeAt(0); range.deleteContents(); range.insertNode(fragment);
+  });
 
-        function runCode() {
-            const htmlCode = editor.value;
-            const frame = document.getElementById('resultFrame').contentWindow.document;
-            frame.open();
-            frame.write(htmlCode);
-            frame.close();
-        }
+  function newNote() { editor.innerHTML = ""; editorHeader.innerText = ""; setRecordedTime(""); alert("Új lap nyitva!"); }
 
-        window.onload = function() {
-            const savedData = localStorage.getItem('savedHtmlCode');
-            if (savedData) {
-                editor.value = savedData;
-            }
-            runCode();
-        };
-    </script>
+  function saveNote() {
+    const name = prompt("Jegyzet neve:", editorHeader.innerText || "uj_jegyzet");
+    if(!name) return;
+    const ts = new Date().toLocaleString();
+    const note = { name, content: editor.innerHTML, header: name, timestamp: ts, color: activeColorClass, font: editor.style.fontFamily, size: editor.style.fontSize };
+    const t = db.transaction("notes", "readwrite");
+    t.objectStore("notes").put(note);
+    t.oncomplete = () => { editorHeader.innerText = name; lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">${name}.json</span>`; setRecordedTime(ts); loadFromDB(); alert("Mentve!"); };
+  }
 
+  function loadNote() {
+    const name = prompt("Betöltendő jegyzet neve:");
+    const note = notes.find(n => n.name === name);
+    if(note) {
+      editor.innerHTML = note.content; editorHeader.innerText = note.header; editor.style.fontFamily = note.font; editor.style.fontSize = note.size; setRecordedTime(note.timestamp);
+    } else { alert("Nincs ilyen jegyzet!"); }
+  }
+
+  function deleteNote() {
+    const name = prompt("Törlendő jegyzet neve:");
+    const note = notes.find(n => n.name === name);
+    if(note) {
+      const t = db.transaction("notes", "readwrite");
+      t.objectStore("notes").delete(note.id);
+      t.oncomplete = () => { loadFromDB(); alert("Törölve!"); };
+    }
+  }
+
+  function clearList() { if(confirm("Minden jegyzetet töröl?")) { hardReset(); } }
+
+  function addSavedItemToUI(name, ts, colorClass) {
+    const div = document.createElement("div"); div.className = "saved-item";
+    div.innerHTML = `<strong class="${colorClass}">${name}</strong><br><small>${ts}</small>`;
+    div.onclick = () => {
+      const note = notes.find(n => n.name === name);
+      editor.innerHTML = note.content; editorHeader.innerText = note.header; editor.style.fontFamily = note.font; editor.style.fontSize = note.size; setRecordedTime(note.timestamp);
+    };
+    savedList.appendChild(div);
+  }
+
+  function exportNotes() {
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0];
+    const timeStr = now.getHours().toString().padStart(2,'0') + "-" + now.getMinutes().toString().padStart(2,'0');
+    const defaultName = `ULTRA-NOTE-PNG-Save_STABLE_V.01_${dateStr}_${timeStr}`;
+
+    const fileName = prompt("Add meg az exportált fájl nevét:", defaultName); 
+    if (!fileName) return; 
+    const blob = new Blob([JSON.stringify(notes)], {type: "application/json"});
+    const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fileName + ".json"; a.click();
+  }
+
+  function importNotes() {
+    const input = document.createElement("input"); input.type = "file"; input.accept = ".json";
+    input.onchange = e => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        const imported = JSON.parse(reader.result);
+        const t = db.transaction("notes", "readwrite");
+        const store = t.objectStore("notes");
+        imported.forEach(n => { delete n.id; store.put(n); });
+        t.oncomplete = () => { loadFromDB(); alert("Importálva!"); };
+      };
+      reader.readAsText(file);
+    };
+    input.click();
+  }
+
+  async function downloadPNG(transparent) {
+    // Mentési klón létrehozása, hogy ne változtassuk az eredetit ; Mentési klón létrehozása, hogy ne változtassuk az eredetit
+    const clone = captureArea.cloneNode(true);
+    clone.style.width = captureArea.offsetWidth + "px";
+    clone.style.position = "fixed";
+    clone.style.top = "-9999px";
+    clone.style.left = "-9999px";
+    clone.style.background = transparent ? "transparent" : "#050505";
+    clone.style.border = transparent ? "none" : "1px solid #333";
+    document.body.appendChild(clone);
+
+    const canvas = await html2canvas(clone, { 
+        backgroundColor: null,
+        scale: 2,
+        useCORS: true,
+        logging: false
+    });
+    
+    document.body.removeChild(clone);
+
+    const a = document.createElement("a"); 
+    a.href = canvas.toDataURL("image/png"); 
+    a.download = transparent ? "ULTRA_note_transparent.png" : "ULTRA_note_black.png"; 
+    a.click();
+  }
+
+  async function downloadPDF(colored) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF("p", "mm", "a4");
+    const wrap = document.getElementById("pdf-helper-wrap");
+    wrap.innerHTML = `<div class="pdf-capture-node" style="background:${colored?'#050505':'#fff'}; color:${colored?'#fff':'#000'}; font-family:${editor.style.fontFamily}; font-size:${editor.style.fontSize}; line-height:1.0;">${editor.innerHTML}</div>`;
+    const canvas = await html2canvas(wrap.firstChild, { backgroundColor: colored ? "#050505" : "#fff", scale: 2 });
+    const imgData = canvas.toDataURL("image/png");
+    const imgProps = doc.getImageProperties(imgData);
+    const pdfWidth = doc.internal.pageSize.getWidth();
+    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+    doc.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+    doc.save("neon_note.pdf");
+    wrap.innerHTML = "";
+  }
+</script>
 </body>
 </html>
