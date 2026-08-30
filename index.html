@@ -177,6 +177,12 @@ iframe.preview{flex:1;border:none;background:#fff;width:100%}
 }
 </style>
 <style>
+#yellowActiveCounter{color:#ffea00 !important;text-shadow:0 0 8px #ffea00 !important;background:#1a1a00 !important;border:1.5px solid #ffea00 !important;border-radius:5px !important;padding:3px 10px !important;font-size:15px !important;font-weight:bold !important;}
+#cyanCodeCounter{color:#00f6ff !important;text-shadow:0 0 8px #00f6ff !important;background:#001a1a !important;border:1.5px solid #00f6ff !important;border-radius:5px !important;padding:3px 10px !important;font-size:15px !important;font-weight:bold !important;}
+#titleH2{border:2px solid #00ff00 !important;background:#001100 !important;display:flex !important;flex-wrap:wrap !important;align-items:center !important;justify-content:center !important;gap:6px !important;}
+</style>
+
+<style>
 .top-bar{
   flex-wrap:nowrap !important;
   overflow-x:auto !important;
@@ -673,17 +679,25 @@ function updateAllCounts(){
   setTimeout(()=>{updateTitleWithTotal();}, 1200);
 }
 
+
 function updateTitleWithTotal(){
   try{
-    const h2=document.getElementById('titleH2');
-    if(h2){
-      // Keep current repo number but add total in green
-      const repoNum=currentDB;
-      h2.innerHTML='⚡ '+repoNum+'. REPO '+repoNum+' V12 <span style="color:#00ff00; font-size:20px; margin-left:8px; border-left:2px solid #00ff00; padding-left:8px;">💾 ÖSSZ: '+totalAllCount+' db</span>';
-      h2.style.color='#00ff00';
+    let totalAll=0;
+    for(let i=1;i<=100;i++){
+      try{ let v=localStorage.getItem('NeonRepoV5_LS_'+i); if(v){ let a=JSON.parse(v); if(Array.isArray(a)) totalAll+=a.length; } }catch(e){}
     }
-  }catch(e){}
+    let active=0;
+    try{
+      let curV=localStorage.getItem('NeonRepoV5_LS_'+currentDB);
+      if(curV){ let curA=JSON.parse(curV); if(Array.isArray(curA)) active=curA.length; }
+    }catch(e){}
+    let h2=document.getElementById('titleH2');
+    if(h2){
+      h2.innerHTML='⚡ '+currentDB+'. REPO '+currentDB+' V12 | <span id="yellowActiveCounter" style="color:#ffea00;background:#1a1a00;border:1.5px solid #ffea00;border-radius:5px;padding:3px 10px;font-size:15px;font-weight:bold;margin:0 4px;display:inline-block;text-shadow:0 0 8px #ffea00;">👁️ AKTÍV: '+active+' db</span> | <span id="cyanCodeCounter" style="color:#00f6ff;background:#001a1a;border:1.5px solid #00f6ff;border-radius:5px;padding:3px 10px;font-size:15px;font-weight:bold;margin:0 4px;display:inline-block;text-shadow:0 0 8px #00f6ff;">💾 ÖSSZ: '+totalAll+' db</span>';
+    }
+  }catch(e){ console.warn(e); }
 }
+
 
 
 
@@ -708,7 +722,7 @@ function switchDB(id){
   DB_NAME="NeonRepoV5_"+id;
   LS_KEY="NeonRepoV5_LS_"+id;
   const col=neonColors[(id-1) % neonColors.length];
-  document.getElementById('titleH2').textContent="⚡ "+id+". REPO "+id+" V12";
+  document.getElementById('titleH2').innerHTML="⚡ "+id+". REPO "+id+" V12 | <span id=\"yellowActiveCounter\" style=\"color:#ffea00;background:#1a1a00;border:1.5px solid #ffea00;border-radius:5px;padding:3px 10px;font-size:15px;\">👁️ AKTÍV: 0 db</span> | <span id=\"cyanCodeCounter\" style=\"color:#00f6ff;background:#001a1a;border:1.5px solid #00f6ff;border-radius:5px;padding:3px 10px;font-size:15px;\">💾 ÖSSZ: 0 db</span>";
   document.getElementById('titleH2').style.color='#00ff00';
   document.getElementById('titleH2').style.textShadow="0 0 10px #00ff00, 0 0 20px #00ff00aa";
   document.getElementById('dbNameLabel').textContent=DB_NAME;
@@ -1352,7 +1366,7 @@ function importAll100(){
     const fullNameHtml = lastName 
       ? '<span class="last-full-under" id="last'+(i-1)+'" style="color:'+lastColor+'; border:1px solid '+lastColor+'; background:rgba(0,0,0,0.35); box-shadow:0 0 8px '+lastColor+'99; box-shadow:0 0 6px '+col+'66;" title="'+lastName.replace(/"/g,'&quot;')+'">'+lastName+'</span>'
       : '<span class="last-full-under" id="last'+(i-1)+'" style="display:none;"></span>';
-    btn.innerHTML=`<span class="last-full-under" id="last${i-1}" style="display:flex; color:${lastColor}; background:#000; width:auto; height:auto; align-items:center; justify-content:center; font-size:20px; font-weight:400; text-shadow:none; box-shadow:none; border:none; text-align:center; word-break:break-all; line-height:0.9; padding:4px; overflow:hidden; white-space:nowrap;">${lastName||''}</span>`;
+    btn.innerHTML=`<span class="last-full-under" id="last${i-1}" style="display:flex; color:${lastColor}; background:#000; width:auto; height:auto; align-items:center; justify-content:center; font-size:20px; font-weight:400; text-shadow:none; box-shadow:none; border:none; text-align:center; word-break:break-all; line-height:0.9; padding:4px; overflow:hidden; white-space:nowrap;">${lastName||'—'}</span>`;
     btn.onclick=()=>switchDB(i);
     topbar.appendChild(btn);
   }
