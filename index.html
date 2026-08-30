@@ -1,478 +1,1482 @@
-<!DOCTYPE html>
-<html lang="hu">
-<head>
-<meta charset="UTF-8">
-<title>5in1-V32-KULON-JSON-NEV-DATUM-IDO-FIX</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet">
-<style>
-*{box-sizing:border-box}
-body{margin:0;background:#0a0a0a;color:#fff;font-family:Arial,sans-serif;overflow:hidden}
-.topbar{height:72px;background:#111;border-bottom:2px solid #222;display:flex;align-items:center;gap:8px;padding:6px 12px;flex-shrink:0;overflow-x:auto}
-.topbar button{padding:10px 14px;border-radius:10px;border:2px solid #333;color:#fff;font-weight:bold;cursor:pointer;font-size:11px;white-space:nowrap;flex-shrink:0;transition:0.2s}
-.topbar button.menu-btn.active{background:#00ff00!important;color:#000!important;border-color:#00ff00!important;box-shadow:0 0 15px #00ff00!important;transform:scale(1.05);}
-.container{height:calc(100vh - 72px);width:100vw;position:relative;background:#000}
-iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none;display:none;background:#000}
-iframe.active{display:block}
-.logo{font-weight:bold;color:#00ff00;margin-right:12px;font-size:13px;font-family:Orbitron,sans-serif;white-space:nowrap;text-shadow:0 0 8px #00ff00;}
-.export-btn{background:#00aa00!important;color:#000!important;border:2px solid #00ff00!important;font-size:11px!important;padding:7px 12px!important;font-weight:800!important;margin-left:14px;border-radius:6px!important;}
-.export-btn2{background:#002200!important;color:#0f0!important;border:2px solid #0f0!important;font-size:11px!important;padding:7px 12px!important;font-weight:800!important;border-radius:6px!important;}
-.import-btn{background:#001a44!important;color:#88bbff!important;border:2px solid #0033aa!important;font-size:11px!important;padding:7px 12px!important;font-weight:800!important;border-radius:6px!important;}
-.reset-all-btn{background:#440000!important;color:#ff6666!important;border:2px solid #ff0000!important;font-size:11px!important;padding:7px 12px!important;font-weight:900!important;border-radius:6px!important;}
-#exportModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);z-index:9999;justify-content:center;align-items:center;} #exportModal.show{display:flex;}
-.modal-box{background:#0c0c0c;border:3px solid #00ff00;border-radius:16px;padding:24px;width:560px;max-width:95%;box-shadow:0 0 20px #00ff00;}
-.modal-box h2{color:#00ff00;margin:0 0 12px 0;font-family:Orbitron,sans-serif;text-align:center;font-size:18px;}
-.modal-box input{width:100%;padding:12px;border-radius:8px;border:2px solid #00ff00;background:#000;color:#00ff00;font-size:14px;font-weight:bold;margin-bottom:14px;outline:none;}
-.modal-actions{display:flex;gap:10px;} .modal-actions button{flex:1;padding:10px;border-radius:8px;border:2px solid;font-weight:bold;cursor:pointer;}
-.btn-modal-save{background:#00ff00;color:#000;border-color:#00ff00!important;} .btn-modal-cancel{background:#222;color:#fff;border-color:#555!important;}
-.status{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);background:#111;border:2px solid #00ff00;padding:10px 20px;border-radius:8px;color:#00ff00;font-weight:bold;z-index:10000;display:none;max-width:95%;text-align:center;font-size:12px;white-space:pre-line;} .status.show{display:block;}
-#resetModal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.92);z-index:10001;justify-content:center;align-items:center;} #resetModal.show{display:flex;}
-.reset-box{background:#1a0000;border:3px solid #ff0000;border-radius:16px;padding:24px;width:480px;max-width:90%;text-align:center;}
-.debug{position:fixed;top:74px;left:10px;background:#000;border:2px solid #0f0;color:#0f0;padding:8px 12px;font-size:11px;z-index:9998;max-height:380px;overflow:auto;width:560px;display:none;font-family:monospace;white-space:pre-wrap;} .debug.show{display:block;}
-.cyan-cnt{color:#00ffff!important;background:#002222;border:1.5px solid #00ffff;border-radius:8px;padding:4px 10px;font-size:16px;font-weight:900;margin-right:8px;min-width:32px;display:inline-block;text-align:center;line-height:1;}
-.topbar button.menu-btn.active .cyan-cnt{color:#000!important;background:#00ffff!important;border-color:#00ffff!important;}
-</style>
-</head>
-<body>
-<div class="topbar">
-  <div class="logo">5in1-V32-KULON-JSON-NEV-DATUM-IDO-FIX</div>
-  <button class="menu-btn active" id="btn0" onclick="showTab(0)"><span class="cyan-cnt" id="cnt0">0</span>1. Neon Repo</button>
-  <button class="menu-btn" id="btn1" onclick="showTab(1)"><span class="cyan-cnt" id="cnt1">0</span>2. OCR Teljes</button>
-  <button class="menu-btn" id="btn2" onclick="showTab(2)"><span class="cyan-cnt" id="cnt2">0</span>3. Végtelen</button>
-  <button class="menu-btn" id="btn3" onclick="showTab(3)"><span class="cyan-cnt" id="cnt3">0</span>4. ULTRA</button>
-  <button class="menu-btn" id="btn4" onclick="showTab(4)"><span class="cyan-cnt" id="cnt4">0</span>5. Vault</button>
-  <div style="margin-left:auto;display:flex;gap:8px;align-items:center;">
-    <button class="export-btn" onclick="openExportModal()">💾 EXPORT</button>
-    <button class="export-btn2" onclick="doExportSeparate()">📦 KÜLÖN JSON</button>
-    <button class="import-btn" onclick="triggerImport()">📥 IMPORT</button>
-    <button class="reset-all-btn" onclick="openResetModal()">💥 RESET</button>
-    <button onclick="document.getElementById('debug').classList.toggle('show')" style="background:#222!important;font-size:10px;padding:5px 8px!important;color:#888!important;">DEBUG</button>
-  </div>
-</div>
-<div class="container">
-  <iframe id="f0" class="active"></iframe>
-  <iframe id="f1"></iframe>
-  <iframe id="f2"></iframe>
-  <iframe id="f3"></iframe>
-  <iframe id="f4"></iframe>
-</div>
-
-<div id="exportModal">
-  <div class="modal-box">
-    <h2>💾 EXPORT V32 FIX</h2>
-    <p style="color:#0f0;font-size:11px;text-align:center;">V32 KÜLÖN JSON • Név+Dátum+Idő • Véletlen színek • Aktív zöld • Számláló FIX</p>
-    <div style="display:flex;gap:12px;margin-bottom:10px;justify-content:center;">
-      <label style="color:#0f0;font-size:12px;display:flex;align-items:center;gap:4px"><input type="radio" name="expMode" value="all" checked> Egyben (5in1)</label>
-      <label style="color:#0ff;font-size:12px;display:flex;align-items:center;gap:4px"><input type="radio" name="expMode" value="sep"> Külön (5db JSON)</label>
-    </div>
-    <input id="exportNameInput" type="text" autocomplete="off" placeholder="Export név..."/>
-    <div class="modal-actions"><button class="btn-modal-cancel" onclick="closeExportModal()">MÉGSE</button><button class="btn-modal-save" onclick="doExport()">MENTÉS</button></div>
-    <div id="exportDebug" style="color:#0f0;font-size:10px;margin-top:10px;max-height:200px;overflow:auto;background:#000;padding:8px;border-radius:4px;border:1px solid #0f0;white-space:pre-wrap;"></div>
-  </div>
-</div>
-
-<div id="resetModal">
-  <div class="reset-box">
-    <h2 style="color:#f00;">💥 RESET V32</h2>
-    <p style="color:#ffaaaa;font-size:13px;">Minden modul adata törlődik (IndexedDB). A menük megmaradnak.</p>
-    <div class="modal-actions" style="margin-top:16px;"><button class="btn-modal-cancel" onclick="closeResetModal()">MÉGSE</button><button class="btn-modal-save" onclick="doResetAllData()" style="background:#f00;color:#fff;border-color:#f00!important;">IGEN, TÖRÖL</button></div>
-  </div>
-</div>
-
-<div id="status" class="status"></div>
-<div id="debug" class="debug"></div>
-<input type="file" id="importFileInput" accept=".json" multiple style="display:none"/>
-
-<script>
-const MODULES = [
-  {id:0, name:"1_Neon_Repo", title:"Neon Repo", db:"NeonRepoV5", color:"#00f6ff"},
-  {id:1, name:"2_OCR_Teljes", title:"OCR Teljes", db:"OCRDBV5", color:"#ffaa00"},
-  {id:2, name:"3_Vegtelen", title:"Végtelen", db:"VegtelenV5", color:"#ff00ff"},
-  {id:3, name:"4_ULTRA", title:"ULTRA", db:"UltraV5", color:"#ffff00"},
-  {id:4, name:"5_Vault", title:"Vault", db:"VaultV5", color:"#00ff88"}
-];
-let exportBuffer = {}; // moduleId -> data
-let pendingExports = 0;
-
-function logDebug(m){
-  const el=document.getElementById('debug');
-  const t=new Date().toLocaleTimeString();
-  el.textContent = `[${t}] ${m}\n` + el.textContent.slice(0,8000);
+<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>100in1-V12-MULTI-DB-FIXED</title><style>
+*{box-sizing:border-box}body{margin:0;background:#050505;color:#fff;font-family:Segoe UI,sans-serif;overflow:hidden;display:flex;flex-direction:column;height:100vh}
+.topbar{height:96px;background:#0a0a0a;border-bottom:3px solid #222;display:flex;align-items:center;gap:10px;padding:8px 14px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;flex-shrink:0}
+.topbar::-webkit-scrollbar{height:13px} .topbar::-webkit-scrollbar-track{background:#111; border-radius:10px} .topbar::-webkit-scrollbar-thumb{background:#00ffff; border-radius:10px; border:1.5px solid #00ffff; box-shadow:0 0 8px #00ffffaa} .topbar::-webkit-scrollbar-thumb:hover{background:#00ff88; box-shadow:0 0 10px #00ffff}
+.topbar button{padding:10px 18px;border-radius:12px;border:2px solid #333;color:#fff;font-weight:400;cursor:pointer;font-size:20px;white-space:normal;flex-shrink:0;transition:0.2s; min-height:70px;}
+.topbar button.menu-btn{background:#1a1a1a !important; color:#ddd !important;}
+.topbar button.menu-btn.active{background:#00ff00!important;color:#000!important;border-color:#00ff00!important;box-shadow:0 0 20px #00ff00!important;transform:scale(1.08);}
+.logo{font-weight:400;color:#00ff00;margin-right:14px;font-size:20px;white-space:nowrap;text-shadow:0 0 10px #00ff00;flex-shrink:0}
+.cyan-cnt{background:#001a1a;border:2px solid #00ffff;border-radius:12px;padding:6px 14px;font-size:20px;font-weight:400;margin-right:10px;min-width:46px;display:inline-block;text-align:center; box-shadow:0 0 10px #00ffff66;}
+.main-wrap{flex:1;display:flex;overflow:hidden;min-height:0}
+.sidebar{width:380px;background:#0a0a0a;border-right:2px solid #222;display:flex;flex-direction:column;padding:14px;overflow:hidden}
+.main{flex:1;display:flex;flex-direction:column;background:#000;overflow:hidden}
+h2{color:#00ff00;text-shadow:0 0 10px #00ff00, 0 0 20px #00ff00aa;font-size:20px;margin:0 0 8px 0;text-align:center; border:2px solid #00ff00; border-radius:8px; padding:6px; background:#001100; box-shadow:0 0 12px #00ff00aa;}
+.storage{font-size:20px;color:#ffea00;font-weight:400;margin-bottom:4px}
+.bar{width:100%;height:8px;background:#111;border-radius:5px;overflow:hidden;margin-bottom:8px;border:1px solid #333}
+#fill{height:100%;width:0%;background:linear-gradient(90deg,#ffea00,#fff);box-shadow:0 0 6px #ffea00;transition:0.5s}
+input,textarea,button{background:#161616;color:#fff;border:1px solid #333;padding:10px;border-radius:8px;outline:none;margin-bottom:6px;font-size:13px}
+input#fileName{border:3px solid #00ffff !important; box-shadow:0 0 10px #00ffff44; background:#0a1a1a !important;}
+input#fileName:focus{border-color:#00ff88 !important; box-shadow:0 0 15px #00ffffaa;}
+textarea{flex:1;width:100%;resize:none;font-family:Consolas,monospace;color:#0f0;font-size:20px;background:#000;border:1px solid #0f04;line-height:1.5}
+.toolbar{display:flex;gap:6px;margin-bottom:6px}
+button{cursor:pointer;font-weight:400;font-size:20px;flex:1;border:1px solid transparent;transition:0.1s;text-transform:uppercase;padding:11px;border-radius:8px}
+button:hover{filter:brightness(1.3)}
+.btn-save{background:#ffea00;color:#000;box-shadow:0 0 10px #ffea00aa}
+.btn-new{background:#222;color:#fff;border:1px solid #444}
+.btn-del{background:#aa0000;border:1px solid #ff4444;color:#fff}
+.btn-imp{background:#ff8800;border:1px solid #ffaa00;color:#000}
+.btn-exp{background:#8800ff;border:1px solid #aa00ff;color:#fff}
+.btn-edge{
+  background:linear-gradient(180deg,#ff0000,#cc0000) !important;
+  border:2px solid #ff3333 !important;
+  color:#fff !important;
+  font-weight:400 !important;
+  font-size:13px !important;
+  box-shadow:0 0 15px #ff0000aa, 0 0 30px #ff000055, inset 0 0 10px #ffffff33 !important;
+  text-shadow:0 0 8px #fff, 0 0 15px #ff0000 !important;
+  animation: pulseRed 1.2s infinite alternate !important;
+}
+@keyframes pulseRed{
+  0%{box-shadow:0 0 10px #ff0000aa, 0 0 20px #ff000055; transform:scale(1);}
+  100%{box-shadow:0 0 20px #ff0000ff, 0 0 40px #ff0000aa, 0 0 60px #ff000066; transform:scale(1.02);}
+}
+.btn-edge:hover{
+  background:linear-gradient(180deg,#ff2222,#ff0000) !important;
+  box-shadow:0 0 25px #ff0000ff, 0 0 50px #ff0000aa !important;
+  filter:brightness(1.2) !important;
 }
 
-function makeModuleHTML(mod){
-  return `<!DOCTYPE html>
-<html lang="hu"><head><meta charset="UTF-8"><style>
-body{margin:0;background:#050505;color:#fff;font-family:'Segoe UI',sans-serif;display:flex;height:100vh;overflow:hidden}
-.sidebar{width:340px;background:#0a0a0a;border-right:2px solid #222;display:flex;flex-direction:column;padding:16px}
-.main{flex:1;display:flex;flex-direction:column;background:#000}
-h2{color:${mod.color};text-shadow:0 0 10px ${mod.color};font-size:18px;margin:0 0 10px 0;text-align:center;letter-spacing:1px}
-.storage{font-size:11px;color:${mod.color};font-weight:bold;margin-bottom:6px}
-.bar{width:100%;height:8px;background:#111;border-radius:4px;overflow:hidden;margin-bottom:12px;border:1px solid #333}
-#fill{height:100%;width:0%;background:linear-gradient(90deg,${mod.color},#fff);box-shadow:0 0 8px ${mod.color};transition:0.5s}
-input,textarea,button{background:#161616;color:#fff;border:1px solid #333;padding:10px;border-radius:8px;outline:none;margin-bottom:8px;font-size:13px}
-textarea{flex:1;width:100%;resize:none;font-family:Consolas,monospace;color:#0f0;font-size:13px;background:#000;border:1px solid #0f04;line-height:1.5}
-.toolbar{display:flex;gap:6px;margin-bottom:6px}
-button{cursor:pointer;font-weight:bold;font-size:11px;flex:1;border:1px solid transparent;transition:0.2s;text-transform:uppercase}
-button:hover{filter:brightness(1.3);transform:scale(1.02)}
-.btn-save{background:${mod.color};color:#000;box-shadow:0 0 10px ${mod.color}66}
-.btn-copy{background:#0088ff;border-color:#00ccff}
-.btn-del{background:#aa0000;border-color:#ff4444}
-.btn-run{background:#0f0;color:#000;font-size:14px;flex:2;box-shadow:0 0 15px #0f08}
-.btn-imp{background:#d47a00;border-color:#ff9d00}
-.btn-exp{background:#7a00d4;border-color:#a600ff}
+.btn-reset{background:#660000 !important;border:1px solid #ff0000 !important;color:#fff !important;}
 #fileList{flex:1;overflow-y:auto;padding-right:4px;margin-top:8px}
-.file-item{padding:12px;margin-bottom:8px;background:#141414;border-radius:8px;cursor:pointer;border:1px solid #222;transition:0.2s;position:relative;overflow:hidden;border-left:5px solid ${mod.color}}
-.file-item:hover{background:#1c1c1c;transform:translateX(4px)}
-.file-item.active{background:#222;border-color:${mod.color}88}
-.file-item strong{display:block;font-size:13px;margin-bottom:4px}
-.file-item small{color:#888;font-size:10px;font-family:monospace}
-.editor-sec{height:45%;display:flex;flex-direction:column;padding:8px;border-bottom:2px solid #333;background:#000}
-.preview-sec{height:55%;display:flex;flex-direction:column;background:#fff}
-.preview-head{background:#0a0a0a;color:#0f0;padding:6px 16px;font-size:11px;font-weight:bold;border-bottom:1px solid #333}
-iframe.preview{flex:1;border:none;background:#fff}
-.reset{margin-top:8px;background:#440000;font-size:10px;opacity:0.7}
-</style></head><body>
+.file-item{padding:10px;margin-bottom:8px;background:#141414;border-radius:8px;cursor:pointer;border:1px solid #222;border-left:5px solid #ffea00}
+.file-item.active{ border-left-color: inherit !important; background:#111 !important; box-shadow:none !important; }
+.file-item strong{display:block;font-size:20px;margin-bottom:3px}
+.file-item small{color:#888;font-size:20px;font-family:monospace}
+.editor-sec{display:flex;flex-direction:column;padding:8px;border-bottom:2px solid #333;background:#000;overflow:hidden;height:45%;min-height:80px}
+#resizer{height:12px;background:#1a1a1a;cursor:row-resize;display:flex;align-items:center;justify-content:center;border-top:2px solid #333;border-bottom:2px solid #333;flex-shrink:0}
+#resizer:hover{background:#333}
+#resizer::after{content:"═══ HÚZD AZ ÁTMÉRETEZÉSHEZ ═══"; color:#666; font-size:20px; letter-spacing:1px}
+.preview-sec{flex:1;display:flex;flex-direction:column;background:#fff;overflow:hidden;min-height:80px}
+.preview-head{background:#0a0a0a;color:#0f0;padding:6px 12px;font-size:20px;font-weight:400;border-bottom:1px solid #333;display:flex;justify-content:space-between}
+iframe.preview{flex:1;border:none;background:#fff;width:100%}
+.bottom-block{margin-top:auto;display:flex;flex-direction:column;gap:6px;padding-top:8px;border-top:1px solid #222}
+
+.btn-exp-all{background:#00cc00 !important;border:2px solid #00ff00 !important;color:#000 !important;box-shadow:0 0 12px #00ff00aa;font-size:13px !important;}
+.btn-imp-all{background:#00cccc !important;border:3px solid #00ffff !important;color:#000 !important;box-shadow:0 0 12px #00ffffaa;font-size:13px !important;}
+
+.editor-sec .toolbar button:hover{filter:brightness(1.25); transform:translateY(-1px);}
+
+.menu-btn.has-data{
+  /* Szélei maradnak eredeti változó színek - nem írjuk felül border-color-t */
+  background:#1a1a1a !important;
+  box-shadow:0 0 12px #ffffff22 !important;
+  transform:scale(1.04);
+}
+.menu-btn.has-data .cyan-cnt{
+  /* Csak a belseje bordó, mint a képen 28 */
+  background:#4a0000 !important;
+  border:2px solid #880000 !important;
+  color:#fff !important;
+  font-size:24px !important;
+  font-weight:400 !important;
+  min-width:60px !important;
+  padding:8px 18px !important;
+  box-shadow:0 0 15px #880000aa inset, 0 0 10px #ff000055 !important;
+  text-shadow:0 0 8px #fff !important;
+}
+/* Repo név fehér és nagyobb, mint a képen 1. REPO 1 */
+.menu-btn.has-data{
+  color:#fff !important;
+  font-size:17px !important;
+  font-weight:400 !important;
+  text-shadow:0 0 8px #ffffffaa !important;
+}
+
+.last-saved-name{
+  display:inline-block;
+  background:#330033;
+  border:1.5px solid #ff00ff;
+  color:#ff00ff;
+  font-size:20px;
+  font-weight:400;
+  padding:3px 8px;
+  border-radius:6px;
+  margin-left:8px;
+  max-width:130px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  vertical-align:middle;
+  box-shadow:0 0 8px #ff00ff88;
+  text-shadow:0 0 6px #ff00ff;
+}
+.menu-btn.has-data .last-saved-name{
+  background:#440044;
+  border-color:#ff00ff;
+  color:#ff88ff;
+  font-size:20px;
+  box-shadow:0 0 12px #ff00ffaa;
+  text-shadow:0 0 8px #ff00ff;
+}
+.last-saved-name.strong-yellow{
+  background:#332200;
+  border-color:#ffea00;
+  color:#ffea00;
+  box-shadow:0 0 10px #ffea00aa;
+  text-shadow:0 0 8px #ffea00;
+}
+
+.last-saved-name:hover{
+  filter:brightness(1.3);
+  transform:scale(1.05);
+  cursor:help;
+  z-index:10;
+}
+
+.last-full-under{
+  display:block;
+  font-size:20px;
+  font-weight:400;
+  max-width:140px;
+  min-width:60px;
+  white-space:normal;
+  word-break:break-word;
+  overflow-wrap:break-word;
+  margin-top:4px;
+  padding:3px 6px;
+  border-radius:5px;
+  background:#000000cc;
+  text-align:center;
+  line-height:1.15;
+  border:1px solid currentColor;
+}
+
+.count-col{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  margin-right:6px;
+  max-width:150px;
+}
+
+.menu-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.menu-btn.has-data .last-full-under{
+  font-size:20px;
+  background:#000000cc;
+  box-shadow:0 0 8px currentColor;
+}
+
+.last-full-under, .last-name {
+  transition: none !important;
+  animation: none !important;
+}
+</style>
+<style>
+.top-bar{
+  flex-wrap:nowrap !important;
+  overflow-x:auto !important;
+  align-items:center !important;
+}
+.top-bar button{
+  width:auto !important;
+  max-width:none !important;
+  min-width:max-content !important;
+  height:45px !important;
+  min-height:45px !important;
+  max-height:45px !important;
+  flex-shrink:0 !important;
+  white-space:nowrap !important;
+  padding:0 14px !important;
+}
+.top-bar button .last-full-under{
+  font-size:20px !important;
+  white-space:nowrap !important;
+  word-break:normal !important;
+  overflow-wrap:normal !important;
+  max-width:none !important;
+  width:auto !important;
+  display:inline-block !important;
+  line-height:45px !important;
+}
+</style>
+
+<style>
+.top-bar button .last-full-under{
+  font-size:20px !important;
+  white-space:normal !important;
+  word-break:break-all !important;
+  overflow-wrap:anywhere !important;
+  line-height:1.1 !important;
+  max-width:140px !important;
+  min-width:80px !important;
+}
+.top-bar button{
+  max-width:160px !important;
+  min-width:80px !important;
+  height:auto !important;
+  min-height:35px !important;
+  white-space:normal !important;
+}
+</style>
+
+<style>
+.top-bar{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:6px !important;
+  background:#000 !important;
+  padding:8px !important;
+  align-items:flex-start !important;
+}
+.top-bar button{
+  width:auto !important;
+  min-width:80px !important;
+  max-width:none !important;
+  height:auto !important;
+  min-height:40px !important;
+  max-height:none !important;
+  background:#000 !important;
+  border:1px solid #222 !important;
+  flex-shrink:0 !important;
+  flex-grow:0 !important;
+  padding:6px 12px !important;
+  overflow:visible !important;
+}
+.top-bar button .last-full-under{
+  font-family: Arial, sans-serif !important;
+  font-size:20px !important;
+  font-weight:400 !important;
+  font-style:normal !important;
+  width:auto !important;
+  height:auto !important;
+  max-width:none !important;
+  max-height:none !important;
+  display:inline-block !important;
+  white-space:nowrap !important;
+  word-break:normal !important;
+  line-height:1.2 !important;
+  text-align:center !important;
+  padding:2px 4px !important;
+  background:#000 !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+  border:none !important;
+  overflow:visible !important;
+}
+</style>
+
+<style>
+/* CYAN CSÚSZKA */
+.top-bar::-webkit-scrollbar{
+  height:10px !important;
+}
+.top-bar::-webkit-scrollbar-track{
+  background:#000 !important;
+  border:1px solid #111 !important;
+}
+.top-bar::-webkit-scrollbar-thumb{
+  background:#00f6ff !important;
+  border-radius:5px !important;
+  box-shadow:0 0 10px #00f6ff !important;
+}
+.top-bar::-webkit-scrollbar-thumb:hover{
+  background:#00e0ff !important;
+  box-shadow:0 0 15px #00f6ff !important;
+}
+/* Firefox */
+.top-bar{
+  scrollbar-width:thin !important;
+  scrollbar-color:#00f6ff #000 !important;
+}
+/* Oldal scroll is cyan */
+::-webkit-scrollbar{
+  width:8px !important;
+  height:8px !important;
+}
+::-webkit-scrollbar-track{
+  background:#0a0a0a !important;
+}
+::-webkit-scrollbar-thumb{
+  background:#00f6ff !important;
+  border-radius:4px !important;
+}
+</style>
+
+<style>
+/* EXCEL ABLAK MINTA - FIX MÉRET, NEM VÁLTOZIK */
+.top-bar{
+  display:flex !important;
+  gap:6px !important;
+  background:#000 !important;
+  padding:8px !important;
+  overflow-x:auto !important;
+}
+.top-bar button{
+  width:140px !important;
+  min-width:140px !important;
+  max-width:140px !important;
+  height:70px !important;
+  min-height:70px !important;
+  max-height:70px !important;
+  background:#000 !important;
+  border:1px solid #222 !important;
+  flex-shrink:0 !important;
+  flex-grow:0 !important;
+  box-sizing:border-box !important;
+  padding:0 !important;
+  margin:0 !important;
+}
+.top-bar button .last-full-under{
+  font-weight:400 !important;
+  font-style:normal !important;
+  width:100% !important;
+  height:100% !important;
+  max-width:140px !important;
+  max-height:70px !important;
+  box-sizing:border-box !important;
+  overflow:hidden !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  word-break:break-all !important;
+  white-space:normal !important;
+  line-height:1 !important;
+  text-align:center !important;
+  justify-content:center !important;
+  align-items:center !important;
+  align-content:center !important;
+  border:none !important;
+  background:#000 !important;
+  text-shadow:none !important;
+  box-shadow:none !important;
+}
+/* Lista aktív - ne legyen zöld */
+.file-item{
+  border-left:3px solid #333 !important;
+  background:#111 !important;
+}
+.file-item:hover{
+  background:#1a1a1a !important;
+  border-left-color:#555 !important;
+}
+</style>
+
+<style>
+.top-bar button{
+  width:150px !important;
+  min-width:150px !important;
+  max-width:150px !important;
+  height:80px !important;
+  min-height:80px !important;
+  max-height:80px !important;
+  flex-shrink:0 !important;
+  overflow:hidden !important;
+}
+.top-bar .last-full-under{
+  width:100% !important;
+  height:100% !important;
+  max-width:100% !important;
+  max-height:100% !important;
+  display:flex !important;
+  flex-wrap:wrap !important;
+  align-items:center !important;
+  justify-content:center !important;
+  align-content:center !important;
+  overflow:hidden !important;
+  word-break:break-all !important;
+  white-space:normal !important;
+  line-height:0.85 !important;
+  padding:3px !important;
+  box-sizing:border-box !important;
+}
+</style>
+
+<style>
+.top-bar{ background:#000 !important; display:flex !important; gap:8px !important; padding:10px !important; }
+.top-bar button{
+  background:#000 !important;
+  border:1px solid #111 !important;
+  width:150px !important;
+  min-width:150px !important;
+  height:80px !important;
+  padding:0 !important;
+  margin:0 !important;
+  overflow:hidden !important;
+  box-shadow:none !important;
+}
+.top-bar button:hover{ border-color:#333 !important; }
+.top-bar .last-full-under{
+  background:#000 !important;
+  border:none !important;
+  width:100% !important;
+  height:100% !important;
+  display:flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:22px !important;
+  font-weight:400 !important;
+  letter-spacing:1px !important;
+  text-transform:uppercase !important;
+  word-break:break-all !important;
+  text-align:center !important;
+  line-height:1 !important;
+  padding:5px !important;
+}
+</style>
+
+
+<style>
+/* 7 ABLAK - FEKETE HÁTTÉR + NEON BETŰ KITÖLTI */
+.top-bar{
+  display:flex !important;
+  gap:6px !important;
+  padding:8px !important;
+  background:#000 !important;
+  overflow-x:auto !important;
+}
+.top-bar button, .top-bar .repo-btn{
+  background:#000 !important;
+  border:2px solid #222 !important;
+  min-width:140px !important;
+  height:70px !important;
+  padding:0 !important;
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:center !important;
+  justify-content:center !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+.top-bar button .last-name,
+.top-bar button .last-full-under,
+.top-bar .repo-btn .last-name,
+.top-bar .repo-btn .last-full-under{
+  display:flex !important;
+  width:100% !important;
+  height:100% !important;
+  align-items:center !important;
+  justify-content:center !important;
+  font-size:18px !important;
+  font-weight:400 !important;
+  letter-spacing:1px !important;
+  text-transform:uppercase !important;
+  background:#000 !important;
+  border:none !important;
+  box-shadow:none !important;
+  text-align:center !important;
+  word-break:break-all !important;
+  line-height:1.1 !important;
+  padding:4px !important;
+}
+.top-bar button .cyan-cnt{
+  display:none !important;
+}
+.top-bar button{
+  font-size:0 !important;
+}
+.top-bar button .last-name{
+  font-size:18px !important;
+}
+</style>
+</head><body>
+<div class="topbar" id="topbar"><div class="logo">100in1-V12</div></div>
+<div class="main-wrap">
 <div class="sidebar">
-<h2>⚡ ${mod.title.toUpperCase()} - V32</h2>
-<div class="storage">TÁRHELY: <span id="stTxt">0 MB / 500 MB</span></div><div class="bar"><div id="fill"></div></div>
+<h2 id="titleH2">⚡ 1. REPO 1 V12</h2>
+<div class="storage">TÁRHELY: <span id="stTxt">0 MB</span> | <span id="status" style="color:#0f0">INIT</span> | <span id="dbNameLabel" style="color:#888">DB1</span></div><div class="bar"><div id="fill"></div></div>
 <input type="text" id="fileName" placeholder="Projekt neve...">
-<div class="toolbar"><button class="btn-save" onclick="saveToDB()">MENTÉS</button><button onclick="newProj()">ÚJ</button><button class="btn-del" onclick="deleteFromDB()">TÖRLÉS</button></div>
 <div id="fileList"></div>
+<div class="bottom-block">
+<div class="toolbar"><button class="btn-save" onclick="saveToDB()">MENTÉS + JSON</button><button class="btn-new" onclick="newProj()">ÚJ</button><button class="btn-del" onclick="deleteFromDB()">TÖRÖL</button></div>
 <div class="toolbar"><button class="btn-imp" onclick="importData()">IMPORT</button><button class="btn-exp" onclick="exportData()">EXPORT</button></div>
-<button class="reset" onclick="clearAll()">RENDSZER RESET (TELJES)</button>
-<div style="font-size:9px;color:#444;margin-top:6px;text-align:center">ID: ${mod.db} • V32 FIX • NÉV+DÁTUM+IDŐ</div>
+<div class="toolbar"><button class="btn-edge" onclick="resetAll100()">💥 RESET 100</button><button class="btn-reset" onclick="clearAll()">RENDSZER RESET</button></div>
+<div class="toolbar" style="border-top:2px solid #00ff00; padding-top:6px; margin-top:4px;"><button class="btn-exp-all" onclick="exportAll100()">💾 EXPORT MIND A 100</button><button class="btn-imp-all" onclick="importAll100()">📥 IMPORT MIND A 100</button></div>
+</div>
 </div>
 <div class="main">
-<div class="editor-sec"><div class="toolbar"><span style="color:#ffff00;font-size:11px;padding-top:8px;font-weight:bold">KÓDSZERKESZTŐ</span><button class="btn-copy" onclick="copyCode()">KÓD MÁSOLÁSA ✨</button><button class="btn-run" onclick="runCode()">▶ FUTTATÁS 🚀</button></div>
+<div class="editor-sec" id="editorSec"><div class="toolbar" style="align-items:center; gap:8px;"><span style="color:#ffff00;font-size:20px;font-weight:400; padding:6px 10px; background:#222; border-radius:6px; border:1px solid #444;">KÓD</span><div style="flex:1"></div><button style="background:#0066ff; color:#fff; border:1px solid #0088ff; padding:10px 18px; font-size:20px; flex:0 0 auto; min-width:110px; border-radius:8px;" onclick="copyCode()">📋 MÁSOLÁS</button><button style="background:#00cc00; color:#000; border:1px solid #00ff00; padding:10px 20px; font-size:20px; font-weight:400; flex:0 0 auto; min-width:140px; border-radius:8px; box-shadow:0 0 8px #00ff0055;" onclick="runCode()">▶ FUTTATÁS</button></div>
 <textarea id="editor" spellcheck="false" placeholder="Ide írd a HTML kódot..."></textarea></div>
-<div class="preview-sec"><div class="preview-head">ELŐNÉZET</div><iframe id="preview" class="preview"></iframe></div>
+<div id="resizer"></div>
+<div class="preview-sec" id="previewSec"><div class="preview-head"><span>ELŐNÉZET - HÚZD FELÜL!</span><span>↕</span></div><iframe id="preview" class="preview"></iframe></div>
+</div>
 </div>
 <script>
-let db; let activeId=null;
-const neonColors=["#00f6ff","#0f0","#f0f","#ff0","#f40","#08f"];
-const DB_NAME="${mod.db}"; const STORE="projects";
-const MOD_ID=${mod.id}; const MOD_NAME="${mod.name}";
-const req=indexedDB.open(DB_NAME,1);
-req.onupgradeneeded=e=>{db=e.target.result; db.createObjectStore(STORE,{keyPath:"id",autoIncrement:true});};
-req.onsuccess=e=>{db=e.target.result; loadList();};
-req.onerror=()=>{console.error("DB hiba")};
+let db=null; let activeId=null;
+  setTimeout(()=>{updateTitleWithTotal();}, 300); let useLS=false; let currentDB=1;
+const STORE="projects";
+const neonColors=['#00f6ff', '#ffaa00', '#ff00ff', '#ffff00', '#00ff88', '#ff4400', '#00ff00', '#ff00aa', '#00aaff', '#aaff00', '#ff6600', '#66ff00', '#ff0066', '#0066ff', '#ff8800', '#88ff00'];
+let DB_NAME="NeonRepoV5_1";
+let LS_KEY="NeonRepoV5_LS_1";
 
-function copyCode(){
- const ed=document.getElementById("editor"); ed.select(); document.execCommand("copy");
- const b=document.querySelector(".btn-copy"); const t=b.innerText; b.innerText="MÁSOLVA! ✓"; b.style.background="#00ff88"; setTimeout(()=>{b.innerText=t; b.style.background="#0088ff";},1200);
-}
-function downloadFile(content,fileName){
- const blob=new Blob([content],{type:"application/json"}); const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download=fileName; a.click(); URL.revokeObjectURL(a.href);
-}
-function saveToDB(){
- if(!db) return;
- const name=document.getElementById("fileName").value.trim() || "Névtelen_"+Date.now();
- const code=document.getElementById("editor").value;
- const color=neonColors[Math.floor(Math.random()*neonColors.length)];
- const tx=db.transaction(STORE,"readwrite"); const store=tx.objectStore(STORE);
- const data={name,code,color,time:new Date().toLocaleString("hu-HU")};
- if(activeId) data.id=activeId;
- store.put(data).onsuccess=e=>{
-  activeId=activeId||e.target.result;
-  loadList();
-  const now=new Date(); const pad=n=>String(n).padStart(2,'0');
-  const dateStr=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
-  const timeStr=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
-  const finalName=MOD_NAME+"_"+name.replace(/\\s+/g,'_')+"_"+dateStr+"_"+timeStr+".json";
-  downloadFile(JSON.stringify(data,null,2),finalName);
- };
-}
-function loadList(){
- if(!db) return;
- const tx=db.transaction(STORE,"readonly");
- tx.objectStore(STORE).getAll().onsuccess=e=>{
-  const list=document.getElementById("fileList"); list.innerHTML=""; let size=0;
-  e.target.result.forEach(item=>{
-   size+=new Blob([item.code]).size;
-   const div=document.createElement("div"); div.className="file-item"+(activeId===item.id?" active":"");
-   div.style.borderLeftColor=item.color; div.innerHTML="<strong style='color:"+item.color+"'>"+item.name+"</strong><small>"+item.time+"</small>";
-   div.onclick=()=>{activeId=item.id; document.getElementById("fileName").value=item.name; document.getElementById("editor").value=item.code; loadList(); runCode();};
-   list.appendChild(div);
-  });
-  const mb=(size/(1024*1024)).toFixed(2); document.getElementById("stTxt").innerText=mb+" MB / 500 MB";
-  document.getElementById("fill").style.width=Math.min((size/(500*1024*1024))*100,100)+"%";
-  parent.postMessage({type:"count", module:MOD_ID, count:e.target.result.length, moduleName:MOD_NAME},"*");
-  parent.postMessage({type:"debug", msg:MOD_NAME+": "+e.target.result.length+" db"},"*");
- };
-}
-function runCode(){
- const code=document.getElementById("editor").value;
- const blob=new Blob([code],{type:'text/html'}); document.getElementById("preview").src=URL.createObjectURL(blob);
-}
-function newProj(){activeId=null; document.getElementById("fileName").value=""; document.getElementById("editor").value=""; document.getElementById("preview").src="about:blank"; loadList();}
-function deleteFromDB(){ if(!activeId || !confirm("Törlöd?")) return; db.transaction(STORE,"readwrite").objectStore(STORE).delete(activeId).onsuccess=newProj; }
-function exportData(){
- const now=new Date(); const pad=n=>String(n).padStart(2,'0');
- const dateStr=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
- const timeStr=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
- const timeFile=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
- let name=prompt("Export név:", MOD_NAME+"_Export_"+dateStr+"_"+timeFile); if(!name) return;
- db.transaction(STORE,"readonly").objectStore(STORE).getAll().onsuccess=e=>{
-  const exportObj={version:"V32-KULON-JSON-FIX", module:MOD_NAME, moduleId:MOD_ID, exportName:name, exportDate:dateStr, exportTime:timeStr, exportTimeFile:timeFile, exportDateTime:now.toLocaleString("hu-HU"), exportTimestamp:now.getTime(), count:e.target.result.length, data:e.target.result};
-  downloadFile(JSON.stringify(exportObj,null,2), (name.endsWith(".json")?name:name+".json"));
- };
-}
-function importData(){
- const input=document.createElement("input"); input.type="file"; input.accept=".json";
- input.onchange=e=>{
-  const reader=new FileReader(); reader.onload=ev=>{
-   try{
-    const parsed=JSON.parse(ev.target.result); let arr=null;
-    if(parsed.data) arr=parsed.data; else if(parsed.modules && parsed.modules[MOD_NAME]) arr=parsed.modules[MOD_NAME].data||parsed.modules[MOD_NAME]; else if(Array.isArray(parsed)) arr=parsed; else arr=[parsed];
-    const tx=db.transaction(STORE,"readwrite"); const store=tx.objectStore(STORE);
-    (Array.isArray(arr)?arr:[arr]).forEach(it=>{delete it.id; store.put(it);});
-    tx.oncomplete=()=>loadList();
-   }catch(err){alert("Import hiba: "+err.message);}
-  }; reader.readAsText(e.target.files[0]);
- }; input.click();
-}
-function clearAll(){ if(confirm("Minden törlődik! Biztos?")) db.transaction(STORE,"readwrite").objectStore(STORE).clear().onsuccess=newProj; }
+function setStatus(t,c){try{document.getElementById('status').textContent=t; document.getElementById('status').style.color=c||"#0f0";}catch(e){} console.log(t);}
 
-// Parent messages
-window.addEventListener("message", (e)=>{
- if(e.data.type==="exportRequest"){
-   if(!db) return;
-   db.transaction(STORE,"readonly").objectStore(STORE).getAll().onsuccess=ev=>{
-     parent.postMessage({type:"exportData", module:MOD_ID, moduleName:MOD_NAME, data:ev.target.result},"*");
-   };
- }
- if(e.data.type==="importData"){
-   try{
-     const items=e.data.payload; const tx=db.transaction(STORE,"readwrite"); const store=tx.objectStore(STORE);
-     (Array.isArray(items)?items:[items]).forEach(it=>{delete it.id; store.put(it);});
-     tx.oncomplete=()=>loadList();
-   }catch(err){}
- }
- if(e.data.type==="resetRequest"){
-   db.transaction(STORE,"readwrite").objectStore(STORE).clear().onsuccess=newProj;
- }
-});
-<\/script></body></html>
-`;
+function getLS(){try{return JSON.parse(localStorage.getItem(LS_KEY)||"[]");}catch(e){return [];}}
+function setLS(arr){try{localStorage.setItem(LS_KEY, JSON.stringify(arr));}catch(e){alert("localStorage tele!");}}
+
+function updateCnt(id, count){
+  try{
+    const el=document.getElementById('cnt'+(id-1));
+    const btn=document.getElementById('btn'+(id-1));
+    if(el){
+      el.textContent=count;
+      if(count>0){
+        el.style.display='inline-block';
+        if(btn){
+          btn.classList.add('has-data');
+          btn.style.color='#fff';
+        }
+        // Update last name if not already
+        try{
+          const lastEl=document.getElementById('last'+(id-1));
+          if(lastEl && (lastEl.style.display==='none' || !lastEl.textContent)){
+            const arr=JSON.parse(localStorage.getItem('NeonRepoV5_LS_'+id)||"[]");
+            if(arr.length>0){
+              const last=arr[arr.length-1];
+              const name=last.fileName||last.name||'';
+              if(name){
+                lastEl.textContent=name;
+                lastEl.title=name;
+                lastEl.style.display='block';
+                try{ const b=document.getElementById('btn'+(id-1)); if(b){ lastEl.style.color=b.style.borderColor; lastEl.style.borderColor=b.style.borderColor; } }catch(e){}
+
+                lastEl.classList.add('strong-yellow');
+                try{localStorage.setItem('NeonRepoV5_LAST_'+id, name);}catch(e){}
+              }
+            }
+          }
+        }catch(e){}
+      }else{
+        if(btn){
+          btn.classList.remove('has-data');
+          btn.style.color='';
+        }
+        try{
+          const lastEl=document.getElementById('last'+(id-1));
+          if(lastEl){lastEl.style.display='none'; lastEl.textContent='';}
+        }catch(e){}
+      }
+    }
+  }catch(e){}
 }
 
-function initIframes(){
-  MODULES.forEach(m=>{
-    const html = makeModuleHTML(m);
-    const iframe = document.getElementById('f'+m.id);
-    iframe.srcdoc = html;
-  });
-}
 
-function showTab(idx){
-  for(let i=0;i<5;i++){
-    document.getElementById('f'+i).classList.remove('active');
-    document.getElementById('btn'+i).classList.remove('active');
+let totalAllCount=0;
+
+function getLatestProject(arr){
+  if(!arr||!arr.length) return null;
+  let latest=arr[0];
+  let latestTime=0;
+  try{
+    // Try parse time field
+    for(let item of arr){
+      let t=0;
+      if(item.time){
+        // Format: "2026. 05. 05. 12:49:03" or locale
+        const m=item.time.match(/(\d{4}).*?(\d{2}).*?(\d{2}).*?(\d{2}):(\d{2}):(\d{2})/);
+        if(m){
+          t=new Date(parseInt(m[1]), parseInt(m[2])-1, parseInt(m[3]), parseInt(m[4]), parseInt(m[5]), parseInt(m[6])).getTime();
+        }else{
+          // Try Date parse
+          const d=new Date(item.time);
+          if(!isNaN(d)) t=d.getTime();
+        }
+      }
+      // Fallback to id
+      if(!t) t=item.id||0;
+      let latestT=0;
+      if(latest.time){
+        const mm=latest.time.match(/(\d{4}).*?(\d{2}).*?(\d{2}).*?(\d{2}):(\d{2}):(\d{2})/);
+        if(mm) latestT=new Date(parseInt(mm[1]), parseInt(mm[2])-1, parseInt(mm[3]), parseInt(mm[4]), parseInt(mm[5]), parseInt(mm[6])).getTime();
+        else{
+          const dd=new Date(latest.time);
+          if(!isNaN(dd)) latestT=dd.getTime();
+          else latestT=latest.id||0;
+        }
+      }else latestT=latest.id||0;
+      
+      if(t>latestTime || t>latestT){
+        if(t>=latestTime){
+          latest=item;
+          latestTime=t;
+        }
+      }
+    }
+  }catch(e){ 
+    // Fallback max id
+    let maxId=0;
+    for(let it of arr){ if((it.id||0)>maxId){ maxId=it.id; latest=it; } }
   }
-  document.getElementById('f'+idx).classList.add('active');
-  document.getElementById('btn'+idx).classList.add('active');
-  logDebug(`Tab váltás -> ${idx} ${MODULES[idx].name}`);
+  return latest;
 }
 
-// Parent export/import/reset
-function openExportModal(){
-  const now=new Date(); const pad=n=>String(n).padStart(2,'0');
-  const dateStr = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-  const timeStr = `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  const timeFile = `${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-  const defName = `5in1_Export_${dateStr}_${timeFile}`;
-  document.getElementById('exportNameInput').value = defName;
-  document.getElementById('exportDebug').textContent = `Dátum: ${dateStr}\nIdő: ${timeStr}\nModulok: 5\nDarabok: ${[0,1,2,3,4].map(i=>document.getElementById('cnt'+i).textContent).join(' | ')}`;
-  document.getElementById('exportModal').classList.add('show');
+function updateAllCounts(){
+  totalAllCount=0;
+  let processed=0;
+  for(let i=1;i<=100;i++){
+    const lsKey="NeonRepoV5_LS_"+i;
+    try{
+      const arr=JSON.parse(localStorage.getItem(lsKey)||"[]");
+      if(arr.length>0){
+        updateCnt(i, arr.length);
+        totalAllCount+=arr.length;
+        processed++;
+        if(processed>=7) updateTitleWithTotal();
+        continue;
+      }
+    }catch(e){}
+    (function(repoId){
+      try{
+        const req=indexedDB.open("NeonRepoV5_"+repoId,1);
+        req.onsuccess=e=>{
+          try{
+            const d=e.target.result;
+            if(!d.objectStoreNames.contains("projects")){
+              processed++;
+              if(processed>=7) updateTitleWithTotal();
+              d.close(); return;
+            }
+            const tx=d.transaction("projects","readonly");
+            tx.objectStore("projects").getAll().onsuccess=ev=>{
+              const cnt=ev.target.result.length;
+              if(cnt>0){
+                updateCnt(repoId, cnt);
+                totalAllCount+=cnt;
+              }
+              processed++;
+              if(processed>=7) updateTitleWithTotal();
+              d.close();
+            };
+            tx.objectStore("projects").getAll().onerror=()=>{
+              processed++;
+              if(processed>=7) updateTitleWithTotal();
+              try{d.close();}catch(ex){}
+            };
+          }catch(ex){
+            processed++;
+            if(processed>=7) updateTitleWithTotal();
+          }
+        };
+        req.onerror=()=>{
+          processed++;
+          if(processed>=7) updateTitleWithTotal();
+        };
+      }catch(ex){
+        processed++;
+        if(processed>=7) updateTitleWithTotal();
+      }
+    })(i);
+  }
+  setTimeout(()=>{updateTitleWithTotal();}, 1200);
 }
-function closeExportModal(){ document.getElementById('exportModal').classList.remove('show'); }
-function openResetModal(){ document.getElementById('resetModal').classList.add('show'); }
-function closeResetModal(){ document.getElementById('resetModal').classList.remove('show'); }
 
-function showStatus(msg,color='#00ff00',dur=6000){
-  const el=document.getElementById('status');
-  el.textContent=msg; el.style.borderColor=color; el.style.color=color;
-  el.classList.add('show'); setTimeout(()=>el.classList.remove('show'),dur);
+function updateTitleWithTotal(){
+  try{
+    const h2=document.getElementById('titleH2');
+    if(h2){
+      // Keep current repo number but add total in green
+      const repoNum=currentDB;
+      h2.innerHTML='⚡ '+repoNum+'. REPO '+repoNum+' V12 <span style="color:#00ff00; font-size:20px; margin-left:8px; border-left:2px solid #00ff00; padding-left:8px;">💾 ÖSSZ: '+totalAllCount+' db</span>';
+      h2.style.color='#00ff00';
+    }
+  }catch(e){}
 }
 
-function requestAllExports(){
-  exportBuffer={};
-  pendingExports=5;
-  MODULES.forEach(m=>{
-    document.getElementById('f'+m.id).contentWindow.postMessage({type:'exportRequest'},'*');
-  });
+
+
+function initDB(){
+  setStatus("DB nyitás...","#ff0");
+  if(db){try{db.close();}catch(e){} db=null;}
+  if(useLS){loadList(); return;}
+  try{
+    if(!window.indexedDB) throw new Error("No IDB");
+    const req=indexedDB.open(DB_NAME,1);
+    req.onupgradeneeded=e=>{const d=e.target.result; if(!d.objectStoreNames.contains(STORE)) d.createObjectStore(STORE,{keyPath:"id",autoIncrement:true});};
+    req.onsuccess=e=>{db=e.target.result; setStatus("DB: IndexedDB OK - "+DB_NAME,"#0f0"); loadList();};
+    req.onerror=e=>{console.warn("IDB error",e); setStatus("DB: LS fallback","#ff8800"); useLS=true; loadList();};
+    req.onblocked=()=>{setStatus("DB: blokkolva LS","#ff8800"); useLS=true; loadList();};
+  }catch(err){
+    setStatus("DB: localStorage","#ff8800"); useLS=true; loadList();
+  }
 }
 
-function doExport(){
-  const mode = document.querySelector('input[name="expMode"]:checked').value;
-  const nameInput = document.getElementById('exportNameInput').value.trim() || `5in1_Export_${Date.now()}`;
-  closeExportModal();
-  if(mode==='sep'){
-    doExportSeparate(nameInput);
+function switchDB(id){
+  currentDB=id;
+  DB_NAME="NeonRepoV5_"+id;
+  LS_KEY="NeonRepoV5_LS_"+id;
+  const col=neonColors[(id-1) % neonColors.length];
+  document.getElementById('titleH2').textContent="⚡ "+id+". REPO "+id+" V12";
+  document.getElementById('titleH2').style.color='#00ff00';
+  document.getElementById('titleH2').style.textShadow="0 0 10px #00ff00, 0 0 20px #00ff00aa";
+  document.getElementById('dbNameLabel').textContent=DB_NAME;
+  document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+  const activeBtn=document.getElementById('btn'+(id-1));
+  if(activeBtn) activeBtn.classList.add('active');
+  activeId=null;
+  setTimeout(()=>{updateTitleWithTotal();}, 300);
+  document.getElementById('fileName').value="";
+  document.getElementById('editor').value="";
+  document.getElementById('preview').src="about:blank";
+  // update color
+  document.documentElement.style.setProperty('--main-color', col);
+  // reload DB
+  initDB();
+}
+
+function downloadFile(content,fileName){
+  try{
+    const blob=new Blob([content],{type:"application/json"});
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement("a");
+    a.href=url; a.download=fileName;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{document.body.removeChild(a); URL.revokeObjectURL(url);},800);
+  }catch(e){alert("Letöltés hiba: "+e.message);}
+}
+
+function saveToDB(){
+  const nameEl=document.getElementById("fileName");
+  const codeEl=document.getElementById("editor");
+  let rawName=nameEl.value.trim() || "Repo"+currentDB+"_"+Date.now();
+  // Remove existing leading numbers user might have typed: 001_, 1-, 1 etc
+  let baseName=rawName.replace(/^\d+[_\-\s]*/, '').trim() || rawName;
+  const code=codeEl.value;
+  if(!code.trim()){alert("Üres a kód!"); return;}
+  const color=neonColors[Math.floor(Math.random()*neonColors.length)]; window._lastSavedColor=color;
+  
+  // Auto sorszám: if editing keep old number, else next number
+  let finalName;
+  if(activeId){
+    // Editing: keep existing prefix if exists
+    try{
+      const existingArr=getLS();
+      const existing=existingArr.find(x=>x.id===activeId);
+      if(existing && existing.fileName){
+        // Keep its number prefix
+        const m=existing.fileName.match(/^(\d+)_/);
+        if(m) finalName=m[1]+'_'+baseName;
+        else finalName=existing.fileName.replace(/^\d+[_\-\s]*/, '').trim() ? existing.fileName.match(/^(\d+)_/)?.[1]+'_'+baseName : baseName;
+        // fallback keep original fileName if baseName same
+        if(!finalName || finalName.startsWith('_')) finalName=existing.fileName;
+        else{
+          // If existing already has correct base, keep number
+          const existingBase=existing.fileName.replace(/^\d+[_\-\s]*/, '');
+          if(existingBase===baseName) finalName=existing.fileName;
+        }
+      }else{
+        finalName=baseName;
+      }
+    }catch(e){ finalName=baseName; }
+    if(!finalName) finalName=baseName;
+  }else{
+    // New: auto increment
+    let nextNum=1;
+    try{
+      const arr=getLS();
+      nextNum=arr.length+1;
+      // Find max number to avoid duplicate after deletions
+      let max=0;
+      arr.forEach(x=>{
+        const fn=x.fileName||x.name||'';
+        const mm=fn.match(/^(\d+)_/);
+        if(mm){ const n=parseInt(mm[1],10); if(n>max) max=n; }
+      });
+      if(max>=nextNum) nextNum=max+1;
+    }catch(e){}
+    const pad=String(nextNum).padStart(2,'0');
+    finalName=pad+'_'+baseName;
+  }
+  
+  const name=finalName;
+  const obj={name,code,color,time:new Date().toLocaleString("hu-HU")};
+  obj.fileName=finalName;
+  // Azonnal fent mutatja a beírt nevet
+  try{ updateLastName(currentDB, finalName); }catch(e){} // ensure both
+  if(activeId) obj.id=activeId;
+
+  if(useLS){
+    let arr=getLS();
+    if(activeId){
+      const idx=arr.findIndex(x=>x.id===activeId);
+      if(idx>=0) arr[idx]=obj; else {obj.id=Date.now(); arr.push(obj); activeId=obj.id;}
+    }else{obj.id=Date.now(); arr.push(obj); activeId=obj.id;}
+    setLS(arr);
+    loadList();
+    const now=new Date(); const pad=n=>String(n).padStart(2,'0');
+    const d=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+    const t=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
+    const fname=currentDB+"_"+name.replace(/\s+/g,'_')+"_"+d+"_"+t+".json";
+    downloadFile(JSON.stringify(obj,null,2), fname);
+    setStatus("MENTVE LS: "+name,"#0f0");
     return;
   }
-  // egyben
-  showStatus('⏳ Adatok gyűjtése 5 modulból...','#00ffff',3000);
-  requestAllExports();
-  const start = Date.now();
-  const checker = setInterval(()=>{
-    if(Object.keys(exportBuffer).length===5 || Date.now()-start>5000){
-      clearInterval(checker);
+
+  if(!db){alert("DB még nem nyílt"); return;}
+  try{
+    const tx=db.transaction(STORE,"readwrite");
+    const store=tx.objectStore(STORE);
+    const req=store.put(obj);
+    req.onsuccess=e=>{
+      activeId=activeId||e.target.result;
+      loadList();
       const now=new Date(); const pad=n=>String(n).padStart(2,'0');
-      const dateStr=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-      const timeStr=`${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-      const timeFile=`${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-      const exportObj={
-        version:"V32-KULON-JSON-5in1-FIX",
-        exportName:nameInput,
-        exportDate:dateStr,
-        exportTime:timeStr,
-        exportTimeFile:timeFile,
-        exportDateTime:now.toLocaleString('hu-HU'),
-        exportTimestamp:now.getTime(),
-        modules:{}
-      };
-      let total=0;
-      MODULES.forEach(m=>{
-        const data=exportBuffer[m.id]||[];
-        exportObj.modules[m.name]={
-          module:m.name,
-          moduleId:m.id,
-          title:m.title,
-          count:data.length,
-          data:data
-        };
-        total+=data.length;
-      });
-      exportObj.totalCount=total;
-      const blob=new Blob([JSON.stringify(exportObj,null,2)],{type:'application/json'});
-      const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-      a.download=(nameInput.endsWith('.json')?nameInput:nameInput+'.json'); a.click();
-      showStatus(`✔ EGYBEN EXPORT KÉSZ!\nNév: ${nameInput}\nDátum: ${dateStr} ${timeStr}\nÖssz: ${total} db`,'#00ff00',7000);
-      logDebug(`Egyben export: ${nameInput} total=${total}`);
-    }
-  },200);
+      const d=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+      const t=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
+      const fname=currentDB+"_"+name.replace(/\s+/g,'_')+"_"+d+"_"+t+".json";
+      downloadFile(JSON.stringify(obj,null,2), fname);
+      setStatus("MENTVE: "+name,"#0f0");
+    };
+  }catch(e){useLS=true; saveToDB();}
 }
 
-function doExportSeparate(customName){
-  const now=new Date(); const pad=n=>String(n).padStart(2,'0');
-  const dateStr=`${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
-  const timeStr=`${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())}`;
-  const timeFile=`${pad(now.getHours())}-${pad(now.getMinutes())}-${pad(now.getSeconds())}`;
-  const baseName = customName || document.getElementById('exportNameInput').value.trim() || `5in1_KULON_${dateStr}_${timeFile}`;
-  closeExportModal();
-  showStatus('⏳ Külön JSON-ok gyűjtése...','#00ffff',3000);
-  requestAllExports();
-  const start=Date.now();
-  const checker=setInterval(()=>{
-    if(Object.keys(exportBuffer).length===5 || Date.now()-start>5000){
-      clearInterval(checker);
-      MODULES.forEach(m=>{
-        const data=exportBuffer[m.id]||[];
-        const obj={
-          version:`V32-KULON-JSON-${m.name}`,
-          module:m.name,
-          moduleId:m.id,
-          moduleName:m.title,
-          exportName:`${baseName}_${m.name}`,
-          exportDate:dateStr,
-          exportTime:timeStr,
-          exportTimeFile:timeFile,
-          exportDateTime:now.toLocaleString('hu-HU'),
-          exportTimestamp:now.getTime(),
-          count:data.length,
-          data:data
-        };
-        const blob=new Blob([JSON.stringify(obj,null,2)],{type:'application/json'});
-        const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
-        a.download=`${baseName}_${m.name}_${dateStr}_${timeFile}.json`; a.click();
-      });
-      showStatus(`✔ KÜLÖN JSON EXPORT KÉSZ!\nBase: ${baseName}\nDátum: ${dateStr} ${timeStr}\n5 fájl letöltve`,'#00ffff',7000);
-      logDebug(`Külön export: ${baseName} 5 fájl`);
-    }
-  },250);
-}
-
-function triggerImport(){
-  document.getElementById('importFileInput').click();
-}
-
-document.getElementById('importFileInput').addEventListener('change', async (e)=>{
-  const files=Array.from(e.target.files); if(!files.length) return;
-  for(const file of files){
-    try{
-      const text=await file.text(); const parsed=JSON.parse(text);
-      // 5in1 format
-      if(parsed.modules){
-        Object.keys(parsed.modules).forEach(key=>{
-          const modEntry=parsed.modules[key];
-          const targetMod=MODULES.find(m=>m.name===key || m.title===key || key.includes(m.name));
-          const mId = targetMod ? targetMod.id : MODULES.find(m=>key.toLowerCase().includes(m.name.toLowerCase().split('_')[1]))?.id;
-          const data = modEntry.data || modEntry.notes || modEntry;
-          const destId = targetMod ? targetMod.id : (mId!==undefined?mId:null);
-          if(destId!==null && destId!==undefined){
-            document.getElementById('f'+destId).contentWindow.postMessage({type:'importData', payload:data},'*');
-          } else {
-            // if can't detect, import to all
-            MODULES.forEach(m=>{document.getElementById('f'+m.id).contentWindow.postMessage({type:'importData', payload:data},'*');});
+function loadList(){
+  const render=(items)=>{
+    const list=document.getElementById("fileList");
+    if(!list) return;
+    list.innerHTML="";
+    let size=0;
+    items.forEach(item=>{
+      try{size+=new Blob([item.code||""]).size;}catch(e){}
+      const div=document.createElement("div");
+      div.className="file-item";
+      div.style.borderLeftColor=item.color||neonColors[(currentDB-1)%neonColors.length];
+      div.innerHTML="<strong style='color:"+(item.color||"#ffea00")+"'>"+(item.name||"Névtelen")+"</strong><small>"+(item.time||"")+"</small>";
+            div.onclick=()=>{
+        activeId=item.id;
+        document.getElementById("fileName").value=item.name;
+        document.getElementById("editor").value=item.code;
+        try{
+          const topEl=document.getElementById('last'+(currentDB-1));
+          if(topEl){
+            topEl.textContent=item.name||item.fileName||'';
+            topEl.style.display='flex';
+            const c=item.color||'#00f6ff';
+            topEl.style.color=c;
+            topEl.style.background='#000';
+            topEl.style.border='none';
+            topEl.style.boxShadow='none';
+            topEl.style.textShadow='none';
+            topEl.style.width='100%';
+            topEl.style.height='100%';
+            topEl.style.fontWeight='400';
+            topEl.style.alignItems='center';
+            topEl.style.justifyContent='center';
+            topEl.style.textAlign='center';
+            topEl.style.letterSpacing='0px';
+            topEl.style.padding='4px';
+            topEl.style.whiteSpace='nowrap';
+            topEl.style.overflow='hidden';
+            try{ localStorage.setItem('NeonRepoV5_LAST_'+currentDB, item.name||''); localStorage.setItem('NeonRepoV5_LAST_COLOR_'+currentDB, c); }catch(e){}
+            window._lastSavedColor=c;
+            setTimeout(()=>fitTextToBox(topEl), 10);
           }
-        });
-        showStatus(`✔ 5in1 IMPORT: ${file.name}`,'#00ff00',5000);
-      } else {
-        // single module
-        let data = parsed.data || parsed.notes || parsed;
-        let targetName = parsed.module || parsed.moduleName || '';
-        let target = MODULES.find(m=>targetName.includes(m.name) || targetName===m.title);
-        if(!target && parsed.version && parsed.version.includes('Neon')) target=MODULES[0];
-        if(!target) target=MODULES[0];
-        if(file.name.includes('Neon')) target=MODULES[0];
-        if(file.name.includes('OCR')) target=MODULES[1];
-        if(file.name.includes('Vegtelen')||file.name.includes('Végtelen')) target=MODULES[2];
-        if(file.name.includes('ULTRA')) target=MODULES[3];
-        if(file.name.includes('Vault')) target=MODULES[4];
-        document.getElementById('f'+target.id).contentWindow.postMessage({type:'importData', payload:data},'*');
-        showStatus(`✔ IMPORT: ${file.name} -> ${target.title}`,'#00ff00',5000);
-      }
-    }catch(err){ showStatus('❌ Import hiba: '+file.name+' '+err.message,'#ff0000',5000); }
-  }
-  e.target.value='';
-});
-
-function doResetAllData(){
-  MODULES.forEach(m=>{
-    document.getElementById('f'+m.id).contentWindow.postMessage({type:'resetRequest'},'*');
-  });
-  setTimeout(()=>{
-    MODULES.forEach(m=>{document.getElementById('cnt'+m.id).textContent='0';});
-    showStatus('💥 MINDEN MODUL RESETELVE','#ff6666',4000);
-    logDebug('RESET ALL');
-  },500);
-  closeResetModal();
+        }catch(e){}
+        loadList();
+        runCode();
+      };
+      list.appendChild(div);
+    });
+    const mb=(size/(1024*1024)).toFixed(2);
+    const st=document.getElementById("stTxt");
+    if(st) st.textContent=mb+" MB / 500 MB";
+    updateCnt(currentDB, items.length);
+    const fill=document.getElementById("fill");
+    if(fill) fill.style.width=Math.min((size/(500*1024*1024))*100,100)+"%";
+  };
+  if(useLS){render(getLS()); return;}
+  if(!db){setTimeout(loadList,500); return;}
+  try{
+    if(!db){ useLS=true; render(getLS()); return; } const tx=db.transaction(STORE,"readonly");
+    tx.objectStore(STORE).getAll().onsuccess=e=>{render(e.target.result);};
+  }catch(e){useLS=true; render(getLS());}
 }
 
-window.addEventListener('message', (e)=>{
-  if(e.data.type==='count'){
-    const id=e.data.module;
-    if(document.getElementById('cnt'+id)){
-      document.getElementById('cnt'+id).textContent=e.data.count;
-      // random color for menu btn inactive
-      if(!document.getElementById('btn'+id).classList.contains('active')){
-        const colors=["#00f6ff","#ffaa00","#ff00ff","#ffff00","#00ff88","#ff4400","#00ff00"];
-        const c=colors[id%colors.length];
-        document.getElementById('btn'+id).style.borderColor=c+'66';
-        document.getElementById('btn'+id).style.color=c;
-      }
+function runCode(){
+  const code=document.getElementById("editor").value;
+  if(!code.trim()){alert("Nincs kód!"); return;}
+  try{
+    const blob=new Blob([code],{type:'text/html'});
+    const url=URL.createObjectURL(blob);
+    const ifr=document.getElementById("preview");
+    ifr.src=url;
+    setTimeout(()=>URL.revokeObjectURL(url), 15000);
+    setStatus("FUTTATVA","#0f0");
+  }catch(e){alert("Futtatás hiba: "+e.message);}
+}
+
+function newProj(){
+  activeId=null;
+  setTimeout(()=>{updateTitleWithTotal();}, 300);
+  document.getElementById("fileName").value="";
+  document.getElementById("editor").value="";
+  document.getElementById("preview").src="about:blank";
+  loadList();
+  setStatus("ÚJ projekt","#ff0");
+}
+
+function deleteFromDB(){
+  if(!activeId){alert("Válassz ki egy projektet!"); return;}
+  if(!confirm("Törlöd?")) return;
+  if(useLS){
+    let arr=getLS().filter(x=>x.id!==activeId);
+    setLS(arr); newProj(); setStatus("TÖRÖLVE LS","#f00"); return;
+  }
+  try{
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).delete(activeId).onsuccess=()=>{newProj(); setStatus("TÖRÖLVE","#f00");};
+  }catch(e){useLS=true; deleteFromDB();}
+}
+
+function exportData(){
+  const now=new Date(); const pad=n=>String(n).padStart(2,'0');
+  const dateStr=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+  const timeStr=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+  const timeFile=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
+  const baseName=document.getElementById("fileName").value.trim()||("Repo"+currentDB+"_Export");
+  const defName=currentDB+"_"+baseName.replace(/\s+/g,'_')+"_"+dateStr+"_"+timeFile;
+  let name=prompt("Export fájl neve (név_dátum_idő):", defName);
+  if(!name) return;
+  if(!name.endsWith(".json")) name+=".json";
+
+  const doExport=(data)=>{
+    if(!data.length){alert("Nincs mentett adat!"); return;}
+    const exportObj={
+      exportName:name,
+      exportDate:dateStr,
+      exportTime:timeStr,
+      exportDateTime:now.toLocaleString("hu-HU"),
+      repo:currentDB,
+      count:data.length,
+      data:data
+    };
+    downloadFile(JSON.stringify(exportObj,null,2), name);
+    setStatus("EXPORT: "+name,"#0f0");
+  };
+
+  if(useLS){doExport(getLS()); return;}
+  try{
+    if(!db){ useLS=true; render(getLS()); return; } const tx=db.transaction(STORE,"readonly");
+    tx.objectStore(STORE).getAll().onsuccess=e=>{doExport(e.target.result);};
+  }catch(e){doExport(getLS());}
+}
+
+function importData(){
+  if(!db){ useLS=true; }
+
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json";
+  input.onchange=e=>{
+    const file=e.target.files[0];
+    if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const parsed=JSON.parse(ev.target.result);
+        let arr=parsed.data||parsed;
+        if(!Array.isArray(arr)) arr=[arr];
+        if(useLS || !db){
+          let cur=getLS();
+          arr.forEach(it=>{delete it.id; it.id=Date.now()+Math.floor(Math.random()*10000); cur.push(it);});
+          setLS(cur); loadList(); alert("Import kész LS: "+arr.length+" db"); return;
+        }
+        try{
+        const tx=db.transaction(STORE,"readwrite");
+        const store=tx.objectStore(STORE);
+        arr.forEach(it=>{delete it.id; store.put(it);});
+        tx.oncomplete=()=>{loadList(); alert("Import kész: "+arr.length+" db");};
+        }catch(e2){ 
+          let cur=getLS(); arr.forEach(it=>{delete it.id; it.id=Date.now()+Math.floor(Math.random()*10000); cur.push(it);}); setLS(cur); loadList(); alert("Import kész LS fallback: "+arr.length+" db"); 
+        }
+      }catch(err){alert("Import hiba: "+err.message);}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+function clearEdge(){resetAll100();}
+function resetAll100(){
+  if(!confirm("⚠️ BIZTOS TÖRLÖD MIND A 100 REPÓT?\n\nEz 100 adatbázist és az összes projektet törli!\nNEM VISSZAVONHATÓ!")){
+    return;
+  }
+  if(!confirm("🔴 VÉGSŐ MEGERŐSÍTÉS\n\nTényleg törlöd MIND A 100 repót?\nMinden mentett kód elveszik!\n\nOK = TÖRLÉS")){
+    return;
+  }
+  setStatus("RESET 100... törlés","#f00");
+  let deletedLS=0;
+  let deletedIDB=0;
+  let total=0;
+
+  // Delete LS + LAST names
+  for(let i=1;i<=100;i++){
+    const key="NeonRepoV5_LS_"+i;
+    const lastKey="NeonRepoV5_LAST_"+i;
+    if(localStorage.getItem(key)){
+      localStorage.removeItem(key);
+      deletedLS++;
+    }
+    try{ localStorage.removeItem(lastKey); }catch(e){}
+    // Clear button UI immediately
+    try{
+      const cntEl=document.getElementById('cnt'+(i-1));
+      const lastEl=document.getElementById('last'+(i-1));
+      const btn=document.getElementById('btn'+(i-1));
+      if(cntEl){ cntEl.textContent='0'; cntEl.style.display='inline-block'; }
+      if(lastEl){ lastEl.textContent=''; lastEl.style.display='none'; lastEl.title=''; }
+      if(btn){ btn.classList.remove('has-data'); btn.style.color=''; }
+    }catch(e){}
+  }
+
+  // Delete IDB databases
+  let completed=0;
+  const finish=()=>{
+    completed++;
+    if(completed>=100){
+      total=deletedLS+deletedIDB;
+      alert("💥 RESET 100 KÉSZ!\n\nTörölve:\n- LS: "+deletedLS+" repo\n- IDB: "+deletedIDB+" repo\n\nMind a 100 repo üres!");
+      setStatus("RESET 100 KÉSZ: "+total+" törölve","#f00");
+      // Reset current view
+      activeId=null;
+  setTimeout(()=>{updateTitleWithTotal();}, 300);
+      document.getElementById("fileName").value="";
+      document.getElementById("editor").value="";
+      document.getElementById("preview").src="about:blank";
+      loadList();
+      updateAllCounts();
+      updateTitleWithTotal();
+      // Also try to close current db
+      try{if(db){db.close(); db=null;}}catch(e){}
+      initDB();
+    }
+  };
+
+  for(let i=1;i<=100;i++){
+    try{
+      const del=indexedDB.deleteDatabase("NeonRepoV5_"+i);
+      del.onsuccess=()=>{deletedIDB++; finish();};
+      del.onerror=()=>{finish();};
+      del.onblocked=()=>{finish();};
+    }catch(e){
+      finish();
     }
   }
-  if(e.data.type==='exportData'){
-    exportBuffer[e.data.module]=e.data.data;
+  // If IDB not supported, finish quickly
+  setTimeout(()=>{
+    if(completed<100){
+      // Force finish after 3 sec
+      while(completed<100){completed++; if(completed>=100) break;}
+      // Call finish logic
+      total=deletedLS+deletedIDB;
+      if(total>0){
+        setStatus("RESET 100 KÉSZ","#f00");
+        loadList();
+        updateAllCounts();
+      }
+    }
+  },3000);
+}
+function clearAll(){
+  if(!confirm("MINDEN TÖRLŐDIK ebben a repóban! Repo "+currentDB+" Biztos?")) return;
+  if(useLS){localStorage.removeItem(LS_KEY); try{localStorage.removeItem('NeonRepoV5_LAST_'+currentDB);}catch(e){} newProj(); setStatus("RESET LS","#f00"); updateAllCounts(); return;}
+  try{
+    const tx=db.transaction(STORE,"readwrite");
+    tx.objectStore(STORE).clear().onsuccess=()=>{newProj(); setStatus("RESET kész","#f00");};
+  }catch(e){localStorage.removeItem(LS_KEY); newProj();}
+}
+
+function copyCode(){
+  const ed=document.getElementById("editor");
+  ed.focus(); ed.select();
+  try{document.execCommand("copy"); setStatus("MÁSOLVA!","#0f0");}catch(e){navigator.clipboard.writeText(ed.value).then(()=>setStatus("MÁSOLVA!","#0f0"));}
+}
+
+
+function exportAll100(){
+  try{
+    const now=new Date(); const pad=n=>String(n).padStart(2,'0');
+    const dateStr=now.getFullYear()+"-"+pad(now.getMonth()+1)+"-"+pad(now.getDate());
+    const timeFile=pad(now.getHours())+"-"+pad(now.getMinutes())+"-"+pad(now.getSeconds());
+    const timeStr=pad(now.getHours())+":"+pad(now.getMinutes())+":"+pad(now.getSeconds());
+    let defName="100in1_ALL_"+dateStr+"_"+timeFile;
+    let name=prompt("Mind a 100 repo export neve:", defName);
+    if(!name) return;
+    if(!name.endsWith(".json")) name+=".json";
+    setStatus("Exportálás mind a 100...","#ff0");
+    const allRepos=[];
+    let totalCount=0;
+    for(let i=1;i<=100;i++){
+      const lsKey="NeonRepoV5_LS_"+i;
+      let lsData=[];
+      try{lsData=JSON.parse(localStorage.getItem(lsKey)||"[]");}catch(e){lsData=[];}
+      // LS data is reliable, IDB may contain same
+      allRepos.push({repo:i, count:lsData.length, data:lsData});
+      totalCount+=lsData.length;
+      // Also update LAST name persistence
+      try{
+        if(lsData.length>0){
+          const last=lsData[lsData.length-1];
+          const lastName=last.fileName||last.name||"";
+          if(lastName) localStorage.setItem('NeonRepoV5_LAST_'+i, lastName);
+        }
+      }catch(e){}
+    }
+    const exportObj={
+      version:"V23-ALL-100-FIXED",
+      exportName:name,
+      exportDate:dateStr,
+      exportTime:timeStr,
+      exportDateTime:now.toLocaleString("hu-HU"),
+      totalRepos:100,
+      totalCount:totalCount,
+      repos:allRepos
+    };
+    downloadFile(JSON.stringify(exportObj,null,2), name);
+    setStatus("EXPORT ALL 100 kész: "+totalCount+" db","#0f0");
+    setTimeout(()=>alert("Export kész! "+totalCount+" projekt 100 repóból\nFájl: "+name), 300);
+  }catch(e){
+    alert("Export hiba: "+e.message);
+    console.error(e);
   }
-  if(e.data.type==='debug'){
-    logDebug(e.data.msg);
+}
+
+function importAll100(){
+  const input=document.createElement("input");
+  input.type="file";
+  input.accept=".json,application/json,.txt";
+  input.style.display="none";
+  document.body.appendChild(input);
+  input.onchange=e=>{
+    const file=e.target.files[0];
+    if(!file){ document.body.removeChild(input); return; }
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        let parsed;
+        try{ parsed=JSON.parse(ev.target.result); }catch(err){
+          alert("Nem JSON fájl! "+err.message);
+          document.body.removeChild(input);
+          return;
+        }
+        let repos=[];
+        // Format 1: V12-V26 ALL export {repos:[{repo,data}]}
+        if(parsed.repos && Array.isArray(parsed.repos)){
+          repos=parsed.repos;
+        }
+        // Format 2: single repo export {data:[...]}
+        else if(parsed.data && Array.isArray(parsed.data)){
+          repos=[{repo:currentDB, data:parsed.data}];
+        }
+        // Format 3: array of projects
+        else if(Array.isArray(parsed)){
+          repos=[{repo:currentDB, data:parsed}];
+        }
+        // Format 4: {projects:[...]}
+        else if(parsed.projects && Array.isArray(parsed.projects)){
+          repos=[{repo:currentDB, data:parsed.projects}];
+        }
+        // Format 5: single project {name, code}
+        else if(parsed.code && parsed.name){
+          repos=[{repo:currentDB, data:[parsed]}];
+        }
+        // Format 6: search any array property that looks like projects
+        else{
+          let found=false;
+          for(let k in parsed){
+            if(Array.isArray(parsed[k]) && parsed[k].length>0){
+              const first=parsed[k][0];
+              if(first && (first.code || first.name || first.fileName)){
+                // If k is repos-like but nested
+                if(k==="repos" && first.repo){
+                  repos=parsed[k];
+                  found=true;
+                  break;
+                }else{
+                  repos=[{repo:currentDB, data:parsed[k]}];
+                  found=true;
+                  break;
+                }
+              }
+              // If array of arrays (old)
+              if(Array.isArray(first)){
+                let flat=[];
+                parsed[k].forEach(sub=>{ if(Array.isArray(sub)) flat=flat.concat(sub); else flat.push(sub); });
+                if(flat.length>0 && flat[0].code){
+                  repos=[{repo:currentDB, data:flat}];
+                  found=true;
+                  break;
+                }
+              }
+            }
+          }
+          if(!found){
+            // Last resort: if object has numeric keys 1..100 with arrays
+            let collected=[];
+            for(let i=1;i<=100;i++){
+              if(parsed[i] && Array.isArray(parsed[i]) && parsed[i].length>0){
+                collected.push({repo:i, data:parsed[i]});
+              }
+              if(parsed["NeonRepoV5_LS_"+i] && Array.isArray(parsed["NeonRepoV5_LS_"+i])){
+                collected.push({repo:i, data:parsed["NeonRepoV5_LS_"+i]});
+              }
+            }
+            if(collected.length>0){
+              repos=collected;
+              found=true;
+            }
+          }
+          if(!found){
+            console.log("Import parse debug:", parsed);
+            alert("Ismeretlen formátum!\nA fájl nem tartalmaz repos vagy data tömböt\n\nTartalom kulcsok: "+Object.keys(parsed).join(", ")+"\nNézd meg F12 konzolt");
+            document.body.removeChild(input);
+            return;
+          }
+        }
+
+        const totalToImport=repos.reduce((s,r)=>s+(r.data?r.data.length:0),0);
+        if(totalToImport===0){
+          alert("A fájl üres, 0 projekt van benne!\nRepos: "+repos.length);
+          document.body.removeChild(input);
+          return;
+        }
+        if(!confirm("Importálod mind a 100 repót?\n"+repos.length+" repo, összesen "+totalToImport+" projekt\nEz hozzáadja a meglévőkhöz, nem törli!")){
+          document.body.removeChild(input);
+          return;
+        }
+        let totalImported=0;
+        repos.forEach(r=>{
+          const repoId=r.repo||currentDB;
+          const dataArr=r.data||[];
+          if(!dataArr.length) return;
+          const lsKey="NeonRepoV5_LS_"+repoId;
+          try{
+            let cur=[];
+            try{cur=JSON.parse(localStorage.getItem(lsKey)||"[]");}catch(e){cur=[];}
+            dataArr.forEach(it=>{
+              if(!it || !it.code) return;
+              const newItem={...it};
+              if(!newItem.fileName) newItem.fileName=newItem.name||("import_"+Date.now());
+              if(!newItem.name) newItem.name=newItem.fileName;
+              delete newItem.id;
+              newItem.id=Date.now()+Math.floor(Math.random()*100000)+repoId*1000+Math.random()*1000;
+              cur.push(newItem);
+            });
+            localStorage.setItem(lsKey, JSON.stringify(cur));
+            totalImported+=dataArr.length;
+            try{
+              const last=dataArr[dataArr.length-1];
+              const lastName=last.fileName||last.name||"";
+              if(lastName) localStorage.setItem('NeonRepoV5_LAST_'+repoId, lastName);
+            }catch(e){}
+          }catch(e){ console.warn(e); }
+        });
+        document.body.removeChild(input);
+        alert("✅ IMPORT MIND A 100 kész!\n"+totalImported+" projekt importálva "+repos.length+" repóba");
+        setStatus("IMPORT ALL 100 kész: "+totalImported,"#0f0");
+        try{ loadList(); updateAllCounts(); updateTitleWithTotal(); }catch(e){}
+        setTimeout(()=>{
+          for(let i=1;i<=100;i++){
+            try{
+              const lastStored=localStorage.getItem('NeonRepoV5_LAST_'+i);
+              if(lastStored) updateLastName(i, lastStored);
+            }catch(e){}
+          }
+          try{ loadList(); }catch(e){}
+        }, 300);
+      }catch(ex){
+        alert("Import hiba: "+ex.message);
+        console.error(ex);
+        try{ document.body.removeChild(input); }catch(e){}
+      }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+
+
+
+// Resizer
+(function(){
+  const resizer=document.getElementById('resizer');
+  const editorSec=document.getElementById('editorSec');
+  if(!resizer || !editorSec) return;
+  let dragging=false; let startY=0; let startH=0;
+  resizer.addEventListener('mousedown', e=>{
+    dragging=true; startY=e.clientY; startH=editorSec.offsetHeight;
+    document.body.style.cursor='row-resize'; document.body.style.userSelect='none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', e=>{
+    if(!dragging) return;
+    const dy=e.clientY - startY;
+    let newH=startH + dy;
+    const total=document.querySelector('.main').offsetHeight;
+    if(newH < 80) newH=80;
+    if(newH > total - 80) newH=total-80;
+    editorSec.style.height=newH+'px';
+    editorSec.style.flex='none';
+  });
+  document.addEventListener('mouseup', ()=>{
+    if(dragging){dragging=false; document.body.style.cursor=''; document.body.style.userSelect='';}
+  });
+})(); setTimeout(()=>{ for(let i=0;i<100;i++){ const el=document.getElementById('last'+i); if(el) fitTextToBox(el); } }, 300);
+
+// Build topbar 100 buttons
+(function(){
+  const topbar=document.getElementById('topbar');
+  for(let i=1;i<=100;i++){
+    const col=neonColors[(i-1) % neonColors.length];
+    const btn=document.createElement('button');
+    btn.className='menu-btn'+(i===1?' active':'');
+    btn.id='btn'+(i-1);
+    btn.style.borderColor=col;
+    // Load last name - legfrissebb DÁTUM szerint, VALÓDI SZÍNNEL
+    let lastName='';
+    let lastColor='#00f6ff';
+    try{
+      const arr=JSON.parse(localStorage.getItem('NeonRepoV5_LS_'+i)||"[]");
+      if(arr.length>0){
+        const latest=getLatestProject(arr);
+        if(latest){ 
+          lastName=latest.fileName||latest.name||'';
+          lastColor=latest.color||'#00f6ff';
+        }
+      }
+    }catch(e){}
+    const fullNameHtml = lastName 
+      ? '<span class="last-full-under" id="last'+(i-1)+'" style="color:'+lastColor+'; border:1px solid '+lastColor+'; background:rgba(0,0,0,0.35); box-shadow:0 0 8px '+lastColor+'99; box-shadow:0 0 6px '+col+'66;" title="'+lastName.replace(/"/g,'&quot;')+'">'+lastName+'</span>'
+      : '<span class="last-full-under" id="last'+(i-1)+'" style="display:none;"></span>';
+    btn.innerHTML=`<span class="last-full-under" id="last${i-1}" style="display:flex; color:${lastColor}; background:#000; width:auto; height:auto; align-items:center; justify-content:center; font-size:20px; font-weight:400; text-shadow:none; box-shadow:none; border:none; text-align:center; word-break:break-all; line-height:0.9; padding:4px; overflow:hidden; white-space:nowrap;">${lastName||''}</span>`;
+    btn.onclick=()=>switchDB(i);
+    topbar.appendChild(btn);
   }
+})();
+
+function updateLastName(id, name){
+  try{
+    let realColor=window._lastSavedColor || '#00f6ff';
+    try{
+      const arr=JSON.parse(localStorage.getItem('NeonRepoV5_LS_'+id)||'[]');
+      const found=arr.find(x=> (x.fileName===name || x.name===name) );
+      if(found && found.color) realColor=found.color;
+      else{
+        const latest=getLatestProject(arr);
+        if(latest && latest.color) realColor=latest.color;
+      }
+    }catch(e){}
+    const el=document.getElementById('last'+(id-1));
+    if(el && name){
+      el.textContent=name;
+      el.title=name+' | '+realColor;
+      el.style.display='block';
+      el.style.color=realColor;
+      el.style.borderColor=realColor;
+      el.style.background='rgba(0,0,0,0.4)';
+      el.style.boxShadow='0 0 8px '+realColor+'99';
+      try{ localStorage.setItem('NeonRepoV5_LAST_'+id, name); localStorage.setItem('NeonRepoV5_LAST_COLOR_'+id, realColor); }catch(e){}
+    }
+  }catch(e){}
+}
+
+
+
+window.onload=()=>{initDB(); setTimeout(updateAllCounts,800);};
+initDB();
+setTimeout(updateAllCounts,1500);
+setInterval(updateAllCounts,5000);
+
+// MIGRATION: javítja az összes LAST kulcsot legfrissebb id szerint - V28 fix
+setTimeout(()=>{
+  try{
+    for(let i=1;i<=100;i++){
+      const lsKey="NeonRepoV5_LS_"+i;
+      let arr=[];
+      try{arr=JSON.parse(localStorage.getItem(lsKey)||"[]");}catch(e){arr=[];}
+      if(arr.length>0){
+        const latest=getLatestProject(arr) || arr[0];
+        const name=latest.fileName||latest.name||'';
+        if(name){
+          try{ localStorage.setItem('NeonRepoV5_LAST_'+i, name); }catch(e){}
+          // Frissíti a gombot is
+          const lastEl=document.getElementById('last'+(i-1));
+          if(lastEl){
+            lastEl.textContent=name;
+            lastEl.title=name;
+            lastEl.style.display='block';
+            try{ const b=document.getElementById('btn'+(i-1)); if(b){ lastEl.style.color=b.style.borderColor; lastEl.style.borderColor=b.style.borderColor; } }catch(e){}
+          }
+        }
+      }
+    }
+    console.log("LAST migration kész - legfrissebb id szerint");
+  }catch(e){ console.warn("Migration hiba", e); }
+}, 500);
+
+
+// LIVE update: ablakba beírt név azonnal fent látszik
+document.addEventListener('DOMContentLoaded', ()=>{
+  setTimeout(()=>{
+    const fileNameInput=document.getElementById('fileName');
+    if(fileNameInput){
+      fileNameInput.addEventListener('input', ()=>{
+        try{
+          const typed=fileNameInput.value.trim();
+          const lastEl=document.getElementById('last'+(currentDB-1));
+          const btn=document.getElementById('btn'+(currentDB-1));
+          if(lastEl && typed){
+            lastEl.textContent=typed;
+            lastEl.title=typed;
+            lastEl.style.display='block';
+            if(btn){ lastEl.style.color=btn.style.borderColor; lastEl.style.borderColor=btn.style.borderColor; }
+          }
+        }catch(e){}
+      });
+    }
+  }, 800);
 });
 
-window.addEventListener('DOMContentLoaded', initIframes);
-</script>
-</body>
-</html>
+setTimeout(()=>{ try{ updateAllCounts(); }catch(e){} }, 1500);
+
+
+
+
+
+
+
+function fitTextToBox(el){
+  if(!el) return;
+  el.style.fontFamily='Arial, sans-serif';
+  el.style.fontSize='20px';
+  el.style.fontWeight='400';
+  el.style.whiteSpace='nowrap';
+  el.style.wordBreak='normal';
+  el.style.lineHeight='45px';
+  el.style.display='inline-block';
+  el.style.maxWidth='none';
+  el.style.width='auto';
+  const box = el.parentElement;
+  if(box){
+    box.style.width='auto';
+    box.style.maxWidth='none';
+    box.style.minWidth='max-content';
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+</script></body></html>
