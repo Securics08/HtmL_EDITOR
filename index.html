@@ -1,594 +1,441 @@
 <!DOCTYPE html>
 <html lang="hu">
-<head>
-<meta charset="UTF-8"> <title>ULTRA-NOTE-PNG-Save_STABLE_V.01 - FINAL ORIGINAL SAVE</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Monoton&family=Pinyon+Script&family=Nabla&family=Bungee+Shade&family=Ewert&family=Vast+Shadow&family=Creepster&family=Lobster&family=Righteous&family=Faster+One&family=Special+Elite&family=Orbitron&family=Pacifico&family=Press+Start+2P&family=Permanent+Marker&family=Sacramento&family=Silkscreen&family=Codystar&family=Megrim&family=Fredericka+the+Great&family=UnifrakturMaguntia&family=Wallpoet&family=Syncopate&family=Fascinate+Inline&family=Nosifer&family=Rubik+Glitch&family=Bangers&family=Alumni+Sans+Inline+One&family=Iceberg&family=Glass+Antiqua&family=Kranky&family=Great+Vibes&family=Bruno+Ace+SC&family=VT323&family=Montserrat&family=Nunito&family=Oswald&family=Playfair+Display&family=Spectral&family=Ultra&family=Varela+Round&family=Alegreya&family=Roboto+Serif&family=Roboto+Mono&family=Bungee+Spice&family=Shadows+Into+Light&family=Indie+Flower&family=Dancing+Script&family=Caveat&family=Satisfy&family=Kaushan+Script&family=Yellowtail&family=Courgette&family=Amatic+SC&family=Bebas+Neue&family=Abril+Fatface&family=Patua+One&family=Fredoka+One&family=Limelight&family=Stalinist+One&family=Black+Ops+One&family=Shojumaru&family=Metal+Mania&family=Sancreek&family=Rye&family=Butcherman&family=Frijole&family=Eater&family=Aclonica&family=Michroma&family=Audiowide&family=Quantico&family=Russo+One&family=Squada+One&family=Allura&family=Alex+Brush&family=Cookie&family=Grand+Hotel&family=Parisienne&family=Rochester&family=Tangerine&family=Zeyada&family=Architects+Daughter&family=Covered+By+Your+Grace&family=Gloria+Hallelujah&family=Handlee&family=Patrick+Hand&family=Reenie+Beanie&family=Rock+Salt&family=Coming+Soon&family=Boogaloo&family=Carter+One&family=Chango&family=Cherry+Cream+Soda&family=Chewy&family=Fugaz+One&family=Luckiest+Guy&family=Titan+One&family=Yeseva+One&family=Marcellus&family=Cinzel&family=Forum&family=Cormorant+Garamond&display=swap" rel="stylesheet">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Képtároló DB - 500MB - 8 Szín + Szerkeszthető Nevek - Zöld Neon</title>
 <style>
-  *{box-sizing:border-box}
-  body{ margin:0; background:#0a0a0a; color:#fff; font-family:Arial, sans-serif; overflow:hidden; }
-  .container{ display:flex; height:100vh; width:100vw; overflow:hidden; }
-  .sidebar{ width:60px; min-width:60px; background:#111; padding:10px; overflow-y:auto; border-right:1px solid #333; }
-  .color-btn{ width:100%; height:24px; margin-bottom:6px; border:none; cursor:pointer; border-radius:4px; box-shadow:0 0 5px rgba(255,255,255,0.3); }
-  .main{ flex:1; min-width:0; padding:10px; display:flex; flex-direction:column; overflow:hidden; }
-  .toolbar{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:8px; align-items:center; }
-  .toolbar select,.toolbar input,.toolbar button{ padding:6px 10px; border-radius:6px; border:1px solid #333; background:#111; color:#fff; font-weight:bold; cursor:pointer; font-size:13px; }
-  .toolbar button:hover{ filter:brightness(1.25); }
-  .btn-reset{ background:#555!important; } .btn-theme{ background:#444!important; color:#ffff00!important; }
-  .btn-insert{ background:#0080ff!important; } .btn-new{ background:#00ff66!important; color:#000!important; }
-  .btn-load{ background:#ffaa00!important; color:#000!important; } .btn-save{ background:#00ff99!important; color:#000!important; }
-  .btn-del{ background:#ff0000!important; color:#fff!important; box-shadow:0 0 8px #ff0000!important; }
-  .btn-export{ background:#ffff00!important; color:#000!important; } .btn-import{ background:#00f6ff!important; color:#000!important; }
-  .btn-png1{ background:#222!important; } .btn-png2{ background:#00ff99!important; color:#000!important; border:2px dashed #fff!important; box-shadow:0 0 12px #00ff99!important; }
-  .btn-pdf1{ background:#fff!important; color:#000!important; } .btn-pdf2{ background:#7a001f!important; color:#fff!important; } .btn-html{ background:#8000ff!important; border-color:#00f6ff!important; }
-  #fontSelect{ min-width:260px; border:2px solid #ff00ff!important; box-shadow:0 0 10px #ff00ff; background:#111!important; }
-  #fontSelect option{ background:#0a0a0a; font-weight:bold; }
-  body.light-mode{ background:#e0e0e0; color:#000; }
-  .light-mode #captureArea{ background:#ffffff!important; border-color:#ccc; }
-  .light-mode #editorHeader{ border-bottom-color:#ccc; color:#000; }
-  #captureArea{ flex:1; min-height:0; background:#050505; border:1px solid #333; border-radius:6px; display:flex; flex-direction:column; overflow-y:auto; position:relative; }
-  #editorHeaderWrap{ display:flex; justify-content:space-between; align-items:center; padding:10px; min-height:30px; margin-bottom:5px; border-bottom:1px dashed #333; flex-shrink:0; gap:10px; }
-  #editorHeader{ flex:1; font-size:18px; }
-  .editor{ flex:1; padding:10px; overflow-y:auto; font-size:20px; white-space:pre-wrap; word-wrap:break-word; word-break:break-word; min-height:100%; outline:none; line-height:1.0!important; }
-  .editor div{ margin:0!important; padding:0!important; min-height:1.0em!important; line-height:1.0!important; }
-  .neon-black{ color:#000000!important; text-shadow:none!important; } .neon-orange{ color:#ff6600!important; text-shadow:0 0 5px #ff6600,0 0 10px #ff6600,0 0 15px #ff6600,0 0 20px #ff6600!important; }
-  .neon-yellow{ color:#ffff00!important; text-shadow:0 0 5px #ffff00,0 0 10px #ffff00,0 0 15px #ffff00,0 0 20px #ffff00!important; }
-  .neon-darkred{ color:#7a001f!important; text-shadow:0 0 5px #7a001f,0 0 10px #7a001f,0 0 15px #7a001f,0 0 20px #7a001f!important; }
-  .neon-cyan{ color:#00f6ff!important; text-shadow:0 0 5px #00f6ff,0 0 10px #00f6ff,0 0 15px #00f6ff,0 0 20px #00f6ff!important; }
-  .neon-blue{ color:#00aaff!important; text-shadow:0 0 5px #00aaff,0 0 10px #00aaff,0 0 15px #00aaff,0 0 20px #00aaff!important; }
-  .neon-deepblue{ color:#0080ff!important; text-shadow:0 0 5px #0080ff,0 0 10px #0080ff,0 0 15px #0080ff,0 0 20px #0080ff!important; }
-  .neon-magenta{ color:#ff00ff!important; text-shadow:0 0 5px #ff00ff,0 0 10px #ff00ff,0 0 15px #ff00ff,0 0 20px #ff00ff!important; }
-  .neon-pink{ color:#ff33ff!important; text-shadow:0 0 5px #ff33ff,0 0 10px #ff33ff,0 0 15px #ff33ff,0 0 20px #ff33ff!important; }
-  .neon-green{ color:#00ff00!important; text-shadow:0 0 5px #00ff00,0 0 10px #00ff00,0 0 15px #00ff00,0 0 20px #00ff00!important; }
-  .neon-lightgreen{ color:#00ff66!important; text-shadow:0 0 5px #00ff66,0 0 10px #00ff66,0 0 15px #00ff66,0 0 20px #00ff66!important; }
-  .neon-lime{ color:#33ff33!important; text-shadow:0 0 5px #33ff33,0 0 10px #33ff33,0 0 15px #33ff33,0 0 20px #33ff33!important; }
-  .neon-mint{ color:#00ff99!important; text-shadow:0 0 5px #00ff99,0 0 10px #00ff99,0 0 15px #00ff99,0 0 20px #00ff99!important; }
-  .neon-purple{ color:#8000ff!important; text-shadow:0 0 5px #8000ff,0 0 10px #8000ff,0 0 15px #8000ff,0 0 20px #8000ff!important; }
-  .neon-red{ color:#ff0000!important; text-shadow:0 0 5px #ff0000,0 0 10px #ff0000,0 0 15px #ff0000,0 0 20px #ff0000!important; }
-  .neon-white{ color:#ffffff!important; text-shadow:0 0 5px #ffffff,0 0 10px #ffffff,0 0 15px #ffffff,0 0 20px #ffffff!important; }
-  .glow-off [class^='neon-']{ text-shadow:none!important; }
-  #glowBtn.on{ background:#00ff00!important; color:#000!important; font-weight:bold; } #glowBtn.off{ background:#ff0000!important; color:#fff!important; font-weight:bold; }
-  .editor a{ cursor:pointer!important; text-decoration:underline!important; display:inline-block; }
-  .saved-panel{ width:320px; min-width:320px; background:#222; padding:20px; display:flex; flex-direction:column; overflow:hidden; border-left:1px solid #333; }
-  .saved-panel h3{ color:#00f6ff; margin-top:0; flex-shrink:0; display:flex; justify-content:space-between; align-items:center; }
-  #savedList{ flex:1; overflow-y:auto; min-height:0; }
-  .saved-item{ border-bottom:1px solid #333; padding:8px; cursor:pointer; display:flex; justify-content:space-between; align-items:center; } .saved-item:hover{ background:#333; }
-  .del-icon{ background:#ff0000; color:#fff; border:none; border-radius:4px; padding:2px 6px; cursor:pointer; }
-  .label-red{ color:#7a001f; font-weight:bold; } .label-yellow{ color:#ffff00; } .label-green{ color:#00ff00; } .label-cyan{ color:#00f6ff; }
-  #savePath{ margin-top:6px; font-family:'Courier New', monospace; line-height:1.6; flex-shrink:0; }
-  #storageInfo{ font-size:20px; margin-top:10px; flex-shrink:0; } .storage-bar-bg{ width:100%; height:12px; background:#333; border-radius:6px; margin:10px 0; overflow:hidden; border:1px solid #444; flex-shrink:0; } #storageBarFill{ height:100%; width:0%; transition:width 0.3s; }
-  .hard-reset-btn{ background:#ff0000!important; color:white!important; font-weight:bold; cursor:pointer; padding:10px; border:none; border-radius:4px; }
-  #pdf-helper-wrap{ position:absolute; left:-9999px; top:0; width:210mm; } .pdf-capture-node{ padding:40px; box-sizing:border-box; }
-  /* ZEON ZÖLD SZÁMLÁLÓ - MENTETT */
-  #noteCountBadge{
-    background:#00ff66; color:#000; font-family:'Orbitron', monospace; font-weight:900; font-size:16px; min-width:36px; height:28px; padding:0 10px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 10px #00ff66, 0 0 20px #00ff66, inset 0 0 5px rgba(0,0,0,0.4); border:2px solid #00ff99; text-shadow:none; margin-left:12px;
-  }
-  
-  @keyframes pulseGreen{0%{box-shadow:0 0 10px #00ff66;}50%{box-shadow:0 0 20px #00ff66,0 0 30px #00ff66;transform:scale(1.08);}100%{box-shadow:0 0 10px #00ff66;}}
-  #noteCountBadge.pulse{animation:pulseGreen 0.6s ease;}
-  @keyframes pulseMagenta{0%{box-shadow:0 0 10px #ff00ff;}50%{box-shadow:0 0 20px #ff00ff,0 0 30px #ff00ff;transform:scale(1.08);}100%{box-shadow:0 0 10px #ff00ff;}}
-  #lineCountBadge.pulse{animation:pulseMagenta 0.4s ease;}
-
-  /* MAGENTA SOR SZÁMLÁLÓ - AKTÍV JEGYZET */
-  #lineCountBadge{
-    background:#ff00ff; color:#fff; font-family:'Orbitron', monospace; font-weight:900; font-size:14px; min-width:70px; height:28px; padding:0 12px; border-radius:8px; display:inline-flex; align-items:center; justify-content:center; box-shadow:0 0 10px #ff00ff, 0 0 20px #ff00ff, inset 0 0 5px rgba(0,0,0,0.4); border:2px solid #ff33ff; text-shadow:0 0 5px #fff; white-space:nowrap; flex-shrink:0;
-  }
-  .glow-off #lineCountBadge{ text-shadow:none!important; box-shadow:0 0 4px #ff00ff!important; }
-
-#ultra-controls-v3 { display:inline-flex; gap:8px; align-items:center; background:#111; border:2px solid #00f6ff; border-radius:10px; padding:6px 10px; box-shadow:0 0 10px #00f6ff; }
-#ultra-color-v3 { background:#000; color:#fff; border:1px solid #555; padding:6px 10px; border-radius:6px; font-weight:bold; min-width:130px; }
-
-<style id="globalColorOverride"></style>
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:#000;color:#0f0;font-family:Arial,Helvetica,sans-serif;overflow:hidden}
+:root{--panel-w:640px}
+.grid{display:grid;grid-template-columns:var(--panel-w) 1fr;height:100vh}
+.proj-card{background:#1a1a1a;border:1px solid #333;border-radius:16px;padding:12px;margin-bottom:12px;display:flex;gap:12px;align-items:center}
+.proj-card:hover{border-color:#0f0;box-shadow:0 0 12px #0f0}
+.proj-card.active{border-color:#0f0;box-shadow:0 0 18px #0f0;background:#0a1a0a}
+.thumb{width:72px;height:72px;border-radius:10px;border:2px solid #0f0;object-fit:cover;background:#000;flex-shrink:0;cursor:pointer}
+.thumb-placeholder{width:72px;height:72px;border-radius:10px;border:2px dashed #0f0;display:flex;align-items:center;justify-content:center;font-size:28px;background:#000;flex-shrink:0;cursor:pointer}
+.topbar{background:#000;border-bottom:2px solid #0f0;padding:10px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.kod{background:#001033;border:1px solid #00aaff;color:#00aaff;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:400;cursor:pointer;font-family:Arial}
+.kod:hover{background:#00aaff;color:#fff}
+.htmlb{background:#001100;border:1px solid #0f0;color:#0f0;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:400;cursor:pointer;font-family:Arial}
+.htmlb:hover{background:#0f0;color:#000}
+.delb{background:#330000;border:1px solid #f00;color:#f00;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:400;cursor:pointer}
+.panel{border:1px solid #0f0;border-radius:16px;padding:10px 14px;background:#0a0a0a;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+input[type=range]{flex:1;height:6px;background:#333;border-radius:999px;accent-color:#0f0}
+.badge{background:#000;border:1px solid #0f0;color:#0f0;border-radius:999px;padding:2px 10px;font-size:10px;min-width:44px;text-align:center}
+#previewFrame{width:100%;height:100%;border:2px solid #0f0;border-radius:8px;background:#111;display:flex;align-items:center;justify-content:center;overflow:auto}
+#previewImg{max-width:100%;max-height:100%;object-fit:contain;border-radius:8px;display:none}
+#previewPlaceholder{color:#0f0;font-size:20px;font-family:Arial;font-weight:400;text-align:center;padding:40px}
+.left{border-right:4px solid #0f0;background:#000;overflow:auto;display:flex;flex-direction:column}
+.right{display:flex;flex-direction:column;background:#000;overflow:hidden}
+#previewWrap{flex:1;background:#000;display:flex;padding:10px;flex-direction:column}
+.btn{border:none;border-radius:10px;padding:10px;font-weight:700;cursor:pointer;font-family:Arial}
+.storage-bar{height:10px;background:#222;border-radius:999px;overflow:hidden;border:1px solid #333;margin-top:6px}
+.storage-fill{height:100%;background:linear-gradient(90deg,#0f0,#00aaff);width:0%;transition:width .3s}
+.color-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;cursor:pointer;border:1px solid #fff3}
 </style>
+<script>(function(){ var _open=window.open; window.open=function(u,n,s){ try{ return _open.call(window,u,n,s); }catch(e){ var a=document.createElement('a'); a.href=u; a.target=n||'_blank'; a.click(); return null; } }; })();</script>
 </head>
-<body class="glow-off">
-<div class="container">
-  <div class="sidebar">
-    <div style="text-align:center;font-size:12px;margin-bottom:8px;">Neon<br>Színek</div>
-    <button class="color-btn" style="background:#000000; border:1px solid #555;" onmousedown="applyColorAndSet(event, 'neon-black')"></button>
-    <button class="color-btn" style="background:#ff6600" onmousedown="applyColorAndSet(event, 'neon-orange')"></button>
-    <button class="color-btn" style="background:#ffff00" onmousedown="applyColorAndSet(event, 'neon-yellow')"></button>
-    <button class="color-btn" style="background:#7a001f" onmousedown="applyColorAndSet(event, 'neon-darkred')"></button>
-    <button class="color-btn" style="background:#00f6ff" onmousedown="applyColorAndSet(event, 'neon-cyan')"></button>
-    <button class="color-btn" style="background:#00aaff" onmousedown="applyColorAndSet(event, 'neon-blue')"></button>
-    <button class="color-btn" style="background:#0080ff" onmousedown="applyColorAndSet(event, 'neon-deepblue')"></button>
-    <button class="color-btn" style="background:#ff00ff" onmousedown="applyColorAndSet(event, 'neon-magenta')"></button>
-    <button class="color-btn" style="background:#ff33ff" onmousedown="applyColorAndSet(event, 'neon-pink')"></button>
-    <button class="color-btn" style="background:#00ff00" onmousedown="applyColorAndSet(event, 'neon-green')"></button>
-    <button class="color-btn" style="background:#00ff66" onmousedown="applyColorAndSet(event, 'neon-lightgreen')"></button>
-    <button class="color-btn" style="background:#33ff33" onmousedown="applyColorAndSet(event, 'neon-lime')"></button>
-    <button class="color-btn" style="background:#00ff99" onmousedown="applyColorAndSet(event, 'neon-mint')"></button>
-    <button class="color-btn" style="background:#8000ff" onmousedown="applyColorAndSet(event, 'neon-purple')"></button>
-    <button class="color-btn" style="background:#ff0000" onmousedown="applyColorAndSet(event, 'neon-red')"></button>
-    <button class="color-btn" style="background:#ffffff" onmousedown="applyColorAndSet(event, 'neon-white')"></button>
-  </div>
-  <div class="main">
-    <div style="background: #1a1a1a; padding: 10px; border-radius: 8px; border: 1px solid #444; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-shrink:0;">
-        <div id="mainTitle" class="neon-green" style="font-weight: bold; font-size: 15px; font-family: 'Orbitron', sans-serif;">ULTRA-NOTE-PNG-Save_STABLE_V.01 - ORIGINAL SAVE</div>
-        <button class="hard-reset-btn" onclick="hardReset()">VÉSZHELYZETI RESET (MEMÓRIA ÜRÍTÉS)</button>
-    </div>
-    <div class="toolbar">
+<body>
+<div class="topbar">
+<span style="color:#00ff00;font-weight:700;font-family:Arial;font-size:20px">📸 Képtároló_DB_V1 - ZÖLD</span><span style="background:#0088ff;color:#fff;border-radius:999px;padding:2px 8px;font-size:9px;font-family:Arial;font-weight:800;white-space:nowrap;cursor:pointer;border:1px solid #00aaff;margin-left:6px" onclick="window.open('https://mega.nz','_blank')">MEGA</span><span style="background:#8800ff;color:#fff;border-radius:999px;padding:2px 8px;font-size:9px;font-family:Arial;font-weight:700;white-space:nowrap;cursor:pointer;border:1px solid #aa00ff;margin-left:4px" onclick="window.open('https://github.com','_blank')">GitHub</span><span style="display:none"></span>
 
-<div id="ultra-controls-v3">
-  <select id="ultra-color-v3">
-    <option value="neon-white">⚪ Fehér</option>
-    <option value="neon-cyan">🔵 Cyán</option>
-    <option value="neon-red">🔴 Piros</option>
-    <option value="neon-blue">🔵 Kék</option>
-    <option value="neon-green">🟢 Zöld</option>
-    <option value="neon-yellow">🟡 Sárga</option>
-    <option value="neon-magenta">🟣 Magenta</option>
-    <option value="neon-orange">🟠 Narancs</option>
-  </select>
-  <button id="ultra-neon-v3" type="button" style="background:#00ff00; color:#000; border:none; padding:6px 12px; border-radius:6px; font-weight:bold; cursor:pointer;">💡 NEON: BE</button>
+<div id="colorLegend" style="display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-left:8px;flex:1"></div>
+<span style="margin-left:auto" id="cntBadge" class="badge">0 db</span>
+</div>
+<div class="grid">
+<div class="left">
+<div style="padding:12px">
+<div class="panel"><span style="font-size:11px;font-family:Arial">PANEL</span><input id="panelSlider" type="range" min="280" max="900" value="640"><span id="panelBadge" class="badge">640px</span></div>
+<div class="panel"><span style="font-size:11px;font-family:Arial">ZOOM</span><input id="previewSlider" type="range" min="30" max="200" value="100"><span id="previewBadge" class="badge">100%</span></div>
+
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:10px">
+<button onclick="document.getElementById('fileImportImg').click()" class="btn" style="flex:1;background:#00ff00;color:#000">📸 KÉP FELTÖLTÉS</button>
+<button onclick="downloadAllProjects()" class="btn" style="flex:1;background:#0047ff;color:#fff">⬇️ ÖSSZ EXPORT</button>
+</div>
+<div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:8px">
+<button onclick="exportJsonModal()" class="btn" style="flex:1;background:#ffcc00;color:#000">📤 EXPORT JSON</button>
+<button onclick="document.getElementById('fileImportJson').click()" class="btn" style="flex:1;background:#ccff00;color:#000">📥 IMPORT JSON</button>
+<button onclick="document.getElementById('fileImportHtml').click()" class="btn" style="flex:1;background:#00ffaa;color:#000">📥 IMPORT HTML</button>
+<button onclick="deleteAllProjects()" class="btn" style="background:#aa0000;color:#fff">🗑️ DEL</button>
 </div>
 
-      <label>Betűtípus:</label>
-      <select id="fontSelect" onchange="setFont()">
-        <option value="Arial" style="color:#ffffff; font-family:'Arial';">1. Arial (Alap)</option>
-        <option value="Montserrat" style="color:#00ffcc; font-family:'Montserrat';">2. Montserrat</option>
-        <option value="Nunito" style="color:#ffccff; font-family:'Nunito';">3. Nunito</option>
-        <option value="Oswald" style="color:#ff6600; font-family:'Oswald';">4. Oswald</option>
-        <option value="Playfair Display" style="color:#ffff99; font-family:'Playfair Display';">5. Playfair Display</option>
-        <option value="Spectral" style="color:#99ff99; font-family:'Spectral';">6. Spectral</option>
-        <option value="Ultra" style="color:#ff3333; font-family:'Ultra';">7. Ultra (Vastag)</option>
-        <option value="Varela Round" style="color:#66ccff; font-family:'Varela Round';">8. Varela Round</option>
-        <option value="Alegreya" style="color:#ff9900; font-family:'Alegreya';">9. Alegreya</option>
-        <option value="Roboto Serif" style="color:#cccccc; font-family:'Roboto Serif';">10. Roboto Serif</option>
-        <option value="Roboto Mono" style="color:#00ff00; font-family:'Roboto Mono';">11. Roboto Mono</option>
-        <option value="Orbitron" style="color:#00f6ff; font-family:'Orbitron';">12. Orbitron (Sci-fi Neon)</option>
-        <option value="Special Elite" style="color:#ffd700; font-family:'Special Elite';">13. Gépelés (Írógép)</option>
-        <option value="VT323" style="color:#00ff00; font-family:'VT323';">14. Terminal (Mátrix)</option>
-        <option value="Press Start 2P" style="color:#ffff00; font-family:'Press Start 2P';">15. 8-Bit (Retro)</option>
-        <option value="Monoton" style="color:#ff00ff; font-family:'Monoton';">16. MONOTON (Neon)</option>
-        <option value="Pinyon Script" style="color:#00ff99; font-family:'Pinyon Script';">17. Pinyon (Kézírás)</option>
-        <option value="Creepster" style="color:#ff0000; font-family:'Creepster';">18. Horror (Creep)</option>
-        <option value="Nabla" style="color:#ff6600; font-family:'Nabla';">19. Nabla (3D Színes)</option>
-        <option value="Lobster" style="color:#00f6ff; font-family:'Lobster';">20. Lobster</option>
-        <option value="Righteous" style="color:#ffff00; font-family:'Righteous';">21. Righteous</option>
-        <option value="Bungee Shade" style="color:#ff33ff; font-family:'Bungee Shade';">22. Bungee (Árnyas)</option>
-        <option value="Faster One" style="color:#00ff00; font-family:'Faster One';">23. Faster (Száguldó)</option>
-        <option value="Ewert" style="color:#8000ff; font-family:'Ewert';">24. Ewert (Különleges)</option>
-        <option value="Vast Shadow" style="color:#ffffff; font-family:'Vast Shadow';">25. Vast Shadow</option>
-        <option value="Permanent Marker" style="color:#ff6600; font-family:'Permanent Marker';">26. Filctoll (Vastag)</option>
-        <option value="Sacramento" style="color:#ff99cc; font-family:'Sacramento';">27. Sacramento (Folyó)</option>
-        <option value="Silkscreen" style="color:#33ff33; font-family:'Silkscreen';">28. Pixel (Tiszta)</option>
-        <option value="Codystar" style="color:#00ffff; font-family:'Codystar';">29. Codystar (Pontok)</option>
-        <option value="Megrim" style="color:#ffcc00; font-family:'Megrim';">30. Megrim (Elvont)</option>
-        <option value="UnifrakturMaguntia" style="color:#7a001f; font-family:'UnifrakturMaguntia';">31. Gótikus (Old)</option>
-        <option value="Wallpoet" style="color:#0080ff; font-family:'Wallpoet';">32. Graffiti</option>
-        <option value="Syncopate" style="color:#00ff99; font-family:'Syncopate';">33. Techno</option>
-        <option value="Nosifer" style="color:#ff0000; font-family:'Nosifer';">34. Vérző (Folyékony)</option>
-        <option value="Rubik Glitch" style="color:#ffff00; font-family:'Rubik Glitch';">35. Glitch (Hiba)</option>
-        <option value="Bangers" style="color:#00aaff; font-family:'Bangers';">36. Pop Art</option>
-        <option value="Pacifico" style="color:#ff33ff; font-family:'Pacifico';">37. Pacifico</option>
-        <option value="Great Vibes" style="color:#ff99cc; font-family:'Great Vibes';">38. Great Vibes</option>
-        <option value="Bruno Ace SC" style="color:#00f6ff; font-family:'Bruno Ace SC';">39. Bruno Ace</option>
-        <option value="Fascinate Inline" style="color:#ff00ff; font-family:'Fascinate Inline';">40. Fascinate</option>
-        <option value="Fredericka the Great" style="color:#ffffff; font-family:'Fredericka the Great';">41. Vázlatos</option>
-        <option value="Courier New" style="color:#ff00ff; font-family:'Courier New';">42. Courier</option>
-        <option value="Bungee Spice" style="color:#ff6600; font-family:'Bungee Spice';">43. Spice (3D)</option>
-        <option value="Shadows Into Light" style="color:#00ff00; font-family:'Shadows Into Light';">44. Shadows</option>
-        <option value="Indie Flower" style="color:#00f6ff; font-family:'Indie Flower';">45. Indie Flower</option>
-        <option value="Dancing Script" style="color:#ffcc00; font-family:'Dancing Script';">46. Dancing</option>
-        <option value="Caveat" style="color:#7a001f; font-family:'Caveat';">47. Caveat</option>
-        <option value="Satisfy" style="color:#00aaff; font-family:'Satisfy';">48. Satisfy</option>
-        <option value="Kaushan Script" style="color:#0080ff; font-family:'Kaushan Script';">49. Kaushan</option>
-        <option value="Yellowtail" style="color:#ff00ff; font-family:'Yellowtail';">50. Yellowtail</option>
-        <option value="Courgette" style="color:#ff33ff; font-family:'Courgette';">51. Courgette</option>
-        <option value="Amatic SC" style="color:#00ff66; font-family:'Amatic SC';">52. Amatic</option>
-        <option value="Bebas Neue" style="color:#33ff33; font-family:'Bebas Neue';">53. Bebas</option>
-        <option value="Abril Fatface" style="color:#00ff99; font-family:'Abril Fatface';">54. Abril</option>
-        <option value="Patua One" style="color:#8000ff; font-family:'Patua One';">55. Patua</option>
-        <option value="Fredoka One" style="color:#ff0000; font-family:'Fredoka One';">56. Fredoka</option>
-        <option value="Limelight" style="color:#ffffff; font-family:'Limelight';">57. Limelight</option>
-        <option value="Stalinist One" style="color:#ff6600; font-family:'Stalinist One';">58. Stalinist</option>
-        <option value="Black Ops One" style="color:#00ff00; font-family:'Black Ops One';">59. Black Ops</option>
-        <option value="Shojumaru" style="color:#00f6ff; font-family:'Shojumaru';">60. Shojumaru</option>
-        <option value="Metal Mania" style="color:#ffff00; font-family:'Metal Mania';">61. Metal Mania</option>
-        <option value="Sancreek" style="color:#7a001f; font-family:'Sancreek';">62. Sancreek</option>
-        <option value="Rye" style="color:#00aaff; font-family:'Rye';">63. Rye</option>
-        <option value="Butcherman" style="color:#0080ff; font-family:'Butcherman';">64. Butcher</option>
-        <option value="Frijole" style="color:#ff00ff; font-family:'Frijole';">65. Frijole</option>
-        <option value="Eater" style="color:#ff33ff; font-family:'Eater';">66. Eater</option>
-        <option value="Aclonica" style="color:#00ff66; font-family:'Aclonica';">67. Aclonica</option>
-        <option value="Michroma" style="color:#33ff33; font-family:'Michroma';">68. Michroma</option>
-        <option value="Audiowide" style="color:#00ff99; font-family:'Audiowide';">69. Audiowide</option>
-        <option value="Quantico" style="color:#8000ff; font-family:'Quantico';">70. Quantico</option>
-        <option value="Russo One" style="color:#ff0000; font-family:'Russo One';">71. Russo</option>
-        <option value="Squada One" style="color:#ffffff; font-family:'Squada One';">72. Squada</option>
-        <option value="Allura" style="color:#ff6600; font-family:'Allura';">73. Allura</option>
-        <option value="Alex Brush" style="color:#00ff00; font-family:'Alex Brush';">74. Alex Brush</option>
-        <option value="Cookie" style="color:#00f6ff; font-family:'Cookie';">75. Cookie</option>
-        <option value="Grand Hotel" style="color:#ffff00; font-family:'Grand Hotel';">76. Grand Hotel</option>
-        <option value="Parisienne" style="color:#7a001f; font-family:'Parisienne';">77. Parisienne</option>
-        <option value="Rochester" style="color:#00aaff; font-family:'Rochester';">78. Rochester</option>
-        <option value="Tangerine" style="color:#0080ff; font-family:'Tangerine';">79. Tangerine</option>
-        <option value="Zeyada" style="color:#ff00ff; font-family:'Zeyada';">80. Zeyada</option>
-        <option value="Architects Daughter" style="color:#ff33ff; font-family:'Architects Daughter';">81. Architects</option>
-        <option value="Covered By Your Grace" style="color:#00ff66; font-family:'Covered By Your Grace';">82. Grace</option>
-        <option value="Gloria Hallelujah" style="color:#33ff33; font-family:'Gloria Hallelujah';">83. Gloria</option>
-        <option value="Handlee" style="color:#00ff99; font-family:'Handlee';">84. Handlee</option>
-        <option value="Patrick Hand" style="color:#8000ff; font-family:'Patrick Hand';">85. Patrick</option>
-        <option value="Reenie Beanie" style="color:#ff0000; font-family:'Reenie Beanie';">86. Reenie</option>
-        <option value="Rock Salt" style="color:#ffffff; font-family:'Rock Salt';">87. Rock Salt</option>
-        <option value="Coming Soon" style="color:#ff6600; font-family:'Coming Soon';">88. Coming Soon</option>
-        <option value="Boogaloo" style="color:#00ff00; font-family:'Boogaloo';">89. Boogaloo</option>
-        <option value="Carter One" style="color:#00f6ff; font-family:'Carter One';">90. Carter</option>
-        <option value="Chango" style="color:#ffff00; font-family:'Chango';">91. Chango</option>
-        <option value="Cherry Cream Soda" style="color:#7a001f; font-family:'Cherry Cream Soda';">92. Cherry</option>
-        <option value="Chewy" style="color:#00aaff; font-family:'Chewy';">93. Chewy</option>
-        <option value="Fugaz One" style="color:#0080ff; font-family:'Fugaz One';">94. Fugaz</option>
-        <option value="Luckiest Guy" style="color:#ff00ff; font-family:'Luckiest Guy';">95. Luckiest</option>
-        <option value="Titan One" style="color:#ff33ff; font-family:'Titan One';">96. Titan</option>
-        <option value="Yeseva One" style="color:#00ff66; font-family:'Yeseva One';">97. Yeseva</option>
-        <option value="Marcellus" style="color:#33ff33; font-family:'Marcellus';">98. Marcellus</option>
-        <option value="Cinzel" style="color:#00ff99; font-family:'Cinzel';">99. Cinzel</option>
-        <option value="Forum" style="color:#8000ff; font-family:'Forum';">100. Forum</option>
-        <option value="Cormorant Garamond" style="color:#ff0000; font-family:'Cormorant Garamond';">101. Garamond</option>
-        <option value="Iceberg" style="color:#ffffff; font-family:'Iceberg';">102. Iceberg</option>
-        <option value="Glass Antiqua" style="color:#ff6600; font-family:'Glass Antiqua';">103. Glass</option>
-        <option value="Kranky" style="color:#00ff00; font-family:'Kranky';">104. Kranky</option>
-        <option value="Alumni Sans Inline One" style="color:#00ff00; font-family:'Alumni Sans Inline One';">105. Alumni</option>
-        <option value="Rubik Glitch" style="color:#ffff00; font-family:'Rubik Glitch';">106. Glitch 2</option>
-        <option value="Times New Roman" style="color:#7a001f; font-family:'Times New Roman';">107. Times</option>
-        <option value="Georgia" style="color:#00aaff; font-family:'Georgia';">108. Georgia</option>
-        <option value="Impact" style="color:#0080ff; font-family:'Impact';">109. Impact</option>
-        <option value="Comic Sans MS" style="color:#ff00ff; font-family:'Comic Sans MS';">110. Comic Sans</option>
-        <option value="Verdana" style="color:#ff33ff; font-family:'Verdana';">111. Verdana</option>
-        <option value="Trebuchet MS" style="color:#00ff66; font-family:'Trebuchet MS';">112. Trebuchet</option>
-        <option value="Garamond" style="color:#33ff33; font-family:'Garamond';">113. Garamond Old</option>
-        <option value="Bookman" style="color:#00ff99; font-family:'Bookman';">114. Bookman</option>
-        <option value="Palatino" style="color:#8000ff; font-family:'Palatino';">115. Palatino</option>
-        <option value="Candara" style="color:#ff0000; font-family:'Candara';">116. Candara</option>
-        <option value="Geneva" style="color:#ffffff; font-family:'Geneva';">117. Geneva</option>
-        <option value="Optima" style="color:#ff6600; font-family:'Optima';">118. Optima</option>
-        <option value="Tahoma" style="color:#00ff00; font-family:'Tahoma';">119. Tahoma (Vége)</option>
-      </select>
-      <label>Méret:</label>
-      <input type="range" id="sizeRange" min="8" max="250" value="20" oninput="setSize(this.value)"> <span id="sizeValue">20</span>px
-      <button class="btn-reset" onclick="resetColor()">Reset szín</button>
-      <button id="glowBtn" class="off" onclick="toggleGlow()">Glow OFF</button>
-      <button class="btn-theme" onclick="toggleTheme()">🌓 Sötétítő</button>
-      <input type="text" id="linkInput" placeholder="Link..." />
-      <button class="btn-insert" onclick="insertLink()">Beszúrás</button>
-      <button class="btn-new" onclick="newNote()">+ Új lap</button>
-    </div>
-    <div class="toolbar">
-        <button class="btn-load" onclick="loadNote()">Betöltés</button>
-        <button class="btn-save" onclick="saveNote()">Mentés (.json)</button>
-        <button class="btn-del" onclick="deleteNote()">Törlés</button>
-        <button class="btn-export" onclick="exportNotes()">EXPORT (ÖSSZES)</button>
-        <button class="btn-import" onclick="importNotes()">Import (.json)</button>
-        <button class="btn-png1" onclick="downloadPNG(false)">PNG fekete TELJES ABLAK</button>
-        <button class="btn-png2" onclick="downloadPNG(true)">PNG átlátszó TELJES ABLAK</button>
-        <button class="btn-pdf1" onclick="downloadPDF(false)">PDF FF</button>
-        <button class="btn-pdf2" onclick="downloadPDF(true)">PDF Színes</button>
-        <button class="btn-html" onclick="insertHTMLPrompt()">HTML BEILLESZTÉS</button>
-    </div>
-    <div id="savePath" style="margin-top:6px; font-family: 'Courier New', monospace; line-height: 1.6;">
-        <div><span class="label-red">Mentés helye:</span> <span class="label-yellow">Letöltések mappa</span></div>
-        <div id="lastFileDisplay"><span class="label-red">Utolsó fájl:</span> <span class="label-green">Nincs mentés</span></div>
-        <div id="timeDisplay"><span class="label-red">Időpont:</span> <span class="label-cyan">--:--:--</span></div>
-        <div id="freeMemoryDisplay"><span class="label-red">Szabad memória:</span> <span class="label-cyan"></span></div>
-    </div>
-    <div id="storageInfo"></div>
-    <div class="storage-bar-bg"><div id="storageBarFill"></div></div>
-    <div id="captureArea">
-        <div id="editorHeaderWrap">
-            <div id="editorHeader"></div>
-            <span id="lineCountBadge">0 sor</span><span id="charCountBadge" style="background:#00ff66;color:#000;font-family:Orbitron,monospace;font-weight:900;font-size:11px;min-width:110px;height:28px;padding:0 10px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 8px #00ff66;border:2px solid #00ff99;white-space:nowrap;flex-shrink:0;margin-left:6px;">0 char</span>
-        </div>
-        <div id="editor" class="editor" contenteditable="true"></div>
-    </div>
-  </div>
-  <div class="saved-panel">
-    <h3><span>Mentett jegyzetek</span> <span id="noteCountBadge">0</span></h3> <div id="savedList"></div> <button class="clear-btn" onclick="clearList()" style="background:#7a001f; color:white; border:1px solid red; padding:10px; cursor:pointer; margin-top:10px;">Lista ürítése</button>
-  </div>
+<input type="file" id="fileImportImg" accept=".jpg,.jpeg,.bmp,.png,.webp,.gif,.avif,.svg,image/*" style="display:none" multiple>
+<input type="file" id="fileImportJson" accept=".json,.txt" style="display:none">
+<input type="file" id="fileImportHtml" accept=".html,.htm" style="display:none">
+
+<div style="margin-top:12px">
+<div style="display:flex;justify-content:space-between;font-size:11px;font-family:Arial"><span>Tárhely: <span id="storageText">0 / 500 MB</span></span><span id="storagePercent">0%</span></div>
+<div class="storage-bar"><div id="storageFill" class="storage-fill"></div></div>
 </div>
-<div id="pdf-helper-wrap"></div>
-<script>
-  const editor = document.getElementById("editor"); const editorHeader = document.getElementById("editorHeader"); const captureArea = document.getElementById("captureArea"); const savedList = document.getElementById("savedList"); const storageInfo = document.getElementById("storageInfo"); const storageBarFill = document.getElementById("storageBarFill"); const linkInput = document.getElementById("linkInput"); const glowBtn = document.getElementById("glowBtn"); const lastFileDisplay = document.getElementById("lastFileDisplay"); const timeDisplay = document.getElementById("timeDisplay"); let activeColorClass = "neon-white"; let glowOn = false; let notes = []; let currentOpenId = null; let currentOpenName = null;
-  let db; const dbRequest = indexedDB.open("NeonNotesDB", 1);
-  dbRequest.onupgradeneeded = e => { db = e.target.result; db.createObjectStore("notes", { keyPath: "id", autoIncrement: true }); };
-  dbRequest.onsuccess = e => { db = e.target.result; loadFromDB(); };
-  function loadFromDB() { const transaction = db.transaction("notes", "readonly"); const store = transaction.objectStore("notes"); const request = store.getAll(); request.onsuccess = () => { notes = request.result; refreshListUI(); updateStorageStatus(); }; }
-  function updateStorageStatus() {
-    const totalMax = 500 * 1024 * 1024; let size = new Blob([JSON.stringify(notes)]).size;
-    const freePercentage = Math.max(0, 100 - ((size / totalMax) * 100)).toFixed(2); const usedMB = (size / (1024 * 1024)).toFixed(2);
-    storageBarFill.style.width = (100 - freePercentage) + "%"; storageBarFill.style.background = freePercentage < 10 ? "#ff0000" : "#00ff00";
-    storageInfo.innerHTML = `<span class="label-red">Használt:</span> <span class="label-cyan">${usedMB} MB</span> / 500 MB`;
-    const freeMB = ((totalMax - size) / (1024 * 1024)).toFixed(2);
-    document.getElementById("freeMemoryDisplay").innerHTML = `<span class="label-red">Szabad memória:</span> <span class="label-cyan">${freeMB} MB</span>`;
-    const badge = document.getElementById("noteCountBadge"); if(badge) badge.textContent = notes.length;
-  }
-  // --- ÚJ: SOR SZÁMLÁLÓ MAGENTA ---
-  function updateLineCount(){
-    const badge = document.getElementById("lineCountBadge");
-    const badgeChars = document.getElementById("charCountBadge");
-    if(!badge) return;
-    const text = editor.innerText || "";
-    if(text.trim() === ""){
-      badge.textContent = "0 sor";
-      if(badgeChars) badgeChars.textContent = "0 char";
-      return;
-    }
-    let lines = 0;
-    const divs = editor.querySelectorAll("div");
-    if(divs.length>0){
-      lines = divs.length;
-      const firstChild = editor.firstChild;
-      if(firstChild && firstChild.nodeType===3 && firstChild.textContent.trim()!==''){
-        lines++;
-      }
-    }else{
-      lines = text.split("\n").length;
-    }
-    if(lines===0 && text.length>0) lines=1;
-    badge.textContent = lines + " sor";
-    // pulse
-    badge.classList.add('pulse');
-    setTimeout(()=>badge.classList.remove('pulse'),400);
-    if(badgeChars){
-      const chars = text.length;
-      const words = text.trim().split(/\s+/).filter(w=>w.length>0).length;
-      badgeChars.textContent = chars + " char | " + words + " szó";
-    }
-  }
 
-  const lineObserver = new MutationObserver(updateLineCount);
-  lineObserver.observe(document.getElementById("editor"), { childList:true, subtree:true, characterData:true });
+<div id="previewLabel" style="margin-top:10px;color:#0ff;font-size:11px;min-height:18px;font-family:Arial"></div>
+<div id="list" style="margin-top:10px"></div>
+<div id="status" style="margin-top:10px;color:#888;font-size:10px;white-space:pre-wrap;font-family:Arial"></div>
+</div>
+</div>
+<div class="right">
+<div id="previewWrap">
+<div style="display:flex;gap:8px;margin-bottom:8px;flex-wrap:wrap;align-items:center">
+<span id="previewName" style="color:#0f0;font-size:13px;font-family:Arial;font-weight:400;flex:1"></span>
+<span id="previewSize" style="color:#888;font-size:11px;font-family:Arial"></span>
+<select id="colorSelect" onchange="changeColor(curIndex, this.value)" style="background:#000;border:2px solid #0f0;color:#0f0;border-radius:8px;padding:4px 8px;font-family:Arial;font-size:12px;min-width:130px;font-weight:700">
+<option value="#00ff00" style="color:#00ff00;background:#111;font-weight:900;font-size:13px">★ ● Zöld [ALAP]</option>
+<option value="#00ffff" style="color:#00ffff;background:#111;font-weight:900;font-size:13px">★ ● Cián [ALAP]</option>
+<option value="#ffff00" style="color:#ffff00;background:#111;font-weight:900;font-size:13px">★ ● Sárga [ALAP]</option>
+<option value="#ff00ff" style="color:#ff00ff;background:#111;font-weight:900;font-size:13px">★ ● Magenta [ALAP]</option>
+<option value="#ff8800" style="color:#ff8800;background:#111;font-weight:900;font-size:13px">★ ● Narancs [ALAP]</option>
+<option value="#ff0000" style="color:#ff0000;background:#111;font-weight:900;font-size:13px">★ ● Piros [ALAP]</option>
+<option value="#0088ff" style="color:#0088ff;background:#111;font-weight:900;font-size:13px">★ ● Kék [ALAP]</option>
+<option value="#ffffff" style="color:#ffffff;background:#111;font-weight:900;font-size:13px">★ ● Fehér [ALAP]</option>
+<option value="#00ff88" style="color:#00ff88;background:#000;font-weight:500">  ● Menta</option>
+<option value="#88ff00" style="color:#88ff00;background:#000;font-weight:500">  ● Lime</option>
+<option value="#ffcc00" style="color:#ffcc00;background:#000;font-weight:500">  ● Arany</option>
+<option value="#ff0088" style="color:#ff0088;background:#000;font-weight:500">  ● Pink</option>
+<option value="#8800ff" style="color:#8800ff;background:#000;font-weight:500">  ● Lila</option>
+<option value="#00ffcc" style="color:#00ffcc;background:#000;font-weight:500">  ● Türkiz</option>
+<option value="#ff4444" style="color:#ff4444;background:#000;font-weight:500">  ● Korall</option>
+<option value="#44ff44" style="color:#44ff44;background:#000;font-weight:500">  ● V.Zöld</option>
+<option value="#4444ff" style="color:#4444ff;background:#000;font-weight:500">  ● Indigó</option>
+<option value="#ffaa00" style="color:#ffaa00;background:#000;font-weight:500">  ● Borostyán</option>
+<option value="#aa00ff" style="color:#aa00ff;background:#000;font-weight:500">  ● Ibolya</option>
+<option value="#00aaff" style="color:#00aaff;background:#000;font-weight:500">  ● Égszín</option>
+<option value="#aaff00" style="color:#aaff00;background:#000;font-weight:500">  ● Chartreuse</option>
+<option value="#ff00aa" style="color:#ff00aa;background:#000;font-weight:500">  ● Fukszia</option>
+<option value="#aa5500" style="color:#aa5500;background:#000;font-weight:500">  ● Barna</option>
+<option value="#5500aa" style="color:#5500aa;background:#000;font-weight:500">  ● Padlizsán</option>
+</select>
+<button onclick="copyImage()" class="btn" style="background:#001033;color:#00aaff;border:1px solid #00aaff;padding:6px 12px;font-size:12px;font-weight:400">📋 KÓD</button>
+<button onclick="downloadCurrent()" class="btn" style="background:#001100;color:#0f0;border:1px solid #0f0;padding:6px 12px;font-size:12px;font-weight:400">⬇️ LETÖLT</button>
+</div>
+<div id="previewFrame">
+<img id="previewImg">
+<div id="previewPlaceholder">📸 Válassz képet a listából vagy tölts fel újat<br><span style="font-size:12px;color:#666">JPG JPEG BMP PNG WEBP GIF AVIF SVG - 500 MB-ig - 8 szín szűrő felül</span></div>
+</div>
+<div style="display:flex;gap:10px;margin-top:8px;align-items:center">
+<span style="font-size:11px;color:#888;font-family:Arial">Színek felül kattinthatók - szűrés - ✏️ név szerkesztés</span>
+<span id="imgInfo" style="margin-left:auto;font-size:11px;color:#0f0;font-family:Arial"></span>
+</div>
+</div>
+</div>
+</div>
 
-  editor.addEventListener("mousedown", function(e) { const link = e.target.closest("a"); if (link) { window.open(link.href, "_blank"); } });
-  function setRecordedTime(ts) { timeDisplay.innerHTML = `<span class="label-red">Időpont:</span> <span class="label-cyan">${ts || "--:--:--"}</span>`; }
-  function hardReset() { if(confirm("Törli a memóriát?")) { const t = db.transaction("notes", "readwrite"); t.objectStore("notes").clear(); t.oncomplete = () => { notes = []; refreshListUI(); updateStorageStatus(); setRecordedTime(""); lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">Nincs mentés</span>`; editor.innerHTML=""; updateLineCount(); alert("Resetelve!"); }; } }
-  function refreshListUI() { savedList.innerHTML = ""; notes.forEach(n => addSavedItemToUI(n)); const badge = document.getElementById("noteCountBadge"); if(badge){ const prev = parseInt(badge.textContent)||0; badge.textContent = notes.length; if(notes.length>prev){ badge.classList.add("pulse"); setTimeout(()=>badge.classList.remove("pulse"),600); } } }
-  function toggleGlow(){ glowOn = !glowOn; document.body.classList.toggle("glow-off", !glowOn); glowBtn.innerText = glowOn ? "Glow ON" : "Glow OFF"; glowBtn.className = glowOn ? "on" : "off"; }
-  function toggleTheme() { document.body.classList.toggle("light-mode"); }
-  function applyColorAndSet(e, className) { e.preventDefault(); activeColorClass = className; const selection = window.getSelection(); if (selection.rangeCount > 0) { let container = selection.anchorNode; if (container.nodeType === 3) container = container.parentElement; const closestLink = container.closest("a"); if (closestLink) { closestLink.className = className; } else if (selection.toString().length > 0) { const range = selection.getRangeAt(0); const span = document.createElement("span"); span.className = className; span.textContent = selection.toString(); range.deleteContents(); range.insertNode(span); } } editor.focus(); setTimeout(updateLineCount,10); }
-  function resetColor(){ activeColorClass = "neon-white"; }
-  function setFont(){ editor.style.fontFamily = document.getElementById("fontSelect").value; }
-  function setSize(size){ editor.style.fontSize = size + "px"; document.getElementById("sizeValue").innerText = size; }
-  function insertHTMLAtCursor(html){ const sel=window.getSelection(); if(!sel.rangeCount) return; const range=sel.getRangeAt(0); range.deleteContents(); const el=document.createElement("div"); el.innerHTML=html; const frag=document.createDocumentFragment(); let node,lastNode; while((node=el.firstChild)) lastNode=frag.appendChild(node); range.insertNode(frag); if(lastNode){ range.setStartAfter(lastNode); range.collapse(true); sel.removeAllRanges(); sel.addRange(range); } setTimeout(updateLineCount,10); }
-  function insertHTMLPrompt() { const htmlCode = prompt("Másold be ide a beillesztendő HTML kódot:"); if(htmlCode) { const span = document.createElement("span"); span.className = activeColorClass; span.textContent = htmlCode; editor.appendChild(span); editor.appendChild(document.createElement("br")); editor.scrollTop = editor.scrollHeight; setTimeout(updateLineCount,10); } }
-  editor.addEventListener("keydown", e => {
-    if(e.key.length === 1 && !e.ctrlKey && !e.metaKey && !e.altKey){ const selection = window.getSelection(); let container = selection.anchorNode.parentElement; if (container && (container.tagName === "A" || container.closest("a"))) return; e.preventDefault(); if(container && container.classList.contains(activeColorClass) && container.tagName === "SPAN") { const textNode = document.createTextNode(e.key === " " ? "\u00A0" : e.key); const range = selection.getRangeAt(0); range.insertNode(textNode); range.setStartAfter(textNode); range.collapse(true); } else { let char = e.key === " " ? "&nbsp;" : e.key; insertHTMLAtCursor(`<span class="${activeColorClass}">${char}</span>`); } } else if(e.key === "Enter"){ e.preventDefault(); insertHTMLAtCursor("<div><br></div>"); setTimeout(updateLineCount,10); }
-  });
-  editor.addEventListener("paste", e => {
-    e.preventDefault(); const text = (e.clipboardData || window.clipboardData).getData("text/plain"); const fragment = document.createDocumentFragment(); const urlPattern = /(https?:\/\/[^\s]+)/gi; const lines = text.split(/\r?\n/);
-    lines.forEach((line) => { const lineDiv = document.createElement("div"); let currentLineHTML = ""; let lastIdx = 0; let match; while ((match = urlPattern.exec(line)) !== null) { const before = line.substring(lastIdx, match.index); if (before) currentLineHTML += `<span class="${activeColorClass}">${before.replace(/ /g, "&nbsp;")}</span>`; currentLineHTML += `<a href="${match[0]}" target="_blank" class="${activeColorClass}">${match[0]}</a>`; lastIdx = urlPattern.lastIndex; } const after = line.substring(lastIdx); if (after) currentLineHTML += `<span class="${activeColorClass}">${after.replace(/ /g, "&nbsp;")}</span>`; lineDiv.innerHTML = currentLineHTML || "<br>"; fragment.appendChild(lineDiv); });
-    const sel = window.getSelection(); if (!sel.rangeCount) return; const range = sel.getRangeAt(0); range.deleteContents(); range.insertNode(fragment); setTimeout(updateLineCount,50);
-  });
-  function getFormattedDate() { const d = new Date(); return `${d.getFullYear()}.${String(d.getMonth()+1).padStart(2,'0')}.${String(d.getDate()).padStart(2,'0')}_${String(d.getHours()).padStart(2,'0')}-${String(d.getMinutes()).padStart(2,'0')}`; }
-  function askHeaderInfo() { const intro = prompt("Bevezető:", editorHeader.innerText.split(" - ")[0] || ""); if(intro===null) return false; const name = prompt("Jegyzet neve:", editorHeader.innerText.split(" - ")[1] || ""); if(!name) return false; const d = new Date(); const timestamp = `${d.getFullYear()}. ${String(d.getMonth()+1).padStart(2,'0')}. ${String(d.getDate()).padStart(2,'0')}. ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}:${String(d.getSeconds()).padStart(2,'0')}`; editorHeader.innerHTML = `<span class="${activeColorClass}">${intro} - ${name} - ${timestamp}</span>`; setRecordedTime(timestamp); return true; }
-  function saveNote(){ if(!askHeaderInfo()) return; const headerText = editorHeader.innerText; const parts = headerText.split(" - "); const intro = parts[0], namePart = parts[1], timestamp = parts[2]; const fileName = `Jegyzet_${namePart}_${getFormattedDate()}.json`; const data = { name: namePart, intro, timestamp, content: editor.innerHTML, color: activeColorClass, font: editor.style.fontFamily, size: editor.style.fontSize }; const t = db.transaction("notes", "readwrite"); const store = t.objectStore("notes"); const req = store.put(data); req.onsuccess = (e)=>{ currentOpenId = e.target.result; currentOpenName = namePart; }; t.oncomplete = () => { loadFromDB(); const blob = new Blob([JSON.stringify(data)], {type:'application/json'}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = fileName; a.click(); lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">${fileName}</span>`; }; }
-  function loadNote(){ const name = prompt("Keresett név:"); const found = notes.find(n=>n.name === name); if(found) { editor.innerHTML = found.content; editorHeader.innerHTML = `<span class="${found.color}">${found.intro} - ${found.name} - ${found.timestamp}</span>`; setRecordedTime(found.timestamp); if(found.font) editor.style.fontFamily=found.font; if(found.size) editor.style.fontSize=found.size; currentOpenId = found.id; currentOpenName = found.name; setTimeout(updateLineCount,20); } }
-  function deleteNote(){
-    if(currentOpenId !== null){ const found = notes.find(n=>n.id===currentOpenId); if(found){ if(!confirm(`Törli VALÓSAN a megnyitott jegyzetet?\n\nNév: '${found.name}'\n`)) return; const t=db.transaction("notes","readwrite"); t.objectStore("notes").delete(found.id); t.oncomplete=()=>{ loadFromDB(); editor.innerHTML=""; editorHeader.innerHTML=""; setRecordedTime(""); currentOpenId = null; currentOpenName = null; lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">Törölve: ${found.name}</span>`; updateStorageStatus(); updateLineCount(); }; return; } }
-    let nameToDelete = prompt("Törlendő jegyzet neve:"); if(!nameToDelete) return; const found = notes.filter(n=>n.name===nameToDelete); if(found.length===0){ alert(`Nincs ilyen: '${nameToDelete}'`); return; } if(!confirm(`${found.length} db '${nameToDelete}' törlése?`)) return; const t=db.transaction("notes","readwrite"); const store=t.objectStore("notes"); found.forEach(n=>store.delete(n.id)); t.oncomplete=()=>{ loadFromDB(); if(currentOpenName===nameToDelete){ editor.innerHTML=""; editorHeader.innerHTML=""; currentOpenId=null; currentOpenName=null; setRecordedTime(""); updateLineCount(); } lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">Törölve: ${nameToDelete}</span>`; updateStorageStatus(); };
-  }
-  function deleteNoteById(id){ const found = notes.find(n=>n.id===id); const nev = found? found.name : id; if(!confirm(`Törli '${nev}'?`)) return; const t=db.transaction("notes","readwrite"); t.objectStore("notes").delete(id); t.oncomplete=()=>{ loadFromDB(); if(currentOpenId===id){ editor.innerHTML=""; editorHeader.innerHTML=""; currentOpenId=null; currentOpenName=null; setRecordedTime(""); updateLineCount(); } }; }
-  function addSavedItemToUI(note){ const div=document.createElement("div"); div.className="saved-item"; div.innerHTML=`<div><span class="${note.color}">${note.name}</span><br><small style="color:#888">${note.timestamp}</small></div><button class="del-icon" onclick="event.stopPropagation(); deleteNoteById(${note.id})">X</button>`; div.onclick=()=>{ const f=notes.find(n=>n.id===note.id); if(f){ editor.innerHTML=f.content; editorHeader.innerHTML=`<span class="${f.color}">${f.intro||""} - ${f.name} - ${f.timestamp}</span>`; if(f.font) editor.style.fontFamily=f.font; if(f.size) editor.style.fontSize=f.size; setRecordedTime(f.timestamp); currentOpenId = f.id; currentOpenName = f.name; setTimeout(updateLineCount,20); } }; savedList.appendChild(div); }
-  function exportNotes(){ if(notes.length===0){ alert("Nincs mit exportálni!"); return; } const now = new Date(); const dateStr = now.toISOString().split('T')[0]; const timeStr = now.getHours().toString().padStart(2,'0') + "-" + now.getMinutes().toString().padStart(2,'0'); const defaultName = `ULTRA-NOTE_${dateStr}_${timeStr}`; const exportName = prompt("Add meg az exportált fájl nevét:", defaultName); if (!exportName) return; const blob = new Blob([JSON.stringify(notes)], {type:'application/json'}); const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = exportName + ".json"; a.click(); }
-  function importNotes(){ const input=document.createElement("input"); input.type="file"; input.accept=".json"; input.style.display="none"; document.body.appendChild(input); input.onchange=e=>{ const file=e.target.files[0]; if(!file){ document.body.removeChild(input); return; } const reader=new FileReader(); reader.onload=ev=>{ try{ let raw=JSON.parse(ev.target.result); let imp=raw; if(raw.modules && raw.modules['4_ultra']) imp=raw.modules['4_ultra']; if(imp && imp.notes && Array.isArray(imp.notes)) imp=imp.notes; if(!window.db){ const req = indexedDB.open("NeonNotesDB", 1); req.onupgradeneeded = ev=>{ const d=ev.target.result; if(!d.objectStoreNames.contains("notes")) d.createObjectStore("notes", {keyPath:"id", autoIncrement:true}); }; req.onsuccess = ev=>{ window.db=ev.target.result; doImport(window.db, imp); document.body.removeChild(input); }; } else { doImport(window.db, imp); document.body.removeChild(input); } } catch(err){ alert("Hiba: " + err.message); } }; reader.readAsText(file); }; input.click(); }
-  function doImport(dbInst, imp){ try{ const t=dbInst.transaction("notes","readwrite"); const store=t.objectStore("notes"); if(Array.isArray(imp)){ imp.forEach(n=>{ if(n && typeof n==='object'){ const copy={...n}; delete copy.id; store.put(copy); } }); } else if(imp && typeof imp==='object'){ const copy={...imp}; delete copy.id; store.put(copy); } t.oncomplete=()=>{ loadFromDB(); alert("Importálva! " + (Array.isArray(imp)? imp.length : 1) + " jegyzet"); }; }catch(e){ alert("Import hiba: " + e.message); } }
-  function clearList() { if(confirm("Üríti a teljes mentett listát?")) { const t = db.transaction("notes", "readwrite"); t.objectStore("notes").clear(); t.oncomplete = () => { notes=[]; savedList.innerHTML=""; updateStorageStatus(); setRecordedTime(""); lastFileDisplay.innerHTML = `<span class="label-red">Utolsó fájl:</span> <span class="label-green">Nincs mentés</span>`; }; } }
-  function newNote(){ editor.innerHTML=""; editorHeader.innerHTML=""; setRecordedTime(""); updateLineCount(); }
-  function insertLink(){ let url = linkInput.value.trim(); if(url) { if(!url.startsWith("http")) url = "https://" + url; const linkHTML = `<a href="${url}" target="_blank" class="${activeColorClass}">${url}</a><span class="${activeColorClass}">&nbsp;</span>`; insertHTMLAtCursor(linkHTML); linkInput.value = ""; } }
-  async function downloadPNG(transparent){
-    const fullWidth = window.innerWidth; const full = document.createElement("div"); full.style.position="fixed"; full.style.left="-10000px"; full.style.top="0"; full.style.width = fullWidth + "px"; full.style.padding="40px"; full.style.display="block";
-    if(transparent){ full.style.background="transparent"; full.style.backgroundColor="transparent"; } else { full.style.background="#050505"; full.style.backgroundColor="#050505"; }
-    const hdr = document.createElement("div"); hdr.innerHTML = editorHeader.innerHTML || ""; hdr.style.marginBottom="20px"; hdr.style.paddingBottom="10px"; hdr.style.borderBottom="1px dashed #333"; hdr.style.background="transparent";
-    const edt = document.createElement("div"); edt.innerHTML = editor.innerHTML || "<br>"; edt.style.fontFamily = editor.style.fontFamily || "Arial"; edt.style.fontSize = editor.style.fontSize || "20px"; edt.style.lineHeight="1.1"; edt.style.whiteSpace="pre-wrap"; edt.style.background="transparent"; edt.style.height="auto"; edt.style.overflow="visible";
-    full.appendChild(hdr); full.appendChild(edt); document.body.appendChild(full);
-    const canvas = await html2canvas(full, { backgroundColor: transparent ? null : "#050505", scale:2, useCORS:true, logging:false, width: fullWidth });
-    document.body.removeChild(full); const a=document.createElement("a"); a.download = transparent ? `ULTRA_note_transparent_FULL_${Date.now()}.png` : `ULTRA_note_black_FULL_${Date.now()}.png`; a.href = canvas.toDataURL("image/png"); a.click();
-  }
-  async function downloadPDF(isColor) {
-    const helperWrap = document.createElement("div"); helperWrap.style.position="fixed"; helperWrap.style.left="-10000px"; helperWrap.style.top="0"; helperWrap.style.width="210mm"; helperWrap.style.background=isColor?"#050505":"#ffffff"; helperWrap.style.padding="30px";
-    helperWrap.innerHTML = `<div>${editorHeader.outerHTML}${editor.outerHTML}</div>`; if(!isColor){ helperWrap.querySelectorAll("span,a,div").forEach(el=>{ el.style.setProperty("color","black","important"); el.style.setProperty("text-shadow","none","important"); }); }
-    document.body.appendChild(helperWrap); const canvas = await html2canvas(helperWrap, { backgroundColor: isColor?"#050505":"#ffffff", scale:2 }); document.body.removeChild(helperWrap);
-    const { jsPDF } = window.jspdf; const pdf = new jsPDF('p','mm','a4'); const w=210; const h=(canvas.height*w)/canvas.width; pdf.addImage(canvas.toDataURL('image/png'),'PNG',0,0,w,h); pdf.save(`jegyzet_${getFormattedDate()}.pdf`);
-  }
-</script>
+<div id="exportModal" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.9);align-items:center;justify-content:center">
+<div style="background:#0a0a0a;border:2px solid #00ff00;border-radius:16px;padding:22px;min-width:460px;max-width:90vw">
+<div style="color:#00ff00;font-weight:400;font-size:20px;margin-bottom:14px;font-family:Arial">📤 EXPORT JSON - Képtároló</div>
+<input id="exportNameInput" style="width:100%;background:#000;border:1px solid #00ff00;color:#0ff;border-radius:8px;padding:11px;font-family:Arial;font-size:13px">
+<div id="exportInfo" style="color:#666;font-size:10px;margin-top:10px;white-space:pre-line;font-family:Arial"></div>
+<div style="display:flex;gap:12px;margin-top:18px">
+<button onclick="document.getElementById('exportModal').style.display='none'" class="btn" style="flex:1;background:#222;color:#aaa;border:1px solid #555">MÉGSE</button>
+<button onclick="doExportJson()" class="btn" style="flex:1;background:#00ff00;color:#000">EXPORT</button>
+</div></div></div>
 
 <script>
-document.addEventListener('DOMContentLoaded', ()=>{
-  const sel = document.getElementById('ultra-color-v3');
-  const neonBtn = document.getElementById('ultra-neon-v3');
-  const glowBtnOriginal = document.getElementById('glowBtn');
+const DB_NAME='KepTarolo_500MB_V1_8color';
+const STORE='images';
+const KEY='all';
+const MAX_STORAGE = 500 * 1024 * 1024;
 
-  function fakeEvent(){ return { preventDefault:()=>{} }; }
+function openDB(){return new Promise((res,rej)=>{let r=indexedDB.open(DB_NAME,1);r.onupgradeneeded=e=>{let db=e.target.result;if(!db.objectStoreNames.contains(STORE))db.createObjectStore(STORE);};r.onsuccess=e=>res(e.target.result);r.onerror=()=>rej();});}
+async function loadIDB(){try{let db=await openDB();return new Promise(r=>{let tx=db.transaction(STORE,'readonly');let st=tx.objectStore(STORE);let g=st.get(KEY);g.onsuccess=()=>{let v=g.result;db.close();r(Array.isArray(v)&&v.length>0?v:null);};g.onerror=()=>{db.close();r(null);};});}catch(e){return null;}}
+async function saveIDB(){try{let db=await openDB();return new Promise(r=>{let tx=db.transaction(STORE,'readwrite');let st=tx.objectStore(STORE);st.put(PROJECTS,KEY);tx.oncomplete=()=>{db.close();r(true);};tx.onerror=()=>{db.close();r(false);};});}catch(e){return false;}}
+async function saveAll(){ let ok=await saveIDB(); try{ document.getElementById('cntBadge').textContent=PROJECTS.length+' db'; }catch(e){} return ok; }
 
-  if(sel){
-    sel.addEventListener('change', (e)=>{
-      const cls = e.target.value;
-      // use existing function
-      if(typeof applyColorAndSet === 'function'){
-        applyColorAndSet(fakeEvent(), cls);
-      }
-      try{ localStorage.setItem('ultra_v3_color', cls); }catch(err){}
-    });
-    // load saved
-    try{
-      const saved = localStorage.getItem('ultra_v3_color');
-      if(saved){ sel.value = saved; }
-    }catch(err){}
+let PROJECTS=[]; let curIndex=-1;
+
+// 8 ALAP SZÍN + SZERKESZTHETŐ NEVEK - VISSZARAKVA
+let PALETTE_8=['#00ff00', '#00ffff', '#ffff00', '#ff00ff', '#ff8800', '#ff0000', '#0088ff', '#ffffff', '#00ff88', '#88ff00', '#ffcc00', '#ff0088', '#8800ff', '#00ffcc', '#ff4444', '#44ff44', '#4444ff', '#ffaa00', '#aa00ff', '#00aaff', '#aaff00', '#ff00aa', '#aa5500', '#5500aa'];
+let colorFilter=null;
+let colorLabels={};
+try{ let s=localStorage.getItem('neon2026_color_labels'); if(s) colorLabels=JSON.parse(s); }catch(e){}
+function saveColorLabels(){ try{ localStorage.setItem('neon2026_color_labels', JSON.stringify(colorLabels)); }catch(e){} }
+function normHex(v){ if(!v||typeof v!=='string') return '#00ff00'; let n=v.trim().toLowerCase(); if(/^[0-9a-f]{3}$/.test(n)) n='#'+n; if(/^[0-9a-f]{6}$/.test(n)) n='#'+n; if(/^#[0-9a-f]{3}$/.test(n)) return '#'+n[1]+n[1]+n[2]+n[2]+n[3]+n[3]; if(/^#[0-9a-f]{6}$/.test(n)) return n; return '#00ff00'; }
+function nearestPaletteColor(v){
+  let n=normHex(v); let r=parseInt(n.slice(1,3),16), g=parseInt(n.slice(3,5),16), b=parseInt(n.slice(5,7),16);
+  let best=null, bestD=Infinity;
+  PALETTE_8.forEach(function(hex){
+    let hn=normHex(hex); let hr=parseInt(hn.slice(1,3),16), hg=parseInt(hn.slice(3,5),16), hb=parseInt(hn.slice(5,7),16);
+    let d=(r-hr)*(r-hr)+(g-hg)*(g-hg)+(b-hb)*(b-hb);
+    if(d<bestD){ bestD=d; best=hex; }
+  });
+  return best;
+}
+function renderColorLegend(){
+  let base8 = ['#00ff00','#00ffff','#ffff00','#ff00ff','#ff8800','#ff0000','#0088ff','#ffffff'];
+  let box=document.getElementById('colorLegend'); if(!box) return; box.innerHTML='';
+  PALETTE_8.forEach(function(hex){
+    let isBase = base8.includes(hex.toLowerCase());
+    let item=document.createElement('div');
+    let active=colorFilter===hex;
+    // alap 8 kiemelve: nagyobb, vastagabb, glow
+    let baseStyle = isBase ? 'padding:4px 9px;border-width:3px;box-shadow:0 0 8px '+hex+';transform:scale(1.05);font-size:11px;' : 'padding:2px 6px;border-width:1px;opacity:0.85;';
+    item.style.cssText='display:flex;align-items:center;gap:4px;background:#0a0a0a;border:1px solid '+(active?hex:hex+(isBase?'':'66'))+';border-width:'+(active?'3px':(isBase?'2px':'1px'))+';border-radius:12px;cursor:pointer;font-family:Arial;line-height:1;'+baseStyle;
+    if(isBase){ item.style.borderColor=hex; item.style.background='#111'; }
+    let cnt=PROJECTS.filter(function(p){ try{return nearestPaletteColor(p.color)===hex;}catch(e){return false;} }).length;
+    let dot=document.createElement('span'); 
+    dot.style.cssText='width:'+(isBase?'12px':'8px')+';height:'+(isBase?'12px':'8px')+';border-radius:50%;background:'+hex+';box-shadow:0 0 '+(isBase?'6px':'3px')+' '+hex+';flex-shrink:0;display:inline-block;border:'+(isBase?'1px solid #fff':'none')+';';
+    let label=document.createElement('span'); 
+    label.style.cssText='font-size:'+(isBase?'12px':'10px')+';color:'+hex+';font-weight:'+(isBase?'900':'700')+';white-space:nowrap;text-shadow:'+(isBase?'0 0 4px '+hex:'none')+';';
+    label.textContent=(isBase?'★ ':'')+(colorLabels[hex]||hex)+(cnt>0?' ('+cnt+')':'');
+    let edit=document.createElement('span'); edit.textContent='✏️'; edit.style.cssText='font-size:8px;cursor:pointer;opacity:0.7;';
+    edit.onclick=function(ev){ ev.stopPropagation(); let val=prompt('Címke ehhez a színhez ('+hex+'):', colorLabels[hex]||''); if(val!==null){ val=val.trim(); if(val==='') delete colorLabels[hex]; else colorLabels[hex]=val; saveColorLabels(); renderColorLegend(); } };
+    item.onclick=function(){ colorFilter=(colorFilter===hex)?null:hex; render(); };
+    item.appendChild(dot); item.appendChild(label); item.appendChild(edit);
+    box.appendChild(item);
+  });
+  if(colorFilter){
+    let clearBtn=document.createElement('div');
+    clearBtn.textContent='✕ ÖSSZES';
+    clearBtn.style.cssText='display:flex;align-items:center;background:#0a0a0a;border:2px solid #0f0;border-radius:12px;padding:4px 8px;cursor:pointer;color:#0f0;font-family:Arial;font-size:11px;font-weight:800;';
+    clearBtn.onclick=function(){ colorFilter=null; render(); }; box.appendChild(clearBtn);
   }
+}
+window.changeColor=function(idx, newColor){
+  if(idx<0 || idx>=PROJECTS.length) return;
+  PROJECTS[idx].color=normHex(newColor);
+  render(); renderColorLegend(); saveAll();
+};
 
-  // Neon toggle uses existing toggleGlow + sync button
-  let neonOn = true;
-  function updateNeonBtn(){
-    if(neonOn){
-      neonBtn.textContent = '💡 NEON: BE';
-      neonBtn.style.background = '#00ff00';
-      neonBtn.style.color = '#000';
-    } else {
-      neonBtn.textContent = '💡 NEON: KI';
-      neonBtn.style.background = '#ff0000';
-      neonBtn.style.color = '#fff';
-    }
+function getTotalSize(){ let total=0; PROJECTS.forEach(p=>{ total += p.dataUrl ? p.dataUrl.length * 0.75 : 0; }); return total; }
+function updateStorageBar(){
+  let total=getTotalSize(); let percent=Math.min(100, (total/MAX_STORAGE)*100);
+  document.getElementById('storageFill').style.width=percent+'%';
+  document.getElementById('storageText').textContent=(total/1024/1024).toFixed(2)+' / 500 MB';
+  document.getElementById('storagePercent').textContent=percent.toFixed(1)+'%';
+  if(percent>90) document.getElementById('storageFill').style.background='linear-gradient(90deg,#ff0000,#ff8800)';
+  else if(percent>70) document.getElementById('storageFill').style.background='linear-gradient(90deg,#ffcc00,#ff8800)';
+  else document.getElementById('storageFill').style.background='linear-gradient(90deg,#0f0,#00aaff)';
+}
+function showPreview(idx){
+  if(idx<0 || idx>=PROJECTS.length) return;
+  let p=PROJECTS[idx]; curIndex=idx;
+  let img=document.getElementById('previewImg'); let ph=document.getElementById('previewPlaceholder');
+  img.src=p.dataUrl; img.style.display='block'; ph.style.display='none';
+  document.getElementById('previewName').textContent=(p.sorszam||idx+1)+'_ '+p.name;
+  document.getElementById('previewSize').textContent=p.size+' • '+p.type;
+  document.getElementById('previewLabel').textContent=p.name+' - előnézet ✓';
+  document.getElementById('imgInfo').textContent=(p.width? p.width+'x'+p.height+' • ':'')+p.size+' • '+(colorLabels[nearestPaletteColor(p.color)]||nearestPaletteColor(p.color));
+  document.getElementById('colorSelect').value=nearestPaletteColor(p.color);
+  render();
+}
+window.previewProject=showPreview;
+window.copyImage=function(idx){
+  let i=(typeof idx==='number')?idx:curIndex; if(i<0||i>=PROJECTS.length){alert('Nincs kiválasztva kép!');return;}
+  let p=PROJECTS[i];
+  if(navigator.clipboard){ navigator.clipboard.writeText(p.dataUrl).then(()=>{ document.getElementById('status').textContent='✅ KÉK KÓD másolva: '+p.name; }); }
+};
+window.copyCode=window.copyImage;
+window.downloadImage=function(idx){
+  let i=(typeof idx==='number')?idx:curIndex; if(i<0||i>=PROJECTS.length){alert('Nincs kiválasztva kép!');return;}
+  let p=PROJECTS[i]; let a=document.createElement('a'); a.href=p.dataUrl; a.download=p.name; document.body.appendChild(a); a.click(); a.remove();
+  document.getElementById('status').textContent='✅ LETÖLTVE: '+p.name;
+};
+window.downloadHtml=window.downloadImage;
+window.downloadCurrent=function(){ downloadImage(curIndex); };
+window.deleteProject=function(idx){
+  if(idx<0||idx>=PROJECTS.length) return; if(!confirm('Törlöd: '+PROJECTS[idx].name+'?')) return;
+  PROJECTS.splice(idx,1); PROJECTS.forEach((x,j)=>x.sorszam=j+1);
+  if(curIndex===idx){curIndex=-1; document.getElementById('previewImg').style.display='none'; document.getElementById('previewPlaceholder').style.display='block'; document.getElementById('previewName').textContent=''; document.getElementById('previewSize').textContent='';}
+  else if(curIndex>idx) curIndex--;
+  render(); renderColorLegend(); saveAll(); updateStorageBar();
+};
+
+function render(){
+  let el=document.getElementById('list'); el.innerHTML='';
+  let visibleIdx=[];
+  PROJECTS.forEach((p,i)=>{ if(!colorFilter || nearestPaletteColor(p.color)===colorFilter) visibleIdx.push(i); });
+  visibleIdx.forEach((realIdx)=>{
+    let p=PROJECTS[realIdx]; let idx=realIdx;
+    let active=(curIndex===idx)?' active':'';
+    let d=document.createElement('div'); d.className='proj-card'+active;
+    let thumbHtml = p.dataUrl ? `<img class="thumb" src="${p.dataUrl}" onclick="previewProject(${idx})" style="border-color:${p.color}">` : `<div class="thumb-placeholder" onclick="previewProject(${idx})">🖼️</div>`;
+    let labelName = colorLabels[nearestPaletteColor(p.color)] || nearestPaletteColor(p.color);
+    d.innerHTML=
+      `<div style="display:flex;gap:12px;align-items:center;flex:1">`+
+      thumbHtml+
+      `<div style="flex:1;overflow:hidden">`+
+        `<div onclick="previewProject(${idx})" style="color:${p.color||'#0f0'};font-weight:400;font-size:20px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-family:Arial;cursor:pointer" title="${p.name}">${p.sorszam||idx+1}_ ${p.name}</div>`+
+        `<div style="font-size:10px;color:#666;font-family:Arial">${p.size} • ${labelName} ${p.width?'• '+p.width+'x'+p.height:''}</div>`+
+      `</div>`+
+      `<div class="color-dot" style="background:${p.color}" onclick="changeColor(${idx}, prompt('Hex szín (#rrggbb):', '${p.color}')||'${p.color}')" title="Szín váltás"></div>`+
+      `<button class="kod" onclick="copyImage(${idx})">KÓD</button>`+
+      `<button class="htmlb" onclick="downloadImage(${idx})">I KÉP</button>`+
+      `<button class="delb" onclick="deleteProject(${idx})">🗑️</button>`+
+      `</div>`;
+    el.appendChild(d);
+  });
+  if(visibleIdx.length===0 && PROJECTS.length>0){ el.innerHTML='<div style="color:#666;font-size:12px;padding:12px;text-align:center;font-family:Arial">Nincs kép ezzel a színnel - katt ✕ ÖSSZES</div>'; }
+  document.getElementById('cntBadge').textContent=PROJECTS.length+' db'+(colorFilter?' (szűrt: '+visibleIdx.length+')':'');
+  updateStorageBar();
+  renderColorLegend();
+}
+
+window.downloadAllProjects=function(){
+  if(PROJECTS.length===0){ alert('Nincs kép exportálni!'); return; }
+  let html='<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Képtároló Export - '+PROJECTS.length+' db - ZÖLD</title><style>'+
+'body{background:#000;color:#0f0;font-family:Arial;margin:0;padding:16px}'+
+'h1{color:#0f0;font-size:22px;margin:0}'+
+'.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-top:16px}'+
+'.card{background:#111;border:1px solid #333;border-radius:12px;padding:10px}'+
+'.card img{width:100%;border-radius:10px;border:2px solid #0f0;cursor:pointer}'+
+'.card img:hover{border-color:#00ff88;transform:scale(1.01)}'+
+'a{color:#0f0}'+
+'.topbar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px}'+
+'.btn{background:#0f0;color:#000;border:none;border-radius:999px;padding:8px 14px;font-weight:800;cursor:pointer}'+
+'.btn2{background:#111;border:2px solid #0f0;color:#0f0;border-radius:999px;padding:8px 14px;font-weight:700;cursor:pointer}'+
+'.btn2:hover{background:#0f0;color:#000}'+
+'#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.93);z-index:9999;align-items:center;justify-content:center;flex-direction:column;padding:20px}'+
+'#lb.on{display:flex}'+
+'#lbImg{max-width:92vw;max-height:72vh;border:3px solid #0f0;border-radius:12px;box-shadow:0 0 30px #0f0a;cursor:grab;transition:transform 0.15s}'+
+'.lb-x{position:absolute;top:14px;right:18px;background:#ff0000;color:#fff;border:none;border-radius:50%;width:42px;height:42px;font-size:22px;font-weight:800;cursor:pointer}'+
+'.lb-n{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,255,0,0.15);border:2px solid #0f0;color:#0f0;width:48px;height:48px;border-radius:50%;font-size:26px;cursor:pointer}'+
+'.lb-p{left:14px} .lb-nx{right:14px}'+
+'.lb-bar{margin-top:14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center}'+
+'.lb-info{margin-top:8px;color:#0f0;font-size:13px;text-align:center}'+
+'#lbZoom{width:160px;accent-color:#00ff00}'+
+'#lbZoomBadge{background:#000;border:1px solid #0f0;color:#0f0;border-radius:999px;padding:2px 10px;font-size:11px}'+
+'#lbResizer{position:absolute;right:20px;bottom:86px;width:32px;height:32px;background:#000;border:2px solid #00aaff;border-radius:8px;cursor:nwse-resize;display:flex;align-items:center;justify-content:center;z-index:100;box-shadow:0 0 12px #00aaff}'+
+'#lbResizer::after{content:\'↘\';color:#00aaff;font-size:18px;font-weight:900}'+
+'</style></head><body>'+
+'<div class="topbar"><h1>📸 Képtároló Export - '+PROJECTS.length+' db - '+(getTotalSize()/1024/1024).toFixed(2)+' MB - 8 szín</h1><div style="display:flex;gap:8px"><button class="btn2" onclick="openLB(0)">🔍 Első</button><button class="btn" onclick="window.close()">✕ Bezárás</button></div></div>'+
+'<div class="grid">'+
+PROJECTS.map((p,i)=>{
+  let w = p.width||p.w||0; let h = p.height||p.h||0;
+  let sizeKB = p.size ? parseFloat(p.size) : (p.dataUrl ? (Math.round((p.dataUrl.length*3/4)/1024*10)/10) : 0);
+  let dim = (w&&h) ? w+'x'+h+' • ' : '';
+  let label = dim + sizeKB + ' kB - ' + (p.color||'#00ff00');
+  let borderCol = p.color||'#00ff00';
+  return '<div class="card" style="border-color:'+borderCol+'"><div style="font-size:12px;color:'+borderCol+';margin-bottom:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700">'+p.name+' ('+label+')</div><img src="'+p.dataUrl+'" onclick="openLB('+i+')" title="Katt a teljes képhez" style="border-color:'+borderCol+'"><div style="margin-top:8px;display:flex;gap:12px"><a href="'+p.dataUrl+'" download="'+p.name+'" style="color:'+borderCol+'">⬇ Letöltés</a><a href="#" onclick="openLB('+i+');return false;" style="margin-left:auto">🔍 Megnyitás</a></div></div>';
+}).join('')+
+'</div>'+
+'<div id="lb" onclick="if(event.target.id==\'lb\') closeLB()"><button class="lb-x" onclick="closeLB()">✕</button><button class="lb-n lb-p" onclick="navLB(-1)">‹</button><img id="lbImg" src="" draggable="false"><button class="lb-n lb-nx" onclick="navLB(1)">›</button><div id="lbResizer" title="Húzd: méretezés 30-400%"></div><div class="lb-bar"><button class="btn2" onclick="closeLB()">✕ Bezárás</button><a id="lbDl" href="#" download style="background:#0f0;color:#000;border-radius:999px;padding:8px 14px;text-decoration:none;font-weight:800">⬇ Letöltés</a><input id="lbZoom" type="range" min="30" max="400" value="100"><span id="lbZoomBadge">100%</span><button class="btn2" onclick="navLB(-1)">‹ Előző</button><button class="btn2" onclick="navLB(1)">Következő ›</button></div><div class="lb-info" id="lbInfo"></div></div>'+
+'<script>let cur=0;let L='+JSON.stringify(PROJECTS.map(p=>({d:p.dataUrl,n:p.name,s:p.size,w:p.width||p.w||0,h:p.height||p.h||0,c:p.color})))+';let lbZ=100, lbTX=0, lbTY=0, lbDrag=false, lbSX=0, lbSY=0;function updZ(v){lbZ=Math.max(30,Math.min(400,v));let im=document.getElementById(\'lbImg\'), bd=document.getElementById(\'lbZoomBadge\'), sl=document.getElementById(\'lbZoom\'); if(sl) sl.value=lbZ; if(bd) bd.textContent=lbZ+\'%\'; if(im) im.style.transform=\'scale(\'+(lbZ/100)+\') translate(\'+lbTX+\'px,\'+lbTY+\'px)\';} function openLB(i){cur=i;let o=L[i];let im=document.getElementById(\'lbImg\'); if(im){im.src=o.d; lbZ=100; lbTX=0; lbTY=0; im.style.transform=\'scale(1) translate(0,0)\';} let a=document.getElementById(\'lbDl\');a.href=o.d;a.download=o.n;let kb = o.s ? (parseFloat(o.s)||0) : (Math.round((o.d.length*3/4)/1024*10)/10); let dim=(o.w&&o.h)?o.w+\'x\'+o.h+\' • \':\'\'; document.getElementById(\'lbInfo\').textContent=(i+1)+\'/\'+L.length+\' - \'+o.n+\' - \'+dim+kb+\' kB - \'+o.c+\' - méret állítható görgő/sarok/csúszka\';document.getElementById(\'lb\').classList.add(\'on\');document.body.style.overflow=\'hidden\'; let sl=document.getElementById(\'lbZoom\'); if(sl) sl.value=100; let bd=document.getElementById(\'lbZoomBadge\'); if(bd) bd.textContent=\'100%\';}'+
+'function closeLB(){document.getElementById(\'lb\').classList.remove(\'on\');document.body.style.overflow=\'\';}'+
+'function navLB(d){let n=cur+d;if(n<0)n=L.length-1;if(n>=L.length)n=0;openLB(n);}'+
+'document.addEventListener(\'DOMContentLoaded\',()=>{let sl=document.getElementById(\'lbZoom\'), rs=document.getElementById(\'lbResizer\'), im=document.getElementById(\'lbImg\'); if(sl){sl.addEventListener(\'input\',e=>updZ(parseInt(e.target.value)));} if(im){im.addEventListener(\'wheel\',e=>{e.preventDefault(); updZ(lbZ+(e.deltaY>0?-10:10));},{passive:false}); im.addEventListener(\'mousedown\',e=>{lbDrag=true; lbSX=e.clientX-lbTX; lbSY=e.clientY-lbTY; e.preventDefault();});} if(rs){rs.addEventListener(\'mousedown\',e=>{let sx=e.clientX, sy=e.clientY, sv=lbZ; function mv(ev){updZ(sv+Math.round(((ev.clientX-sx)+(ev.clientY-sy))/2));} function up(){document.removeEventListener(\'mousemove\',mv); document.removeEventListener(\'mouseup\',up);} document.addEventListener(\'mousemove\',mv); document.addEventListener(\'mouseup\',up); e.preventDefault(); e.stopPropagation();});} window.addEventListener(\'mousemove\',e=>{if(!lbDrag) return; lbTX=e.clientX-lbSX; lbTY=e.clientY-lbSY; let im=document.getElementById(\'lbImg\'); if(im) im.style.transform=\'scale(\'+(lbZ/100)+\') translate(\'+lbTX+\'px,\'+lbTY+\'px)\';}); window.addEventListener(\'mouseup\',()=>{lbDrag=false;});});'+
+'document.addEventListener(\'keydown\',e=>{let lb=document.getElementById(\'lb\');if(!lb.classList.contains(\'on\'))return;if(e.key==\'Escape\')closeLB();if(e.key==\'ArrowLeft\')navLB(-1);if(e.key==\'ArrowRight\')navLB(1); if(e.key==\'+\'||e.key==\'=\') updZ(lbZ+10); if(e.key==\'-\') updZ(lbZ-10); if(e.key==\'0\') updZ(100);});<\/script></body></html>';
+  let blob=new Blob([html],{type:'text/html'}); let url=URL.createObjectURL(blob); let a=document.createElement('a'); a.href=url; a.download='Keptarolo_'+PROJECTS.length+'db_'+new Date().toISOString().slice(0,10)+'.html'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),1000);
+};
+
+window.deleteAllProjects=async function(){
+  if(!confirm('Törlöd az összes képet? ('+PROJECTS.length+' db)')) return;
+  PROJECTS=[]; curIndex=-1; colorFilter=null;
+  try{ document.getElementById('previewImg').style.display='none'; document.getElementById('previewPlaceholder').style.display='block'; document.getElementById('previewName').textContent=''; document.getElementById('previewSize').textContent=''; document.getElementById('previewLabel').textContent='Törölve ✓'; }catch(e){}
+  render(); renderColorLegend(); await saveAll();
+  try{ let delReq=indexedDB.deleteDatabase(DB_NAME); }catch(e){}
+  updateStorageBar();
+  document.getElementById('status').textContent='🗑️ Minden törölve - 0 db - színek megmaradtak ✓';
+};
+
+
+async function processFiles(files){
+  let added=0;
+  for(let file of files){
+    if(!file.type.startsWith('image/')){let ext=file.name.toLowerCase(); if(!['.jpg','.jpeg','.bmp','.png','.webp','.gif','.avif','.svg'].some(e=>ext.endsWith(e))) continue;}
+    if(getTotalSize() + file.size > MAX_STORAGE){alert('500 MB limit elérve!'); break;}
+    let dataUrl=await new Promise((res,rej)=>{let r=new FileReader(); r.onload=e=>res(e.target.result); r.onerror=rej; r.readAsDataURL(file);});
+    let width=0,height=0; try{ let dims=await new Promise((res)=>{let img=new Image(); img.onload=()=>res({w:img.naturalWidth,h:img.naturalHeight}); img.onerror=()=>res({w:0,h:0}); img.src=dataUrl;}); width=dims.w; height=dims.h; }catch(e){}
+    let color = file.type.includes('png')?'#00aaff': file.type.includes('jpeg')||file.type.includes('jpg')?'#ffff00' : file.type.includes('bmp')?'#ff8800' : file.type.includes('gif')?'#ff00ff' : '#00ff00';
+    color = nearestPaletteColor(color);
+    PROJECTS.push({sorszam:PROJECTS.length+1, name:file.name, type:file.type||'image', size:(file.size/1024).toFixed(1)+' kB', sizeBytes:file.size, color:color, width:width, height:height, dataUrl:dataUrl, date:new Date().toISOString()});
+    added++;
   }
+  if(added>0){ render(); await saveAll(); document.getElementById('previewLabel').textContent=added+' db kép feltöltve ✓'; if(curIndex===-1 && PROJECTS.length>0) showPreview(0); }
+  updateStorageBar();
+}
 
-  if(neonBtn){
-    neonBtn.addEventListener('click', ()=>{
-      if(typeof toggleGlow === 'function'){ toggleGlow(); }
-      // read state from body class or glowBtn
-      const isOff = document.body.classList.contains('glow-off');
-      neonOn = !isOff;
-      updateNeonBtn();
-      try{ localStorage.setItem('ultra_v3_neon', neonOn ? 'on':'off'); }catch(err){}
-    });
-  }
+document.getElementById('fileImportImg').addEventListener('change',async e=>{ let files=Array.from(e.target.files); if(files.length) await processFiles(files); e.target.value=''; });
+document.addEventListener('dragover',e=>{e.preventDefault();});
+document.addEventListener('drop',async e=>{ e.preventDefault(); let files=Array.from(e.dataTransfer.files||[]); if(files.length>0) await processFiles(files); });
 
-  // sync with original glow button if exists
-  if(glowBtnOriginal){
-    const observer = new MutationObserver(()=>{
-      const isOff = document.body.classList.contains('glow-off');
-      neonOn = !isOff;
-      updateNeonBtn();
-    });
-    observer.observe(document.body, {attributes:true, attributeFilter:['class']});
-  }
-
-  // restore neon state
-  try{
-    const savedNeon = localStorage.getItem('ultra_v3_neon');
-    if(savedNeon === 'off'){
-      if(typeof toggleGlow === 'function' && !document.body.classList.contains('glow-off')){
-        toggleGlow();
-        neonOn = false;
-        updateNeonBtn();
-      }
-    }
-  }catch(err){}
+window.exportJsonModal=function(){
+ if(PROJECTS.length===0){alert('Nincs mit exportálni!');return;}
+ let d=new Date(); let def='Keptarolo_Export_'+d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')+'_'+String(d.getHours()).padStart(2,'0')+'-'+String(d.getMinutes()).padStart(2,'0');
+ document.getElementById('exportNameInput').value=def;
+ document.getElementById('exportInfo').textContent='Fájl: '+def+'.json\nTartalom: '+PROJECTS.length+' kép • '+(getTotalSize()/1024/1024).toFixed(2)+' MB\n8 szín: '+PALETTE_8.map(h=> (colorLabels[h]||h) ).join(', ');
+ document.getElementById('exportModal').style.display='flex';
+};
+window.doExportJson=function(){
+ let fn=document.getElementById('exportNameInput').value.trim(); if(!fn) fn='Keptarolo_Export_'+new Date().toISOString().slice(0,10); if(!fn.toLowerCase().endsWith('.json')) fn+='.json';
+ let blob=new Blob([JSON.stringify(PROJECTS,null,2)],{type:'application/json'}); let url=URL.createObjectURL(blob);
+ let a=document.createElement('a');a.href=url;a.download=fn;document.body.appendChild(a);a.click();a.remove(); setTimeout(()=>URL.revokeObjectURL(url),800);
+ document.getElementById('exportModal').style.display='none';
+};
+document.getElementById('exportModal').addEventListener('click',function(e){if(e.target===this)this.style.display='none';});
+document.getElementById('fileImportJson').addEventListener('change',async e=>{
+ let file=e.target.files[0]; if(!file) return;
+ try{
+  let txt=await file.text(); let data=JSON.parse(txt); let arr=Array.isArray(data)?data:(data.images||data.projects||[]);
+  if(arr.length===0 && typeof data==='object'){ for(let k in data){ if(data[k] && typeof data[k]==='object' && data[k].dataUrl) arr.push(data[k]); } }
+  let added=0;
+  arr.forEach(p=>{if(!p.dataUrl) return; if(getTotalSize()+ (p.sizeBytes||p.dataUrl.length*0.75) > MAX_STORAGE){return;} PROJECTS.push({sorszam:PROJECTS.length+1, name:p.name||'image.png', type:p.type||'image/png', size:p.size||'?', sizeBytes:p.sizeBytes||0, color:normHex(p.color||'#00ff00'), width:p.width||0, height:p.height||0, dataUrl:p.dataUrl, date:p.date||new Date().toISOString()}); added++;});
+  render(); await saveAll(); updateStorageBar(); alert(added+' db kép JSON-ból importálva');
+ }catch(err){alert('JSON hiba:'+err.message);}
+ e.target.value='';
 });
-</script>
 
 
-<script>
-(function(){
-  const colorMap = {
-    'neon-white': { hex:'#ffffff', shadow:'0 0 5px #ffffff, 0 0 10px #ffffff, 0 0 15px #ffffff' },
-    'neon-cyan': { hex:'#00f6ff', shadow:'0 0 5px #00f6ff, 0 0 10px #00f6ff, 0 0 15px #00f6ff' },
-    'neon-red': { hex:'#ff0000', shadow:'0 0 5px #ff0000, 0 0 10px #ff0000, 0 0 15px #ff0000' },
-    'neon-deepblue': { hex:'#0080ff', shadow:'0 0 5px #0080ff, 0 0 10px #0080ff, 0 0 15px #0080ff' },
-    'neon-blue': { hex:'#00aaff', shadow:'0 0 5px #00aaff, 0 0 10px #00aaff, 0 0 15px #00aaff' },
-    'neon-green': { hex:'#00ff00', shadow:'0 0 5px #00ff00, 0 0 10px #00ff00, 0 0 15px #00ff00' },
-    'neon-yellow': { hex:'#ffff00', shadow:'0 0 5px #ffff00, 0 0 10px #ffff00, 0 0 15px #ffff00' },
-    'neon-magenta': { hex:'#ff00ff', shadow:'0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 15px #ff00ff' },
-    'neon-orange': { hex:'#ff6600', shadow:'0 0 5px #ff6600, 0 0 10px #ff6600, 0 0 15px #ff6600' }
-  };
-
-  function getOverrideStyle(){ return document.getElementById('globalColorOverride'); }
-
-  function applyGlobalOverride(cls){
-    const info = colorMap[cls];
-    const styleEl = getOverrideStyle();
-    if(!info || !styleEl) return;
-    styleEl.textContent = `
-      #mainTitle { color:${info.hex} !important; text-shadow:${info.shadow} !important; }
-      #editor [class^='neon-'], #editorHeader [class^='neon-'] { color:${info.hex} !important; text-shadow:${info.shadow} !important; }
-      body.glow-off #mainTitle, body.glow-off #editor [class^='neon-'], body.glow-off #editorHeader [class^='neon-'] { text-shadow:none !important; }
-    `;
-  }
-
-  function forceRecolorSelection(newClass){
-    const sel = window.getSelection();
-    if(!sel || sel.rangeCount===0) return false;
-    const selectedText = sel.toString();
-    if(selectedText.length===0) return false;
-    // Use existing applyColorAndSet if available for selected range
-    if(typeof applyColorAndSet === 'function'){
-      try{
-        applyColorAndSet({preventDefault:()=>{}}, newClass);
-        return true;
-      }catch(e){}
+document.getElementById('fileImportHtml').addEventListener('change', async e=>{
+  let file=e.target.files[0]; if(!file) return;
+  try{
+    let txt=await file.text();
+    let added=0;
+    let m = txt.match(/let\s+L\s*=\s*(\[.*?\]);/s);
+    if(!m) m = txt.match(/let\s+L\s*=\s*(\[.*\])\s*;function/s);
+    let arr=[];
+    if(m){
+      try{ arr = JSON.parse(m[1]); }catch(err){ console.log('L parse hiba', err); }
     }
-    // Fallback manual
-    try{
-      const range = sel.getRangeAt(0);
-      const span = document.createElement('span');
-      span.className = newClass;
-      span.textContent = selectedText;
-      range.deleteContents();
-      range.insertNode(span);
-      return true;
-    }catch(e){ return false; }
-  }
-
-  function recolorAllEditor(newClass){
-    const editor = document.getElementById('editor');
-    if(editor){
-      editor.querySelectorAll('[class^="neon-"]').forEach(el=>{ el.className = newClass; });
-    }
-    const header = document.getElementById('editorHeader');
-    if(header){
-      const s = header.querySelector('span');
-      if(s) s.className = newClass;
-    }
-    const mainTitle = document.getElementById('mainTitle');
-    if(mainTitle) mainTitle.className = newClass;
-  }
-
-  document.addEventListener('DOMContentLoaded', ()=>{
-    const sel = document.getElementById('ultra-color-v3') || document.getElementById('ultra-color-v4') || document.getElementById('ultra-color-v5') || document.querySelector('select[id^="ultra-color"]');
-    if(!sel) return;
-
-    // Upgrade change handler to also handle selection
-    sel.addEventListener('change', (e)=>{
-      const cls = e.target.value;
-      const hadSelection = window.getSelection() && window.getSelection().toString().length>0;
-
-      if(hadSelection){
-        forceRecolorSelection(cls);
-      } else {
-        // if no selection, recolor all + set active
-        recolorAllEditor(cls);
-        if(typeof applyColorAndSet === 'function'){
-          applyColorAndSet({preventDefault:()=>{}}, cls);
-        }
+    if(arr && arr.length>0){
+      arr.forEach(p=>{
+        if(!p.d && !p.dataUrl) return;
+        let dataUrl = p.d || p.dataUrl;
+        if(getTotalSize()+ (dataUrl.length*0.75) > MAX_STORAGE) return;
+        PROJECTS.push({
+          sorszam:PROJECTS.length+1,
+          name:p.n||p.name||('image_'+(PROJECTS.length+1)+'.png'),
+          type:'image/png',
+          size:p.s||'?',
+          sizeBytes:0,
+          color:normHex(p.c||p.color||'#00ff00'),
+          width:p.w||p.width||0,
+          height:p.h||p.height||0,
+          dataUrl:dataUrl,
+          date:new Date().toISOString()
+        });
+        added++;
+      });
+    } else {
+      let regex = /src="(data:image\/[^"]+)"/g, match; let seen=new Set();
+      while((match=regex.exec(txt))!==null){
+        let dataUrl=match[1]; if(seen.has(dataUrl)) continue; seen.add(dataUrl);
+        if(getTotalSize()+ (dataUrl.length*0.75) > MAX_STORAGE) break;
+        let name='import_'+(added+1)+'.png';
+        let snippet=txt.substring(Math.max(0,match.index-400), match.index+400);
+        let nm=snippet.match(/download="([^"]+)"/); if(nm) name=nm[1];
+        PROJECTS.push({sorszam:PROJECTS.length+1, name:name, type:'image/png', size:(dataUrl.length*0.75/1024).toFixed(1)+' kB', sizeBytes:0, color:'#00ff00', width:0, height:0, dataUrl:dataUrl, date:new Date().toISOString()});
+        added++;
       }
-      try{ activeColorClass = cls; window.activeColorClass = cls; }catch(e){}
-      applyGlobalOverride(cls);
-      try{
-        localStorage.setItem('ultra_final_color', cls);
-        localStorage.setItem('ultra_v5_color', cls);
-        localStorage.setItem('ultra_v3_color', cls);
-        localStorage.setItem('ultra_v4_color', cls);
-      }catch(e){}
-    });
-
-    // Restore on load
-    try{
-      const saved = localStorage.getItem('ultra_final_color') || localStorage.getItem('ultra_v5_color') || localStorage.getItem('ultra_v4_color') || localStorage.getItem('ultra_v3_color');
-      if(saved){
-        sel.value = saved;
-        applyGlobalOverride(saved);
-        try{ activeColorClass = saved; window.activeColorClass = saved; }catch(e){}
-        const mt = document.getElementById('mainTitle');
-        if(mt) mt.className = saved;
-      }
-    }catch(e){}
-
-    // Also patch loadFromDB to re-apply after DB load
-    if(window.loadFromDB){
-      const orig = window.loadFromDB;
-      window.loadFromDB = function(){
-        const r = orig.apply(this, arguments);
-        setTimeout(()=>{
-          try{
-            const s = localStorage.getItem('ultra_final_color') || localStorage.getItem('ultra_v5_color');
-            if(s) applyGlobalOverride(s);
-          }catch(e){}
-        }, 400);
-        return r;
-      };
     }
-  });
+    if(added>0){
+      render(); renderColorLegend(); await saveAll(); updateStorageBar();
+      alert(added+' db kép HTML-ből importálva ✓\n'+file.name);
+      document.getElementById('status').textContent='✅ HTML IMPORT: '+added+' db - '+file.name;
+      if(curIndex===-1) showPreview(0);
+    } else { alert('Nem találtam képet ebben a HTML-ben!'); }
+  }catch(err){ alert('HTML import hiba: '+err.message); }
+  e.target.value='';
+});
+
+
+document.getElementById('panelSlider').addEventListener('input',e=>{document.documentElement.style.setProperty('--panel-w',e.target.value+'px');document.getElementById('panelBadge').textContent=e.target.value+'px';});
+document.getElementById('previewSlider').addEventListener('input',e=>{document.getElementById('previewBadge').textContent=e.target.value+'%'; document.getElementById('previewFrame').style.zoom=e.target.value+'%';});
+
+(async()=>{
+ document.getElementById('status').textContent='Betöltés...';
+ let data=await loadIDB();
+ if(data&&data.length>0){PROJECTS=data; PROJECTS.forEach((x,j)=>{if(!x.sorszam)x.sorszam=j+1; if(!x.color)x.color=normHex(x.color||'#00ff00');}); curIndex=0; render(); showPreview(0); document.getElementById('status').textContent='✅ Visszaállítva: '+PROJECTS.length+' db • '+(getTotalSize()/1024/1024).toFixed(2)+' MB';}
+ else{PROJECTS=[]; render(); document.getElementById('status').textContent='Üres képtároló - tölts fel képeket 📸 - 8 szín felül szerkeszthető ✏️';}
+ updateStorageBar(); renderColorLegend();
 })();
 </script>
-
 </body>
 </html>
